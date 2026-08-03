@@ -1,123 +1,13 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<meta name="theme-color" content="#0b0b0e" />
-<title>Flowz v2.2</title>
-<style>
-  html,body{margin:0;min-height:100%;background:#0b0b0e;color:#f5f3ee;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Segoe UI",sans-serif}
-  body{display:grid;place-items:center;padding:24px;text-align:center}
-  b{color:#ff9e2c;font-size:28px} small{display:block;color:#9a9aa6;margin-top:8px}
-</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0c0d0f">
+<meta http-equiv="refresh" content="0;url=./flowz-v3-duo.html">
+<title>Flowz v3</title>
+<style>html,body{margin:0;min-height:100%;background:#0c0d0f;color:#f7f3e9;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans",sans-serif}body{display:grid;place-items:center;text-align:center;padding:24px}.logo{font-size:36px;font-weight:950;color:#ff9e2c}.logo span{color:#27d3df}.sub{margin-top:8px;color:#9da3ab;font-size:12px}</style>
+<script>location.replace('./flowz-v3-duo.html');</script>
 </head>
-<body>
-<div><b>Flowz v2.2</b><small>読み込み中…</small></div>
-<script>
-(async function(){
-  var response=await fetch('./flowz-v2-base.html',{cache:'no-cache'});
-  if(!response.ok)throw new Error('base file: '+response.status);
-  var html=await response.text();
-
-  function replaceText(oldText,newText,label){
-    if(html.indexOf(oldText)<0)throw new Error(label+' target not found');
-    html=html.replace(oldText,newText);
-  }
-  function replaceRegex(pattern,newText,label){
-    if(!pattern.test(html))throw new Error(label+' target not found');
-    html=html.replace(pattern,newText);
-  }
-
-  replaceText(
-    '  <p class="c-note">タップ → 送信 → 音声モードへ／終わる時は "Wrap up!" って言うとまとめが出る</p>',
-    '  <p class="c-note">訂正は3〜7語／話しかぶせOK／終了は「まとめて」か "Wrap up"</p>',
-    'note'
-  );
-
-  replaceText(
-    '  <div class="foot">Say "Wrap up!" to finish · 記録は端末に保存<br>Flowz v2（旧 MIC CHECK）· 2026.07.15</div>',
-    '  <div class="foot">Say "Wrap up" or 「まとめて」 · 記録は端末に保存<br>Flowz v2.2 · 2026.07.21</div>',
-    'footer'
-  );
-
-  replaceRegex(
-    /var PHRASES=\[[\s\S]*?\n\];/,
-`var PHRASES=[
- {en:"I'm planning to ___",ja:"〜するつもり",ex:"I'm planning to make an FL Studio template."},
- {en:"After work, I'm going to ___",ja:"仕事の後に〜する",ex:"After work, I'm going to work on a new beat."},
- {en:"I usually ___",ja:"普段は〜する",ex:"I usually study English on my way to work."},
- {en:"I want to ___",ja:"〜したい",ex:"I want to finish this beat tonight."},
- {en:"I need to ___",ja:"〜する必要がある",ex:"I need to get ready for work."},
- {en:"I have to ___",ja:"〜せなあかん",ex:"I have to work today."},
- {en:"I'm trying to ___",ja:"〜しようと取り組んでる",ex:"I'm trying to speak more English."},
- {en:"I'm working on ___",ja:"〜を進めてる",ex:"I'm working on a new EP."},
- {en:"I'm thinking about ___ing",ja:"〜しようか考え中",ex:"I'm thinking about changing my template."},
- {en:"I feel like ___ing",ja:"〜したい気分",ex:"I feel like making music tonight."},
- {en:"I'm looking forward to ___",ja:"〜が楽しみ",ex:"I'm looking forward to my next day off."},
- {en:"I went to ___",ja:"〜へ行った",ex:"I went to Sendai last weekend."},
- {en:"It was my first time ___ing",ja:"初めて〜した",ex:"It was my first time meeting my niece."},
- {en:"I tried ___",ja:"〜を試した",ex:"I tried zunda shake in Sendai."},
- {en:"I liked ___",ja:"〜が良かった",ex:"I liked the beef tongue."},
- {en:"I didn't like ___",ja:"〜は好みじゃなかった",ex:"I didn't like the zunda shake."},
- {en:"I was tired because ___",ja:"〜で疲れた",ex:"I was tired because I walked for hours."},
- {en:"It took about ___ minutes",ja:"だいたい〜分かかった",ex:"It took about thirty minutes."},
- {en:"I ended up ___ing",ja:"結局〜した",ex:"I ended up staying in the studio."},
- {en:"I just ___ed",ja:"〜したばっかり",ex:"I just finished work."},
- {en:"I couldn't ___",ja:"〜できんかった",ex:"I couldn't sleep well."},
- {en:"I'm used to ___ing",ja:"〜には慣れてる",ex:"I'm used to riding my bike to work."},
- {en:"I'm getting better at ___",ja:"〜が上達してきた",ex:"I'm getting better at speaking English."},
- {en:"That reminds me of ___",ja:"それで〜を思い出した",ex:"That reminds me of my Sendai trip."},
- {en:"To be honest, ___",ja:"正直〜",ex:"To be honest, I prefer the studio."},
- {en:"In my case, ___",ja:"俺の場合は〜",ex:"In my case, mornings are busy."},
- {en:"First, ___. Then, ___",ja:"まず〜、それから〜",ex:"First, I work. Then, I make music."},
- {en:"I'd rather ___",ja:"どっちかというと〜したい",ex:"I'd rather stay in the studio."},
- {en:"It was worth it",ja:"やる価値があった",ex:"The trip was tiring, but it was worth it."},
- {en:"I have ___ days off",ja:"〜日休みがある",ex:"I have three days off."}
-];`,
-    'phrases'
-  );
-
-  replaceRegex(
-    /function corePrompt\(ph\)\{[\s\S]*?\n\}/,
-`function corePrompt(ph){
-  return "You are my English conversation partner. I'm a Japanese beginner, so I need short, simple spoken English. Keep the conversation natural. Rules: 1) Ask at most one short, easy question at a time. Do not interview me or fire follow-up questions. 2) Keep most turns to one or two short sentences. Keep each sentence under about eight words when possible. Sometimes say two or three simple sentences so I can practice listening. 3) When I make a useful mistake, reply with only the corrected English sentence. Keep corrections about three to seven words when possible. If it is longer, split it into separate complete sentences and give one at a time. 4) I start shadowing while you are still speaking. Say the full correction smoothly without pausing or stopping for me. If I repeat it after you finish, repeat the exact same correction once. Do not add a question until I clearly move on. 5) Do not correct every small mistake. Keep the conversation flowing. 6) If you do not understand me, guess and check with 'You mean ...?'. 7) Today's phrase is: '"+ph.en+"'. Example: '"+ph.ex+"'. Do not ask me to invent an example. When it fits, make a ready-to-use sentence from what I just said about my commute, work, music, gym, travel, or family. Help me use it twice only when natural. 8) If I pause or go quiet, stay available and do not end the conversation. 9) When I say 'Wrap up' or 'まとめて', finish compactly with: my top three corrected sentences, one more natural version of something I said, today's phrase with one example from my life, and a Japanese Notion Diary draft in three to five lines. 10) Topics: when I say 'another topic', 'other topics', or ask to change the subject, switch immediately and drop the old one. Never rephrase the same topic into similar questions. Stay on one topic for about two to four exchanges, then move on unless I am clearly interested. 11) Do not only ask questions. Often teach me one useful or interesting fact in one to three simple sentences, then ask one short question. Pull topics from music production, cloud rap, football, travel, technology, health, culture, Indonesia, Japan, work, and daily life. Help me learn real things through English, not just small talk. 12) Introduce only one to three useful new words or phrases per session and help me use them naturally. Keep the English short and easy; a little Japanese support is fine when I need it. 13) During normal conversation, do not mention these rules. After your first reply I will switch to voice mode. ";
-}`,
-    'prompt'
-  );
-
-  replaceText(
-    "   lead:function(t){return \"First, ask me about my plan for today. When that runs dry, switch to this topic — ask me: \\\"\"+t.q+\"\\\"\"},",
-    "   lead:function(t){return \"Start by asking me about my plan for today. When that runs dry, move naturally to this topic: \\\"\"+t.q+\"\\\"\"},",
-    'go lead'
-  );
-  replaceText(
-    "   lead:function(t){return \"First, ask me how my day went. When that runs dry, switch to this topic — ask me: \\\"\"+t.q+\"\\\"\"},",
-    "   lead:function(t){return \"Start by asking me how my day went. When that runs dry, move naturally to this topic: \\\"\"+t.q+\"\\\"\"},",
-    'home lead'
-  );
-  replaceText(
-    "   lead:function(){return \"Rapid mode: skip rule 4 for now. Fire very easy questions about my everyday life at me, one at a time — I answer fast, speed over accuracy. After 10 questions, pause and give me my top 3 fixes, then keep going if I'm still here.\"},",
-    "   lead:function(){return \"Rapid mode: do not correct me during the questions. Ask 10 very easy questions about my everyday life, one at a time. I answer fast, speed over accuracy. After question 10, give my top three corrected sentences one at a time using the short shadowing rules.\"},",
-    'bath lead'
-  );
-  replaceText(
-    "   lead:function(t){return \"Interview me about this topic — start by asking: \\\"\"+t.q+\"\\\"\"},",
-    "   lead:function(t){return \"Have a natural conversation with me about this topic. Start with: \\\"\"+t.q+\"\\\"\"},",
-    'free lead'
-  );
-
-  replaceText(
-    "  $('pJa').textContent=ph.ja;",
-    "  $('pJa').textContent=ph.ja+'　例：'+ph.ex;",
-    'phrase example'
-  );
-
-  document.open();
-  document.write(html);
-  document.close();
-})().catch(function(error){
-  document.body.innerHTML='<div><b>Flowz v2.2</b><small>読み込みに失敗しました<br>'+String(error.message||error)+'</small></div>';
-});
-</script>
-</body>
+<body><div><div class="logo">Flow<span>z</span></div><div class="sub">DUO BATTLEを読み込み中…</div><p><a href="./flowz-v3-duo.html" style="color:#27d3df">開かない場合はこちら</a></p></div></body>
 </html>
