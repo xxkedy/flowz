@@ -9,11 +9,11 @@
 <meta name="apple-mobile-web-app-title" content="Flowz Duo">
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
-<title>Flowz v3.2 · Duo Battle</title>
-<link rel="stylesheet" href="flowz-v3-duo.css?v=3.2.0">
+<title>Flowz v3.3 · Duo Battle</title>
+<link rel="stylesheet" href="flowz-v3-duo.css?v=3.3.0">
 </head>
 <body data-profile="kedy">
-<header class="top"><div class="brand"><h1>Flow<span>z</span></h1><p>DUO LANGUAGE BATTLE</p></div><div class="version">v3.2</div></header>
+<header class="top"><div class="brand"><h1>Flow<span>z</span></h1><p>DUO LANGUAGE BATTLE</p></div><div class="version">v3.3</div></header>
 
 <section class="profile-switch" aria-label="Select learner">
   <button class="profile-btn active" data-profile="kedy"><span class="pname"><span class="pflag">🇺🇸</span>kedy</span><span class="plang">ENGLISH</span><span class="pmini" id="mini-kedy">LV.1</span></button>
@@ -38,7 +38,7 @@
 </section>
 
 <section class="panel pending" id="pending">
-  <h3 id="pendingHeading">✅ SESSION RESULT</h3><p id="pendingText">Return from ChatGPT, choose the result, then finish.</p>
+  <h3 id="pendingHeading">✅ SESSION RESULT</h3><p id="pendingText">Return after speaking. The session records automatically.</p>
   <div class="checks"><label class="check"><input type="checkbox" id="phraseCheck"><span id="phraseLabel">Used today’s phrase</span> <b>+3 XP</b></label><label class="check"><input type="checkbox" id="fixCheck"><span id="fixLabel">Fixed a sentence</span> <b>+2 XP</b></label></div>
   <button class="complete" id="completeBtn">COMPLETE SESSION +10 XP</button>
 </section>
@@ -69,9 +69,10 @@
   <div class="io"><button class="small-btn" id="exportBtn">COPY RECORD</button><button class="small-btn" id="importBtn">RESTORE RECORD</button><button class="small-btn" id="resetPendingBtn">CLEAR PENDING</button></div>
 </details>
 <p class="note" id="storageNote">Records are saved automatically in this browser with a backup. Different devices do not sync yet.</p>
-<p class="note">✅ Last updated 2026.08.04 · Flowz v3.2 Mission Flow</p>
+<p class="note">✅ Last updated 2026.08.05 · Flowz v3.3 Natural Commute</p>
 <div class="toast" id="toast"></div>
 
 <script src="flowz-v3-duo.js?v=3.2.0" defer></script>
+<script src="flowz-v3.3-override.js?v=3.3.0" defer></script>
 </body>
 </html>
