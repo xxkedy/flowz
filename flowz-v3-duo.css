@@ -33,6 +33,21 @@ button{font:inherit}
 .mode:active{transform:translateY(2px) scale(.99)}
 .mode b{display:block;font-size:16px}.mode small{display:block;font-size:9px;line-height:1.25;margin-top:4px;opacity:.75;font-weight:850;max-width:82%}.mode .icon{font-size:22px;position:absolute;right:9px;bottom:7px;opacity:.72}
 .mode.m1{background:linear-gradient(160deg,var(--cyan),#0ba8b5);color:#012428}.mode.m2{background:linear-gradient(160deg,var(--orange),#df431b);color:#2b0e00}.mode.m3{background:linear-gradient(160deg,var(--green),#27ae5a);color:#04220e}.mode.m4{background:linear-gradient(160deg,var(--amber),#dd7812);color:#261300}
+
+.mission{display:none;border-color:rgba(255,158,44,.58);box-shadow:0 0 0 1px rgba(255,158,44,.12),0 12px 28px rgba(0,0,0,.2)}
+.mission.show{display:block}.mission.leni{border-color:rgba(39,211,223,.58);box-shadow:0 0 0 1px rgba(39,211,223,.12),0 12px 28px rgba(0,0,0,.2)}
+.mission-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:9px}
+.mission-item{padding:9px 10px;border:1px solid var(--line);border-radius:11px;background:var(--panel2);margin-bottom:7px}
+.mission-item span{display:block;font-size:8px;letter-spacing:1px;color:var(--muted);font-weight:950;margin-bottom:4px}
+.mission-item b{display:block;font-size:14px;line-height:1.35;font-weight:950}
+.mission-target{border-left:3px solid var(--amber)}.mission.leni .mission-target{border-left-color:var(--cyan)}
+.mission-target b{color:var(--cream)}.mission.leni .mission-target b{color:#b9f8fc}
+.mission-target small{display:block;color:var(--muted);font-size:9px;line-height:1.35;margin-top:3px;font-weight:750}
+.mission p{margin:7px 2px 10px;color:var(--muted);font-size:10px;line-height:1.4;font-weight:750}
+.start-session{width:100%;border:0;border-radius:13px;padding:12px;background:linear-gradient(135deg,var(--amber),var(--orange));color:#281300;font-size:14px;font-weight:950;cursor:pointer}
+.mission.leni .start-session{background:linear-gradient(135deg,var(--cyan),var(--green));color:#002329}
+.start-session:active{transform:translateY(1px)}.start-session:disabled{opacity:.45}
+
 .pending{border-color:rgba(85,217,130,.55);display:none}.pending.show{display:block}.pending h3{margin:0 0 5px;color:var(--green);font-size:15px}.pending p{margin:0 0 10px;color:var(--muted);font-size:10px;line-height:1.45}
 .checks{display:grid;gap:7px;margin-bottom:9px}.check{display:flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--panel2);border-radius:11px;padding:9px;font-size:11px;font-weight:850;cursor:pointer}.check input{width:19px;height:19px;accent-color:var(--green)}.check b{margin-left:auto}
 .complete{width:100%;border:0;border-radius:13px;padding:12px;background:var(--green);color:#041d0c;font-weight:950;font-size:14px;cursor:pointer}.complete:disabled{opacity:.45}
@@ -53,5 +68,5 @@ button{font:inherit}
 .data-panel{padding:0;overflow:hidden}.data-panel summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px;cursor:pointer}.data-panel summary::-webkit-details-marker{display:none}.data-panel[open] summary{border-bottom:1px solid var(--line)}
 .io{display:flex;gap:7px;padding:11px}.small-btn{flex:1;border:1px solid var(--line);border-radius:999px;background:transparent;color:var(--muted);padding:8px 7px;font-size:9px;font-weight:850;cursor:pointer}
 .note{font-size:9px;color:#686e76;line-height:1.45;text-align:center;margin:10px 4px 2px}.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));transform:translate(-50%,18px);opacity:0;pointer-events:none;transition:.2s;background:#101216;border:1px solid var(--green);color:var(--green);padding:10px 15px;border-radius:999px;font-size:11px;font-weight:950;z-index:20;max-width:90%;text-align:center}.toast.show{opacity:1;transform:translate(-50%,0)}
-@media(max-width:370px){.fighter-xp{font-size:22px}.profile-btn{padding:9px}.hero-name{font-size:19px}.mode b{font-size:14px}.mode small{font-size:8px}}
+@media(max-width:370px){.fighter-xp{font-size:22px}.profile-btn{padding:9px}.hero-name{font-size:19px}.mode b{font-size:14px}.mode small{font-size:8px}.mission-item b{font-size:13px}}
 :focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
