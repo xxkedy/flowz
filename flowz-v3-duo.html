@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -9,58 +9,61 @@
 <meta name="apple-mobile-web-app-title" content="Flowz Duo">
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
-<title>Flowz v3 · Duo Battle</title>
-<link rel="stylesheet" href="flowz-v3-duo.css">
+<title>Flowz v3.1 · Duo Battle</title>
+<link rel="stylesheet" href="flowz-v3-duo.css?v=3.1.0">
 </head>
-<body>
-<header class="top"><div class="brand"><h1>Flow<span>z</span></h1><p>DUO LANGUAGE BATTLE</p></div><div class="version">v3 MVP</div></header>
+<body data-profile="kedy">
+<header class="top"><div class="brand"><h1>Flow<span>z</span></h1><p>DUO LANGUAGE BATTLE</p></div><div class="version">v3.1</div></header>
 
-<section class="profile-switch" aria-label="学習者を選択">
+<section class="profile-switch" aria-label="Select learner">
   <button class="profile-btn active" data-profile="kedy"><span class="pname"><span class="pflag">🇺🇸</span>kedy</span><span class="plang">ENGLISH</span><span class="pmini" id="mini-kedy">LV.1</span></button>
   <button class="profile-btn" data-profile="leni"><span class="pname"><span class="pflag">🇯🇵</span>Leni</span><span class="plang">JAPANESE</span><span class="pmini" id="mini-leni">LV.1</span></button>
 </section>
 
+<section class="panel today-card" id="todayCard">
+  <div class="today-line"><div class="today-main"><b id="todayTitle">NOT STARTED</b><span id="todayDetail">Complete 1 session for 10 XP</span></div><div class="today-score"><span id="todayXp">0</span><small> XP</small></div></div>
+</section>
+
+<section class="panel session-panel">
+  <div class="section-head"><div class="section-title" id="modeTitle">🎙️ ENGLISH SESSION</div><span class="chip" id="dailyCap">MAX 15 XP</span></div>
+  <div class="modes" id="modes"></div>
+</section>
+
+<section class="panel pending" id="pending">
+  <h3 id="pendingHeading">✅ SESSION RESULT</h3><p id="pendingText">Return from ChatGPT, choose the result, then finish.</p>
+  <div class="checks"><label class="check"><input type="checkbox" id="phraseCheck"><span id="phraseLabel">Used today’s phrase</span> <b>+3 XP</b></label><label class="check"><input type="checkbox" id="fixCheck"><span id="fixLabel">Fixed a sentence</span> <b>+2 XP</b></label></div>
+  <button class="complete" id="completeBtn">COMPLETE SESSION +10 XP</button>
+</section>
+
 <section class="panel battle">
-  <div class="battle-title">⚔️ THIS WEEK</div>
+  <div class="battle-title" id="battleTitle">⚔️ THIS WEEK</div>
   <div class="versus">
     <div class="fighter"><div class="fighter-name">kedy</div><div class="fighter-lang">ENGLISH</div><div class="fighter-xp"><span id="battleKedy">0</span><small>XP</small></div></div>
     <div class="vs">VS</div>
     <div class="fighter right"><div class="fighter-name">Leni</div><div class="fighter-lang">JAPANESE</div><div class="fighter-xp"><span id="battleLeni">0</span><small>XP</small></div></div>
   </div>
-  <div class="battle-result" id="battleResult">今週は同点</div>
-  <div class="duo-row"><span class="chip">🤝 DUO STREAK <b id="duoStreak">0</b>日</span><span class="chip">🔥 2人で <b id="duoDays">0</b>日達成</span></div>
+  <div class="battle-result" id="battleResult">Tied this week</div>
+  <div class="duo-row"><span class="chip"><span id="duoStreakText">🤝 DUO STREAK</span> <b id="duoStreak">0</b><span id="duoStreakUnit"> days</span></span><span class="chip"><span id="duoDaysText">🔥 TOGETHER</span> <b id="duoDays">0</b><span id="duoDaysUnit"> days</span></span></div>
 </section>
 
 <section class="panel" id="heroPanel">
   <div class="hero">
     <div class="level-ring" id="levelRing"><div class="level-core"><b id="levelNum">1</b><span>LEVEL</span></div></div>
-    <div><div class="hero-name" id="heroName">kedy 🇺🇸</div><div class="hero-sub" id="heroSub">英語を実戦で使う</div><div class="stats"><div class="stat"><b id="streak">0</b><span>連続日数</span></div><div class="stat"><b id="best">0</b><span>最長</span></div><div class="stat"><b id="sessions">0</b><span>セッション</span></div></div></div>
+    <div><div class="hero-name" id="heroName">kedy 🇺🇸</div><div class="hero-sub" id="heroSub">Use English in real life</div><div class="stats"><div class="stat"><b id="streak">0</b><span id="streakLabel">STREAK</span></div><div class="stat"><b id="best">0</b><span id="bestLabel">BEST</span></div><div class="stat"><b id="sessions">0</b><span id="sessionsLabel">SESSIONS</span></div></div></div>
   </div>
-  <div class="progress-line" id="levelBar"><i></i></div><div class="progress-meta"><span id="totalXp">0 XP</span><span id="nextXp">次まで100 XP</span></div>
+  <div class="progress-line" id="levelBar"><i></i></div><div class="progress-meta"><span id="totalXp">0 XP</span><span id="nextXp">Next: 100 XP</span></div>
 </section>
 
-<section class="panel today-card" id="todayCard">
-  <div class="today-line"><div class="today-main"><b id="todayTitle">今日はまだ</b><span id="todayDetail">1セッションで10 XP</span></div><div class="today-score"><span id="todayXp">0</span><small style="font-size:10px;color:var(--muted)"> XP</small></div></div>
-</section>
+<section class="panel"><div class="section-head"><div class="section-title" id="weekTitle">📅 LAST 7 DAYS</div><span class="chip" id="weekSessions">0 / 7 days</span></div><div class="week-strip" id="weekStrip"></div></section>
 
-<section class="panel">
-  <div class="section-head"><div class="section-title" id="modeTitle">🎙️ 今日のセッション</div><span class="chip" id="dailyCap">上限 15 XP</span></div>
-  <div class="modes" id="modes"></div>
-</section>
-
-<section class="panel pending" id="pending">
-  <h3>✅ セッション結果</h3><p id="pendingText">ChatGPTから戻ったら、できた内容を選んで完了してな。</p>
-  <div class="checks"><label class="check"><input type="checkbox" id="phraseCheck"> 今日の表現を使えた <b>+3 XP</b></label><label class="check"><input type="checkbox" id="fixCheck"> 言い直しに成功した <b>+2 XP</b></label></div>
-  <button class="complete" id="completeBtn">セッション完了 +10 XP</button>
-</section>
-
-<section class="panel"><div class="section-head"><div class="section-title">📅 LAST 7 DAYS</div><span class="chip" id="weekSessions">0 sessions</span></div><div class="week-strip" id="weekStrip"></div></section>
-
-<section class="panel"><div class="section-head"><div class="section-title">💾 DATA</div><span class="chip">端末内保存</span></div><div class="io"><button class="small-btn" id="exportBtn">記録をコピー</button><button class="small-btn" id="importBtn">記録を復元</button><button class="small-btn" id="resetPendingBtn">保留を消す</button></div></section>
-<p class="note">MVPはこの端末内で対戦記録を保存。次段階でSupabase同期を入れれば、kedyとLeniのiPhoneをリアルタイム共有できる。</p>
-<p class="note">✅ 最終更新 2026.08.04｜Flowz v3 Duo Battle</p>
+<details class="panel data-panel">
+  <summary><span class="section-title" id="dataTitle">💾 DATA & BACKUP</span><span class="chip" id="storageLabel">AUTO BACKUP</span></summary>
+  <div class="io"><button class="small-btn" id="exportBtn">COPY RECORD</button><button class="small-btn" id="importBtn">RESTORE RECORD</button><button class="small-btn" id="resetPendingBtn">CLEAR PENDING</button></div>
+</details>
+<p class="note" id="storageNote">Records are saved automatically in this browser with a backup. Different devices do not sync yet.</p>
+<p class="note">✅ Last updated 2026.08.04 · Flowz v3.1 Persistent Duo</p>
 <div class="toast" id="toast"></div>
 
-<script src="flowz-v3-duo.js" defer></script>
+<script src="flowz-v3-duo.js?v=3.1.0" defer></script>
 </body>
 </html>
