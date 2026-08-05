@@ -253,7 +253,19 @@ function localRowsAfterMigration(cloud){
 }
 async function pushLocal(cloud){
   var rows=localRowsAfterMigration(cloud);if(!rows.length)return 0;
-  var ids=await existingIds(cloud.roomId,cloud.profile);return insertMissing(rows,ids);
+  var existingResult=await client.from('flowz_sessions').select('client_session_id,session_date,xp').eq('room_id',cloud.roomId).eq('profile',cloud.profile);
+  if(existingResult.error)throw existingResult.error;
+  var existing={},cloudXp={};
+  (existingResult.data||[]).forEach(function(row){existing[row.client_session_id]=true;cloudXp[row.session_date]=(cloudXp[row.session_date]||0)+(Number(row.xp)||0)});
+  var state=loadState(),days=state&&state.profiles&&state.profiles[cloud.profile]&&state.profiles[cloud.profile].days||{};
+  var remaining={};
+  rows.forEach(function(row){
+    if(existing[row.client_session_id])return;
+    if(!(row.session_date in remaining))remaining[row.session_date]=Math.max(0,xpOf(days[row.session_date])-Number(cloudXp[row.session_date]||0));
+    row.xp=Math.min(100,remaining[row.session_date]);
+    remaining[row.session_date]=0;
+  });
+  return insertMissing(rows,existing);
 }
 function cloudToState(state,rows){
   if(!state||!state.profiles)return false;
