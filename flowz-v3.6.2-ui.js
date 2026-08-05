@@ -1,7 +1,7 @@
 (function(){
 'use strict';
 
-var VERSION='v3.6.2 (2026.8.6)';
+var VERSION='v3.7 (2026.8.6)';
 var LABELS={kedy:'🌙 kedy',leni:'☀️ Leni'};
 var scheduled=false;
 
