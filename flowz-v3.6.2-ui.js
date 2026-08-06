@@ -1,8 +1,6 @@
 (function(){
 'use strict';
 
-var VERSION='v3.7 (2026.8.6)';
-var FOOTER='✅ Last updated 2026.08.06 · Flowz v3.7 Conversation Variety';
 var LABELS={kedy:'🌙 kedy',leni:'☀️ Leni'};
 var scheduled=false;
 
@@ -28,9 +26,6 @@ function apply(){
 
   var profile=currentProfile();
   setText('#heroName',LABELS[profile]);
-  setText('.version',VERSION);
-  setText('body>.note:last-of-type',FOOTER);
-  document.title='Flowz v3.7 · Duo Battle';
 
   document.querySelectorAll('#flowzCloudPanel .cloud-member').forEach(function(el){
     var text=el.textContent||'';
