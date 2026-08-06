@@ -5,7 +5,7 @@ function parse(raw){try{return raw?JSON.parse(raw):null}catch(e){return null}}
 function profile(){return document.body&&document.body.getAttribute('data-profile')==='leni'?'leni':'kedy'}
 function pending(){return parse(localStorage.getItem(PENDING_KEY))}
 function diaryRule(){
-  return "After the spoken recap, silently use connected Notion tools to find today's existing Diary page by date. Append a Flowz English log without creating a new Diary page, then fetch it again to verify. If Notion is unavailable, clearly say it was not recorded and output copy-ready text. The written log should contain 2–3 diary sentences, one Phrase line, up to three Fix lines, and one Coach Assessment line. Do not update GitHub for an ordinary learning session.";
+  return "At wrap-up, silently use connected Notion tools to find today's existing Diary page by date. Append a Flowz English log without creating a new Diary page, then fetch it again to verify. If Notion is unavailable, clearly say it was not recorded and output copy-ready text. The written log should contain 2–3 diary sentences, one Phrase line, up to three Fix lines, and one Coach Assessment line. Do not update GitHub for an ordinary learning session.";
 }
 function commutePrompt(p){
   var m=p.mission||{};
@@ -22,7 +22,7 @@ function commutePrompt(p){
     "Assume the screen is not visible. Do not rely on spelling, markdown, headings, tables, or visual bullet lists. Keep every spoken turn easy to understand by ear.",
     "When he is almost at work or home, give a brief Arrival Review without ending. In about 20 seconds, naturally mention what you talked about, three phrases he used, up to two corrections, and one phrase to reuse next time.",
     "Never ask or prompt him to say 'Wrap up'. Continue naturally until he says 'まとめて' or 'Wrap up'.",
-    "At wrap-up, give the spoken recap before making any tool call. Keep it conversational and about 30–45 seconds: summarize the actual topics, say three corrected or reusable sentences slowly, give one concise CEFR range with the next focus, and state the XP result. Do not read the full English Log, labels, headings, spelling, or a long assessment aloud.",
+    "At wrap-up, use connected tools only then. Keep the final spoken recap conversational and about 30–45 seconds: summarize the actual topics, say three corrected or reusable sentences slowly, give one concise CEFR range with the next focus, and state the XP result. Do not read the full English Log, labels, headings, spelling, tool activity, or a long assessment aloud.",
     "Judge his English from this actual conversation, not from XP or session count. Assess communication success, grammar control, usable vocabulary, and listening or reaction speed. Avoid a TOEIC score unless a real TOEIC-style test was done.",
     diaryRule()
   ].join(' ');
