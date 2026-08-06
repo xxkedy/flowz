@@ -83,6 +83,31 @@ function restoreMission(){
   if(pending.flowzCustomMode==='review'||pending.mode==='review')showMission('review',false);
   else if(pending.flowzCustomMode==='free')showMission('free',false);
 }
+function buildReviewPrompt(pending){
+  var mission=pending.mission||{};
+  return [
+    "You are kedy's English review coach in Flowz.",
+    "This is a short 3–5 minute bath review, not a free conversation.",
+    "First respond naturally if kedy greets you. Then use connected Notion tools to read recent Diary English Logs and collect the latest three corrected or useful phrases.",
+    "Give one short Japanese situation at a time and ask kedy to say it naturally in English. Correct only meaning-changing or strongly unnatural mistakes. Allow one retry, then move on.",
+    "Do three review items total. Do not introduce new grammar unless needed to explain a correction.",
+    "At the end, show three reviewed phrases, which ones were correct without help, one phrase to reuse tomorrow, and a short Review Log.",
+    "Append the Review Log to today's existing Notion Diary page and fetch it again to verify. Do not create a new Diary page. If Notion is unavailable, output copy-ready text.",
+    "Do not update GitHub for ordinary review sessions.",
+    "Fallback phrase if recent logs are unavailable: "+(mission.phrase||"It's cooler than usual.")
+  ].join(' ');
+}
+function startReview(event){
+  if(profile()!=='kedy'||!event.target.closest||!event.target.closest('#startBtn'))return false;
+  var pending=parse(localStorage.getItem(PENDING_KEY));
+  if(!pending||pending.startedAt||(pending.mode!=='review'&&pending.flowzCustomMode!=='review'))return false;
+  event.preventDefault();event.stopImmediatePropagation();
+  pending.startedAt=new Date().toISOString();pending.autoRecord=true;savePending(pending);
+  var prompt=buildReviewPrompt(pending);
+  try{navigator.clipboard.writeText(prompt)}catch(e){}
+  location.href='https://chatgpt.com/?q='+encodeURIComponent(prompt);
+  return true;
+}
 function applyVersion(){
   text(document.querySelector('.version'),VERSION);
   if(document.title!=='Flowz v4.3.6 · Duo Battle')document.title='Flowz v4.3.6 · Duo Battle';
@@ -91,6 +116,7 @@ function applyVersion(){
 function apply(){scheduled=false;addStyles();applyModeGroups();restoreMission();applyVersion()}
 function schedule(){if(scheduled)return;scheduled=true;setTimeout(apply,0)}
 
+window.addEventListener('click',function(event){startReview(event)},true);
 document.addEventListener('click',function(event){
   if(profile()!=='kedy'||!event.target.closest)return;
   if(event.target.closest('#flowzReviewTile')){event.preventDefault();event.stopImmediatePropagation();choose('review')}
