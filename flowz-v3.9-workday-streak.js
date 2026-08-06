@@ -2,8 +2,6 @@
 'use strict';
 
 var DATA_KEY='flowz_duo_data';
-var VERSION='v3.9 (2026.8.6)';
-var FOOTER='✅ Last updated 2026.08.06 · Flowz v3.9 Workday Streak';
 
 function parse(raw){try{return raw?JSON.parse(raw):null}catch(e){return null}}
 function dateKey(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
@@ -41,9 +39,6 @@ function render(){
     setText('streak',currentRun(days));setText('best',bestRun(days));setText('sessions',sessions.length);
     setText('streakLabel','WORKDAY RUN');setText('bestLabel','BEST RUN');setText('sessionsLabel','SESSIONS');
   }
-  var version=document.querySelector('.version');if(version)version.textContent=VERSION;
-  var footer=document.querySelector('body>.note:last-of-type');if(footer)footer.textContent=FOOTER;
-  document.title='Flowz v3.9 · Duo Battle';
 }
 function schedule(){setTimeout(render,0);setTimeout(render,400);setTimeout(render,1400)}
 document.addEventListener('DOMContentLoaded',schedule);
