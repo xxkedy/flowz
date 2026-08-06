@@ -1,25 +1,32 @@
 (function(){
 'use strict';
-var VERSION='v4.0 (2026.8.6)',PENDING_KEY='flowz_duo_pending';
+var PENDING_KEY='flowz_duo_pending',scheduled=false;
 function parse(raw){try{return raw?JSON.parse(raw):null}catch(e){return null}}
-function text(sel,value){var el=document.querySelector(sel);if(el)el.textContent=value}
+function setText(sel,value){var el=document.querySelector(sel);if(el&&el.textContent!==value)el.textContent=value}
+function setHtml(el,value){if(el&&el.innerHTML!==value)el.innerHTML=value}
 function profile(){return document.body&&document.body.getAttribute('data-profile')==='leni'?'leni':'kedy'}
 function moveMission(){
   var mission=document.getElementById('mission'),profiles=document.querySelector('.profile-switch');
   if(!mission||!profiles)return;
   if(profiles.nextElementSibling!==mission)profiles.insertAdjacentElement('afterend',mission);
-  mission.classList.add('mission-first');
-  text('#missionHeading','🎯 TODAY’S PHRASE');text('#startBtn','⚡ START COMMUTE');
-  var guide=document.getElementById('missionGuide');if(guide)guide.textContent='Check the phrase, then start with one tap. You can greet ChatGPT normally first.';
+  if(!mission.classList.contains('mission-first'))mission.classList.add('mission-first');
+  var p=parse(localStorage.getItem(PENDING_KEY)),toeic=p&&p.profile==='kedy'&&p.mode==='toeic';
+  setText('#missionHeading',toeic?'🎯 TOEIC CHECK':'🎯 TODAY’S PHRASE');
+  setText('#startBtn',toeic?'START TOEIC CHECK':'⚡ START COMMUTE');
+  var guide=document.getElementById('missionGuide');
+  var guideText=toeic?'12-question Listening & Reading mini-check. The result is an estimated range, not an official score.':'Check the phrase, then start with one tap. You can greet ChatGPT normally first.';
+  if(guide&&guide.textContent!==guideText)guide.textContent=guideText;
 }
 function coachAssessment(){
   var panel=document.getElementById('flowzAssessment');if(!panel)return;
   var title=panel.querySelector('.section-title'),chip=panel.querySelector('.chip'),stats=panel.querySelectorAll('.stat'),note=panel.querySelector('.note');
-  if(title)title.textContent='🗣️ COACH ASSESSMENT';if(chip)chip.textContent='CONVERSATION BASED';
-  if(stats[0])stats[0].innerHTML='<b>A1→A2</b><span>CURRENT CEFR</span>';
-  if(stats[1])stats[1].innerHTML='<b>SHORT TALK</b><span>CAN COMMUNICATE</span>';
-  if(stats[2])stats[2].innerHTML='<b>毎回更新</b><span>VOICE REVIEW</span>';
-  if(note)note.textContent='XPは継続とレベル用。英語力は実際の発話・通じやすさ・文法・語彙・反応速度を会話終了時にコーチが判定する。';
+  if(title&&title.textContent!=='🗣️ COACH ASSESSMENT')title.textContent='🗣️ COACH ASSESSMENT';
+  if(chip&&chip.textContent!=='CONVERSATION BASED')chip.textContent='CONVERSATION BASED';
+  setHtml(stats[0],'<b>A1→A2</b><span>CURRENT CEFR</span>');
+  setHtml(stats[1],'<b>SHORT TALK</b><span>CAN COMMUNICATE</span>');
+  setHtml(stats[2],'<b>毎回更新</b><span>VOICE REVIEW</span>');
+  var noteText='XPは継続とレベル用。英語力は実際の発話から判定し、TOEICは専用ミニテストで別に測る。';
+  if(note&&note.textContent!==noteText)note.textContent=noteText;
 }
 function promptFor(p){
   var m=p.mission||{};
@@ -41,16 +48,17 @@ function promptFor(p){
 }
 function intercept(e){
   var btn=e.target.closest&&e.target.closest('#startBtn');if(!btn||profile()!=='kedy')return;
-  var p=parse(localStorage.getItem(PENDING_KEY));if(!p||p.startedAt)return;
+  var p=parse(localStorage.getItem(PENDING_KEY));if(!p||p.startedAt||p.mode==='toeic')return;
   e.preventDefault();e.stopImmediatePropagation();p.startedAt=new Date().toISOString();p.autoRecord=true;
   try{localStorage.setItem(PENDING_KEY,JSON.stringify(p))}catch(err){}
   var prompt=promptFor(p);try{navigator.clipboard.writeText(prompt)}catch(err){}
   location.href='https://chatgpt.com/?q='+encodeURIComponent(prompt);
 }
-function apply(){moveMission();coachAssessment();text('.version',VERSION);document.title='Flowz v4.0 · Duo Battle';var footer=document.querySelector('body>.note:last-of-type');if(footer)footer.textContent='✅ Last updated 2026.08.06 · Flowz v4.0 Conversation First';}
+function apply(){scheduled=false;moveMission();coachAssessment()}
+function schedule(){if(scheduled)return;scheduled=true;setTimeout(apply,0)}
 document.addEventListener('click',intercept,true);
-document.addEventListener('DOMContentLoaded',function(){setTimeout(apply,0);setTimeout(apply,1200)});
-window.addEventListener('pageshow',function(){setTimeout(apply,0)});
-document.addEventListener('click',function(e){if(e.target.closest&&e.target.closest('.profile-btn'))setTimeout(apply,30)});
-new MutationObserver(function(){setTimeout(apply,0)}).observe(document.documentElement,{childList:true,subtree:true});
+document.addEventListener('DOMContentLoaded',function(){schedule();setTimeout(schedule,1200)});
+window.addEventListener('pageshow',schedule);
+document.addEventListener('click',function(e){if(e.target.closest&&e.target.closest('.profile-btn,.mode'))setTimeout(schedule,30)});
+new MutationObserver(schedule).observe(document.documentElement,{childList:true,subtree:true,attributes:true,attributeFilter:['data-profile','class']});
 })();
