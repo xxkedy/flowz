@@ -31,7 +31,8 @@ function intercept(e){
   var btn=e.target.closest&&e.target.closest('#startBtn');
   if(!btn||profile()!=='kedy')return;
   var p=pending();
-  if(!p||p.startedAt||p.mode==='toeic'||p.mode==='bath'||p.mode==='free')return;
+  var custom=p&&p.flowzCustomMode;
+  if(!p||p.startedAt||p.mode==='toeic'||p.mode==='bath'||p.mode==='free'||p.mode==='review'||custom==='free'||custom==='review')return;
   e.preventDefault();
   e.stopImmediatePropagation();
   p.startedAt=new Date().toISOString();
