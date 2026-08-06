@@ -5,8 +5,6 @@ var DATA_KEY='flowz_duo_data';
 var BACKUP_KEY='flowz_duo_data_backup';
 var VAULT_KEY='flowz_history_vault_v1';
 var SNAPSHOT_PREFIX='flowz_history_snapshot_';
-var VERSION='v3.8 (2026.8.6)';
-var FOOTER='✅ Last updated 2026.08.06 · Flowz v3.8 History Vault';
 var LOCK=false;
 
 function parse(raw){try{return raw?JSON.parse(raw):null}catch(e){return null}}
@@ -97,9 +95,7 @@ function protect(){
     return changed;
   }finally{LOCK=false}
 }
-function setText(selector,text){var el=document.querySelector(selector);if(el&&el.textContent!==text)el.textContent=text}
 function renderStatus(){
-  setText('.version',VERSION);setText('body>.note:last-of-type',FOOTER);document.title='Flowz v3.8 · Duo Battle';
   var details=document.querySelector('.data-panel');if(!details)return;
   var note=document.getElementById('historyVaultNote');
   if(!note){note=document.createElement('p');note.id='historyVaultNote';note.className='note';details.insertAdjacentElement('afterend',note)}
