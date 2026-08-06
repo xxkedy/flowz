@@ -22,6 +22,8 @@ function todayMission(){return COMMUTE_MISSIONS[missionSeed('kedy','commute',dat
 function currentProfile(){return document.body&&document.body.dataset.profile==='leni'?'leni':'kedy'}
 function savePending(value){try{localStorage.setItem(PENDING_KEY,JSON.stringify(value))}catch(e){}}
 function loadState(){return parse(localStorage.getItem(DATA_KEY))||{}}
+function setText(element,value){if(element&&element.textContent!==value)element.textContent=value}
+function setDisplay(element,value){if(element&&element.style.display!==value)element.style.display=value}
 function previousPhrase(){
   var state=loadState(),sessions=state.profiles&&state.profiles.kedy&&state.profiles.kedy.sessions||[];
   for(var i=sessions.length-1;i>=0;i--){
@@ -49,7 +51,6 @@ function buildToeicPrompt(pending){
   ].join(' ');
 }
 
-/* Capture TOEIC starts before the older generic start handler reaches the button. */
 document.addEventListener('click',function(event){
   var start=event.target&&event.target.closest&&event.target.closest('#startBtn');
   if(!start)return;
@@ -107,7 +108,9 @@ function ensureTalkPrep(){
       if(event.target&&event.target.closest&&event.target.closest('#flowzTalkPrepBtn'))startCommute();
     });
   }
-  var m=todayMission(),reuse=previousPhrase();
+  var m=todayMission(),reuse=previousPhrase(),signature=m.phrase+'|'+reuse+'|'+currentProfile();
+  if(card.dataset.signature===signature)return;
+  card.dataset.signature=signature;
   card.innerHTML='<div class="prep-head"><div class="prep-title">🗣️ TALK PREP</div><span class="prep-chip">COMMUTE</span></div>'+
     '<div class="prep-grid">'+
       '<div class="prep-row"><span>OPEN</span><div><b>Hey ChatGPT, how’s it going?</b><small>普通に挨拶から始めてOK</small></div></div>'+
@@ -128,7 +131,7 @@ function startCommute(){
 function updateModeLabels(){
   document.querySelectorAll('#modes .mode').forEach(function(button){
     var title=button.querySelector('b'),sub=button.querySelector('small');
-    if(title&&title.textContent.trim()==='TOEIC'&&sub)sub.textContent='Mini L/R check · 10min';
+    if(title&&title.textContent.trim()==='TOEIC'&&sub&&sub.textContent!=='Mini L/R check · 10min')sub.textContent='Mini L/R check · 10min';
   });
 }
 
@@ -137,8 +140,8 @@ function updateMissionVisibility(){
   if(!mission||!talk)return;
   var pending=parse(localStorage.getItem(PENDING_KEY));
   var showTalk=currentProfile()==='kedy'&&(!pending||pending.profile!=='kedy'||pending.mode==='commute');
-  talk.style.display=showTalk?'':'none';
-  if(showTalk)mission.style.display='none';else mission.style.display='';
+  setDisplay(talk,showTalk?'':'none');
+  setDisplay(mission,showTalk?'none':'');
 }
 
 function compactDuo(){
@@ -146,10 +149,10 @@ function compactDuo(){
   if(!panel)return;
   var on=panel.querySelectorAll('.cloud-member.on').length;
   if(on>=2){
-    panel.classList.add('flowz-duo-ready');
+    if(!panel.classList.contains('flowz-duo-ready'))panel.classList.add('flowz-duo-ready');
     var title=panel.querySelector('.cloud-title'),status=panel.querySelector('.cloud-status');
-    if(title)title.textContent='☁️ DUO CONNECTED · kedy + Leni';
-    if(status)status.textContent='SYNC ON';
+    setText(title,'☁️ DUO CONNECTED · kedy + Leni');
+    setText(status,'SYNC ON');
     if(!panel.dataset.compactBound){
       panel.dataset.compactBound='1';
       panel.addEventListener('click',function(event){
@@ -158,7 +161,8 @@ function compactDuo(){
       });
     }
   }else{
-    panel.classList.remove('flowz-duo-ready','expanded');
+    if(panel.classList.contains('flowz-duo-ready'))panel.classList.remove('flowz-duo-ready');
+    if(panel.classList.contains('expanded'))panel.classList.remove('expanded');
   }
   if(talk&&talk.nextElementSibling!==panel)talk.insertAdjacentElement('afterend',panel);
 }
@@ -170,10 +174,10 @@ function apply(){
   updateModeLabels();
   updateMissionVisibility();
   compactDuo();
-  var version=document.querySelector('.version');if(version)version.textContent=VERSION;
-  document.title='Flowz v4.1 · Duo Battle';
+  setText(document.querySelector('.version'),VERSION);
+  if(document.title!=='Flowz v4.1 · Duo Battle')document.title='Flowz v4.1 · Duo Battle';
   var notes=document.querySelectorAll('body>.note');
-  if(notes.length)notes[notes.length-1].textContent='✅ Last updated 2026.08.06 · Flowz v4.1 TOEIC + Talk Prep';
+  if(notes.length)setText(notes[notes.length-1],'✅ Last updated 2026.08.06 · Flowz v4.1 TOEIC + Talk Prep');
 }
 function schedule(){if(scheduled)return;scheduled=true;setTimeout(apply,0)}
 
@@ -182,6 +186,6 @@ window.addEventListener('pageshow',schedule);
 document.addEventListener('click',function(event){
   if(event.target&&event.target.closest&&event.target.closest('.profile-btn,.mode'))setTimeout(schedule,40);
 });
-new MutationObserver(schedule).observe(document.documentElement,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['data-profile','class']});
+new MutationObserver(schedule).observe(document.documentElement,{childList:true,subtree:true,attributes:true,attributeFilter:['data-profile','class']});
 
 })();
