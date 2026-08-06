@@ -32,7 +32,7 @@ function previousPhrase(){
   }
   return 'I feel good.';
 }
-function safe(value){return String(value==null?'':value).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function safe(value){return String(value==null?'':value).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot',"'":'&#39;'}[c]})}
 
 function buildToeicPrompt(pending){
   var mission=pending.mission||{};
@@ -46,6 +46,7 @@ function buildToeicPrompt(pending){
     "After question 12, give: Listening score out of 6, Reading score out of 6, total out of 12, the questions he missed with very short explanations, and a broad estimated TOEIC L&R score band. Never claim an official or exact TOEIC score from one mini-check. Use a broad band of about 150 points and label confidence LOW. If connected Notion contains at least three recent TOEIC Check results, combine the latest three and you may narrow the estimate to about a 100-point band with MEDIUM confidence.",
     "Keep TOEIC scoring separate from conversation CEFR and separate from Flowz XP. XP is only for consistency and game progress.",
     "Today's useful phrase is: \""+(mission.phrase||'Could you send it again?')+"\". Meaning: "+(mission.meaning||'もう一度送ってもらえますか')+". After scoring, use it in one short practical example, but do not include it as a scored question unless it fits naturally.",
+    "At the end, say the result once in this exact compact format so kedy can enter it in Flowz: FLOWZ TOEIC RESULT: Lx/6 Ry/6. Then give the normal explanation.",
     "At the end, use connected Notion tools to find today's existing Diary page by date. Append a TOEIC Check log with date, Listening /6, Reading /6, Total /12, estimated band, confidence, and up to three weak areas. Do not create a new Diary page. Fetch the page again to verify the update. If Notion is unavailable, clearly say it was not recorded and output copy-ready text.",
     "Do not update GitHub for an ordinary TOEIC learning session."
   ].join(' ');
@@ -82,16 +83,7 @@ function addStyles(){
     '#flowzTalkPrep .prep-row small{display:block;margin-top:2px;color:#858d96;font-size:10px}'+
     '#flowzTalkPrepBtn{width:100%;margin-top:10px;padding:14px;border:0;border-radius:13px;background:linear-gradient(135deg,#ff9e2c,#ff7138);color:#111;font:950 15px/1 -apple-system,BlinkMacSystemFont,"Hiragino Sans",sans-serif}'+
     'body[data-profile="leni"] #flowzTalkPrep{display:none}'+
-    'body[data-profile="kedy"] #quickCommuteBtn{display:none!important}'+
-    '#flowzCloudPanel.flowz-duo-ready{padding:11px 14px}'+
-    '#flowzCloudPanel.flowz-duo-ready .cloud-head{margin:0;cursor:pointer}'+
-    '#flowzCloudPanel.flowz-duo-ready:not(.expanded) .cloud-message,'+
-    '#flowzCloudPanel.flowz-duo-ready:not(.expanded) .cloud-code,'+
-    '#flowzCloudPanel.flowz-duo-ready:not(.expanded) .cloud-members,'+
-    '#flowzCloudPanel.flowz-duo-ready:not(.expanded) .cloud-latest,'+
-    '#flowzCloudPanel.flowz-duo-ready:not(.expanded) .cloud-note{display:none}'+
-    '#flowzCloudPanel.flowz-duo-ready .cloud-title{font-size:12px}'+
-    '#flowzCloudPanel.flowz-duo-ready .cloud-status{padding:5px 8px;font-size:9px}';
+    'body[data-profile="kedy"] #quickCommuteBtn{display:none!important}';
   document.head.appendChild(style);
 }
 
@@ -144,40 +136,12 @@ function updateMissionVisibility(){
   setDisplay(mission,showTalk?'none':'');
 }
 
-function compactDuo(){
-  var panel=document.getElementById('flowzCloudPanel'),talk=document.getElementById('flowzTalkPrep');
-  if(!panel)return;
-  var on=panel.querySelectorAll('.cloud-member.on').length;
-  if(on>=2){
-    if(!panel.classList.contains('flowz-duo-ready'))panel.classList.add('flowz-duo-ready');
-    var title=panel.querySelector('.cloud-title'),status=panel.querySelector('.cloud-status');
-    setText(title,'☁️ DUO CONNECTED · kedy + Leni');
-    setText(status,'SYNC ON');
-    if(!panel.dataset.compactBound){
-      panel.dataset.compactBound='1';
-      panel.addEventListener('click',function(event){
-        if(event.target&&event.target.closest&&event.target.closest('[data-cloud-action]'))return;
-        if(event.target&&event.target.closest&&event.target.closest('.cloud-head'))panel.classList.toggle('expanded');
-      });
-    }
-  }else{
-    if(panel.classList.contains('flowz-duo-ready'))panel.classList.remove('flowz-duo-ready');
-    if(panel.classList.contains('expanded'))panel.classList.remove('expanded');
-  }
-  if(talk&&talk.nextElementSibling!==panel)talk.insertAdjacentElement('afterend',panel);
-}
-
 function apply(){
   scheduled=false;
   addStyles();
   ensureTalkPrep();
   updateModeLabels();
   updateMissionVisibility();
-  compactDuo();
-  setText(document.querySelector('.version'),VERSION);
-  if(document.title!=='Flowz v4.1 · Duo Battle')document.title='Flowz v4.1 · Duo Battle';
-  var notes=document.querySelectorAll('body>.note');
-  if(notes.length)setText(notes[notes.length-1],'✅ Last updated 2026.08.06 · Flowz v4.1 TOEIC + Talk Prep');
 }
 function schedule(){if(scheduled)return;scheduled=true;setTimeout(apply,0)}
 
