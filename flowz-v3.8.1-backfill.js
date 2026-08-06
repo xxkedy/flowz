@@ -53,13 +53,11 @@ function show(){
   var anchor=document.getElementById('historyVaultNote');
   if(!anchor)return;
   if(!el){el=document.createElement('p');el.id='historyBackfillNote';el.className='note';anchor.insertAdjacentElement('afterend',el)}
-  el.textContent='✅ Estimated history restored · 2026.07.08–08.05 · 21 weekdays / 210 XP';
+  var text='✅ Estimated history restored · 2026.07.08–08.05 · 21 weekdays / 210 XP';
+  if(el.textContent!==text)el.textContent=text;
 }
 function run(){
   var changed=applyBackfill();show();
-  var version=document.querySelector('.version');if(version)version.textContent='v3.8.1 (2026.8.6)';
-  var footer=document.querySelector('body>.note:last-of-type');if(footer)footer.textContent='✅ Last updated 2026.08.06 · Flowz v3.8.1 History Backfill';
-  document.title='Flowz v3.8.1 · Duo Battle';
   if(changed)setTimeout(function(){location.reload()},120);
 }
 
