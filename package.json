@@ -1,0 +1,12 @@
+{
+  "name": "flowz",
+  "private": true,
+  "version": "4.4.0",
+  "description": "Flowz Duo Battle — static frontend, no build step. This package.json only exists to run the Playwright regression test in tests/stability.spec.js.",
+  "scripts": {
+    "test": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.47.0"
+  }
+}
