@@ -35,7 +35,7 @@ function coachAssessment(){
   if(note&&note.textContent!==noteText)note.textContent=noteText;
 }
 function openingRule(){
-  return "Important opening rule: kedy usually begins with a casual greeting such as 'ChatGPT, how are you?' Respond like a normal conversation partner first. Have one or two natural greeting exchanges before introducing learning structure. Do not immediately announce a lesson, mission, correction, test, or shadowing.";
+  return "Important opening rule: kedy usually begins with a casual greeting such as 'ChatGPT, how are you?' Respond like a normal conversation partner first, then move into a real topic without forcing repeated greeting exchanges. Do not immediately announce a lesson, mission, correction, test, or shadowing. Never end a turn with only praise, acknowledgement, or a closing phrase such as 'Perfect', 'You're welcome', 'Got it', or 'Thanks'. After a brief acknowledgement, immediately continue with a natural question, topic, or next sentence. Do not close the conversation until kedy explicitly ends it.";
 }
 function diaryRule(kind){
   return "At the end, use connected Notion tools to find today's existing Diary page by date. Append a "+kind+" log without creating a new Diary page, then fetch it again to verify. If Notion is unavailable, clearly say it was not recorded and output copy-ready text. Do not update GitHub for an ordinary learning session.";
