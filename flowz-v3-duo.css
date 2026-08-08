@@ -70,3 +70,61 @@ button{font:inherit}
 .note{font-size:9px;color:#686e76;line-height:1.45;text-align:center;margin:10px 4px 2px}.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));transform:translate(-50%,18px);opacity:0;pointer-events:none;transition:.2s;background:#101216;border:1px solid var(--green);color:var(--green);padding:10px 15px;border-radius:999px;font-size:11px;font-weight:950;z-index:20;max-width:90%;text-align:center}.toast.show{opacity:1;transform:translate(-50%,0)}
 @media(max-width:370px){.fighter-xp{font-size:22px}.profile-btn{padding:9px}.hero-name{font-size:19px}.mode b{font-size:14px}.mode small{font-size:8px}.mission-item b{font-size:13px}}
 :focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+
+/* ---- Talk Prep (COMMUTE quick-start card, kedy only) ---- */
+.prep{border-color:#5d4a32;background:linear-gradient(155deg,#171512,#111315);padding:15px;min-height:0}
+body[data-profile="leni"] .prep{display:none}
+.prep:empty{padding:0;margin-bottom:0;border:0;background:none;box-shadow:none}
+.prep-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.prep-title{font-size:14px;font-weight:950;letter-spacing:.1em}
+.prep-chip{padding:6px 9px;border:1px solid #5d4a32;border-radius:999px;font-size:10px;font-weight:900;color:#ffae48}
+.prep-grid{display:grid;gap:7px}
+.prep-row{display:grid;grid-template-columns:54px 1fr;gap:8px;align-items:center;padding:9px 10px;border:1px solid var(--line);border-radius:12px;background:var(--panel2)}
+.prep-row span{font-size:9px;font-weight:950;letter-spacing:.1em;color:var(--muted)}
+.prep-row b{font-size:14px;line-height:1.3;color:var(--text)}
+.prep-row small{display:block;margin-top:2px;color:var(--muted);font-size:10px}
+#flowzTalkPrepBtn{width:100%;margin-top:10px;padding:14px;border:0;border-radius:13px;background:linear-gradient(135deg,var(--amber),#ff7138);color:#111;font:950 15px/1 -apple-system,BlinkMacSystemFont,"Hiragino Sans",sans-serif}
+
+/* ---- Kedy mode grid: fixed curated layout (COMMUTE lives in Talk Prep) ---- */
+.modes.kedy-modes{grid-template-columns:1fr 1fr}
+.modes.kedy-modes .mode{min-height:84px}
+.modes.kedy-modes .mode.wide{grid-column:1/-1;min-height:70px}
+.mode-label{grid-column:1/-1;margin:4px 2px 0;color:var(--muted);font-size:10px;font-weight:900;letter-spacing:.12em}
+.mode.m5{background:linear-gradient(145deg,#20c7cc,#16aeb8);color:#012428}
+.mode.m6{background:linear-gradient(145deg,#30363d,#20252b);border:1px solid #4b555f;color:var(--text)}
+
+/* ---- Duo Sync panel (kept near Data & Backup, not the profile cards) ---- */
+#flowzCloudPanel{border-color:#25b889;background:linear-gradient(160deg,#13191a,#101315)}
+#flowzCloudPanel:empty{padding:0;margin-bottom:0;border:0;background:none;box-shadow:none}
+#flowzCloudPanel .cloud-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+#flowzCloudPanel .cloud-title{font-size:15px;font-weight:900;letter-spacing:.09em}
+#flowzCloudPanel .cloud-status{font-size:11px;font-weight:850;padding:7px 10px;border:1px solid #343a42;border-radius:999px;color:#9fa6ae;white-space:nowrap}
+#flowzCloudPanel[data-status="connected"] .cloud-status{color:#50dd8a;border-color:#287a4b}
+#flowzCloudPanel[data-status="error"] .cloud-status{color:#ff9e6d;border-color:#8a4930}
+#flowzCloudPanel .cloud-message{margin:0 0 12px;color:#a6adb5;font-size:12px;line-height:1.55}
+#flowzCloudPanel .cloud-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+#flowzCloudPanel .cloud-btn,#flowzCloudPanel .cloud-input{min-height:46px;border-radius:13px;border:1px solid #343a42;background:#1a1e23;color:var(--text);font:850 13px/1 -apple-system,BlinkMacSystemFont,"Hiragino Sans",sans-serif}
+#flowzCloudPanel .cloud-btn{padding:0 12px}
+#flowzCloudPanel .cloud-btn.primary{border:0;background:linear-gradient(135deg,#29d58b,#1bbad1);color:#07120f}
+#flowzCloudPanel .cloud-input{width:100%;box-sizing:border-box;padding:0 14px;text-align:center;font-size:18px;letter-spacing:.18em}
+#flowzCloudPanel .cloud-code{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border:1px solid #343a42;border-radius:13px;background:#171b20}
+#flowzCloudPanel .cloud-code b{font-size:22px;letter-spacing:.16em}
+#flowzCloudPanel .cloud-copy{border:0;background:transparent;color:var(--cyan);font-weight:850}
+#flowzCloudPanel .cloud-members{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+#flowzCloudPanel .cloud-member{padding:7px 10px;border-radius:999px;border:1px solid #343a42;color:#8f969f;font-size:11px;font-weight:850}
+#flowzCloudPanel .cloud-member.on{color:#50dd8a;border-color:#287a4b}
+#flowzCloudPanel .cloud-latest{margin-top:11px;padding-top:11px;border-top:1px solid #2c3138;color:#d9ddd8;font-size:12px;line-height:1.45}
+#flowzCloudPanel .cloud-note{margin-top:9px;color:#747b84;font-size:10px;line-height:1.45}
+@media(max-width:420px){#flowzCloudPanel .cloud-actions{grid-template-columns:1fr}}
+
+/* ---- TOEIC result modal ---- */
+.modal-overlay{position:fixed;inset:0;background:rgba(6,7,9,.72);display:flex;align-items:center;justify-content:center;padding:20px;z-index:30}
+.toeic-sheet{width:100%;max-width:360px;background:linear-gradient(180deg,var(--panel),#111317);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:0 20px 44px rgba(0,0,0,.4)}
+.toeic-sheet h3{margin:0 0 8px;font-size:16px}
+.toeic-sheet p{margin:0 0 14px;color:var(--muted);font-size:11px;line-height:1.5}
+.toeic-inputs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.toeic-inputs label{display:block;font-size:9px;font-weight:900;letter-spacing:.08em;color:var(--muted)}
+.toeic-inputs select{width:100%;margin-top:6px;min-height:44px;border-radius:11px;border:1px solid var(--line);background:var(--panel2);color:var(--text);font:850 14px/1 -apple-system,BlinkMacSystemFont,"Hiragino Sans",sans-serif}
+.toeic-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.toeic-cancel,.toeic-save{min-height:46px;border-radius:13px;border:1px solid var(--line);background:transparent;color:var(--muted);font:850 13px/1 -apple-system,BlinkMacSystemFont,"Hiragino Sans",sans-serif}
+.toeic-save{border:0;background:linear-gradient(135deg,var(--amber),var(--orange));color:#281300}
