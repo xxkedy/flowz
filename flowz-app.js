@@ -117,7 +117,7 @@ function legacyDatesArray(value){
   return dates;
 }
 function stateFromDates(dates){
-  var s=blankProfile? defaultState():defaultState();
+  var s=defaultState();
   dates.forEach(function(d){s.profiles.kedy.days[d]={base:10,phrase:0,fix:0,duo:0,count:1,mode:'legacy'}});
   return s;
 }
@@ -546,7 +546,12 @@ function renderModes(){
   }
   text($('modeTitle'),UI[current].modeTitle);
 }
-var MISSION_GUIDE_OVERRIDE={toeic:'Voice 5問チェック。Listening 3問＋Reading 2問を約5〜8分で採点。',bath:'Voice Talk専用。画面を見ながら話さず、耳だけで答える5問・約5〜8分。'};
+var MISSION_GUIDE_OVERRIDE={
+  toeic:'Voice 5問チェック。Listening 3問＋Reading 2問を約5〜8分で採点。',
+  bath:'Voice Talk専用。画面を見ながら話さず、耳だけで答える5問・約5〜8分。',
+  review:'約3〜5分。直近のDiary English Logから3フレーズを1問ずつ復習。',
+  free:'固定レッスンなし。今日話したいことを自然な英会話で続ける。'
+};
 var MISSION_START_OVERRIDE={toeic:'START TOEIC CHECK · 5Q',bath:'START TOEIC STUDY · 5Q',review:'START REVIEW',free:'START FREE TALK'};
 function renderMission(){
   var panel=$('mission'),u=UI[current];
@@ -708,6 +713,7 @@ function setCloudPanel(status,message,extra){
 }
 function renderCloudPanel(){
   var panel=$('flowzCloudPanel');if(!panel)return;
+  var codeInput=$('flowzRoomCode'),typedCode=codeInput?codeInput.value:'';
   var cloud=loadCloud(),connected=!!cloud.roomId;
   panel.dataset.status=connected?'connected':cloudPanelState.status;
   var html='<div class="cloud-head"><div class="cloud-title">☁️ DUO SYNC</div><span class="cloud-status">'+escapeHtml(connected?'CONNECTED':cloudPanelState.status==='error'?'ERROR':'SETUP')+'</span></div>';
@@ -724,6 +730,8 @@ function renderCloudPanel(){
     html+='<div class="cloud-note">既存履歴は保持／オフライン時は端末保存し、復帰後に同期</div>';
   }
   panel.innerHTML=html;
+  /* A redraw must never eat a Duo Code the user is halfway through typing. */
+  if(typedCode){var next=$('flowzRoomCode');if(next)next.value=typedCode}
 }
 function bindCloudPanel(){
   var panel=$('flowzCloudPanel');if(!panel)return;
@@ -954,10 +962,15 @@ function bindInteractions(){
   if(assessment)assessment.addEventListener('click',function(e){
     if(e.target.closest&&e.target.closest('#flowzToeicResultBtn'))openToeicModal();
   });
+  /* Another tab changed our data. Re-read and redraw, but only write back
+     when the merge actually produced something new -- an unconditional
+     persist() here makes two open tabs ping-pong storage events forever. */
   window.addEventListener('storage',function(e){
-    if(e.key&&/(flowz|tm_)/i.test(e.key)){
-      state=bootstrapState();persist(state);pending=loadPending();render();
-    }
+    if(!e.key||!/(flowz|tm_)/i.test(e.key))return;
+    pending=loadPending();
+    var merged=bootstrapState();
+    if(JSON.stringify(merged.profiles)!==JSON.stringify(state.profiles))state=persist(merged);
+    render();
   });
 }
 

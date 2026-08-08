@@ -119,12 +119,15 @@ None of them knew about the others.
   `flowz_sessions` RPC calls (`flowz_create_room`, `flowz_join_room`) are
   unchanged, so existing Duo Rooms keep working.
 
-## Removed files
+## Retired files
 
 The 13 scripts that were wired into `flowz-v3-duo.html` (listed above)
-are deleted — their logic now lives in `flowz-app.js`. Also removed nine
-files that were **already unused** (not referenced by any HTML in `main`)
-before this change and were superseded by later patches:
+are no longer loaded — their logic now lives in `flowz-app.js`. They are
+archived under `legacy/` (see `legacy/README.md` for the full
+old-file → new-function mapping); nothing in that folder is referenced by
+any HTML, and nothing there may be re-added to a `<script>` tag. Also
+retired: nine files that were **already unused** (not referenced by any
+HTML in `main`) before this change and were superseded by later patches:
 `flowz-v3.3-override.js`, `flowz-v3.5-quick.js`,
 `flowz-v4-conversation-first.js`, `flowz-v4.2-profile-sync-toeic-study.js`,
 `flowz-v4.2.1-stability.js`, `flowz-v4.3-bath-review.js`,
@@ -139,3 +142,39 @@ Fixed at a single new stable release: **v4.4.0 (2026.8.7)**. This is the
 only version string in the codebase (`RELEASE` constant in
 `flowz-app.js`); nothing else writes `.version`, `document.title`, or the
 footer note.
+
+## Post-consolidation fixes (browser-verified)
+
+Found while verifying the consolidated build in a real browser:
+
+- **Two-tab storage ping-pong.** The `storage` listener re-read state and
+  then persisted it unconditionally. Two open tabs would therefore write
+  to each other forever, each write firing the other's `storage` event.
+  It now only persists when the merge actually produced new data.
+- **Duo Code input wiped by a redraw.** Any `render()` while the user was
+  halfway through typing a 6-digit Duo Code cleared the field. The typed
+  value is now carried across the redraw.
+- **REVIEW / FREE mission guides.** Both fell back to a generic mission
+  guide; they now carry their own copy ("約3〜5分。直近のDiary English
+  Logから3フレーズを1問ずつ復習。" and "固定レッスンなし。今日話したい
+  ことを自然な英会話で続ける。").
+- Dead ternary in `stateFromDates()`.
+
+## Verification results
+
+Measured in Chromium at iPhone viewport (375×812) against the real files:
+
+| Check | Result |
+| --- | --- |
+| Idle 41s | 0 DOM mutations, snapshot byte-identical |
+| Version / title / footer | never rewritten after first paint |
+| Duo Sync panel position | fixed at body index 11 throughout |
+| 10× kedy ↔ Leni switches | tile order + all node counts unchanged |
+| 25× `render()` | all node counts unchanged (no DOM growth) |
+| 24 resume events (visibility/focus/pageshow) | 0 DOM mutations, 0 XP change |
+| Auto-complete | 10 XP / count 1 / 1 session, once — survives reload |
+| Legacy migration | `flowz_duo_v3` + backup + `tm_days` + `tm_last` → union of 4 days, phrase bonus and Leni history intact |
+| No-op `storage` events ×5 | 0 writes (ping-pong closed); real changes still applied |
+| Prompt spec | 27/27 assertions pass across COMMUTE / TOEIC CHECK / TOEIC STUDY / REVIEW / FREE / Leni |
+| Console errors | none |
+| Horizontal overflow at 375px | none |
