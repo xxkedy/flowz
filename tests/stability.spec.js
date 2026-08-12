@@ -52,9 +52,15 @@ test.afterAll(async () => { await new Promise((r) => server.close(r)); });
 const BACKFILL_MARKER = 'flowz_backfill_2026_07_08_to_08_05_v1';
 
 /* Seed localStorage before any page script runs. Marking the one-off backfill
-   as already applied keeps XP assertions independent of it. */
+   as already applied keeps XP assertions independent of it.
+   addInitScript reruns on every navigation in this page, including
+   page.reload() -- guard with a sessionStorage flag (which itself
+   survives reload but not a new tab) so a reload sees the state the
+   app actually left behind instead of the original seed again. */
 function seed(page, entries){
   return page.addInitScript((data) => {
+    if (sessionStorage.getItem('__flowzSeeded__')) return;
+    sessionStorage.setItem('__flowzSeeded__', '1');
     for (const [k, v] of Object.entries(data)) localStorage.setItem(k, v);
   }, { [BACKFILL_MARKER]: 'done', ...entries });
 }
@@ -137,7 +143,13 @@ test('no always-on DOM watchers or polling timers are installed', async ({ page 
       return realObserve.apply(this, arguments);
     };
     const realInterval = window.setInterval;
-    window.setInterval = function(fn, ms){ window.__intervals.push(ms); return realInterval.apply(this, arguments); };
+    window.setInterval = function(fn, ms){
+      // Attribute the call to its source file via the stack, so a timer
+      // owned by a third-party script (e.g. the Supabase realtime client's
+      // own heartbeat) doesn't get confused with one Flowz itself installed.
+      window.__intervals.push({ ms: ms, stack: String(new Error().stack || '') });
+      return realInterval.apply(this, arguments);
+    };
   });
   await seed(page, {});
   await page.goto(`${baseURL}/flowz-v3-duo.html`);
@@ -149,8 +161,9 @@ test('no always-on DOM watchers or polling timers are installed', async ({ page 
   }));
   // No subtree observer on documentElement/body — that was the DOM-forcing repair loop.
   expect(observed.filter((o) => o.subtree && /HTML|BODY/.test(o.tag || ''))).toEqual([]);
-  // No repeating timer owned by Flowz itself.
-  expect(intervals).toEqual([]);
+  // No repeating timer owned by flowz-app.js itself (a third-party script,
+  // e.g. Supabase's realtime client heartbeat, may legitimately use one).
+  expect(intervals.filter((i) => /flowz-app\.js/.test(i.stack))).toEqual([]);
 });
 
 test('every kedy mode opens its own prompt with the required rules', async ({ page }) => {
