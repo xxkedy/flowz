@@ -1,5 +1,5 @@
 /*
- * Regression suite for the v4.4.0 frontend consolidation.
+ * Regression suite for the v4.4.1 frontend consolidation.
  *
  * Run with: npm install && npx playwright install chromium && npm test
  *
@@ -11,11 +11,12 @@
  *   2. version / title / Duo Sync position stable for 30s (no polling)
  *   3. profile switch kedy <-> Leni, repeated
  *   4. every mode selection opens the right prompt
- *   5. pending session restore
- *   6. auto complete records XP exactly once
- *   7. legacy data migration
- *   8. repeated render does not grow the DOM
- *   9. no JS errors, no data loss
+ *   5. compact linked Duo Sync status
+ *   6. pending session restore
+ *   7. auto complete records XP exactly once
+ *   8. legacy data migration
+ *   9. repeated render does not grow the DOM
+ *  10. no JS errors, no data loss
  */
 const { test, expect } = require('@playwright/test');
 const path = require('path');
@@ -98,8 +99,8 @@ test('stays visually still for 30s, across profile switches and resume, with no 
   }));
 
   const initial = await snapshot();
-  expect(initial.version).toBe('v4.4.0 (2026.8.7)');
-  expect(initial.title).toBe('Flowz v4.4.0 · Duo Battle');
+  expect(initial.version).toBe('v4.4.1 (2026.8.14)');
+  expect(initial.title).toBe('Flowz v4.4.1 · Duo Battle');
   // kedy's final tile order. COMMUTE is the Talk Prep card above the grid.
   expect(initial.modeIds).toEqual(['toeic', 'bath', 'review', 'free']);
   expect(initial.labels).toEqual(['🛁 BATH ROUTINE · mikan 30 → Flowz', '🎲 ANYTIME · OPEN TALK']);
@@ -185,7 +186,9 @@ test('every kedy mode opens its own prompt with the required rules', async ({ pa
   });
 
   // COMMUTE: no Notion before/during, Diary only at wrap-up, 80/20,
-  // never a praise-only turn, voice-only, arrival review, no self-ending.
+  // one short shadowing sentence at a time, no fatigue softening,
+  // immediate topic redirection, never a praise-only turn, voice-only,
+  // arrival review, and no self-ending.
   expect(p.commute).toMatch(/Do not call Notion, web, or any connected tool before your first reply/);
   expect(p.commute).toMatch(/Only use Notion after he says 'まとめて' or 'Wrap up'/);
   expect(p.commute).toMatch(/about 80 percent and shadowing about 20 percent/);
@@ -194,6 +197,12 @@ test('every kedy mode opens its own prompt with the required rules', async ({ pa
   expect(p.commute).toMatch(/Arrival Review/);
   expect(p.commute).toMatch(/Do not close the conversation until kedy explicitly ends it/);
   expect(p.commute).toMatch(/reply like a normal conversation partner once/); // no greeting ping-pong
+  expect(p.commute).toMatch(/speak exactly one short sentence per assistant turn/);
+  expect(p.commute).toMatch(/Never combine multiple shadowing sentences in one spoken turn/);
+  expect(p.commute).toMatch(/wait for exactly one repetition before giving the next/);
+  expect(p.commute).toMatch(/do not offer an easier lesson, rest, stopping, or ending/);
+  expect(p.commute).toMatch(/immediately follow the new direction/);
+  expect(p.commute).toMatch(/Never proactively offer to end the session/);
 
   // TOEIC CHECK: 5 questions, L3/R2, 5-8 minutes.
   expect(p.toeic).toMatch(/five-question TOEIC Listening & Reading mini-check in about five to eight minutes/);
@@ -249,6 +258,25 @@ test('selecting each tile shows the matching mission card and start label', asyn
   await page.click('.profile-btn[data-profile="leni"]');
   expect(await page.evaluate(() => [...document.querySelectorAll('#modes .mode')].map((b) => b.dataset.modeId)))
     .toEqual(['free', 'work', 'n2', 'kanji']);
+});
+
+test('a linked Duo Room renders as a compact status strip', async ({ page }) => {
+  await seed(page, {
+    flowz_duo_data: emptyState,
+    flowz_duo_cloud_v1: JSON.stringify({
+      roomId: 'test-room-id', roomCode: '829018', profile: 'kedy',
+      linkedAt: new Date().toISOString(), migratedAt: new Date().toISOString()
+    })
+  });
+  await page.goto(`${baseURL}/flowz-v3-duo.html`);
+  await page.waitForSelector('#flowzCloudPanel .cloud-compact');
+
+  await expect(page.locator('#flowzCloudPanel .cloud-compact')).toHaveCount(1);
+  await expect(page.locator('#flowzCloudPanel .cloud-room')).toContainText('829018');
+  await expect(page.locator('#flowzCloudPanel .cloud-code')).toHaveCount(0);
+  await expect(page.locator('#flowzCloudPanel .cloud-latest')).toHaveCount(0);
+  await expect(page.locator('#flowzCloudPanel .cloud-note')).toHaveCount(0);
+  await expect(page.locator('#flowzCloudPanel')).toHaveAttribute('data-linked', 'true');
 });
 
 test('a pending session is restored on reload and shown as started', async ({ page }) => {
