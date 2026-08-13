@@ -27,10 +27,10 @@
 
 /* ============================== RELEASE ============================== */
 var RELEASE={
-  number:'4.4.0',
-  label:'v4.4.0 (2026.8.7)',
-  title:'Flowz v4.4.0 · Duo Battle',
-  footer:'✅ Last updated 2026.08.07 · Flowz v4.4.0 Unified Build'
+  number:'4.4.1',
+  label:'v4.4.1 (2026.8.14)',
+  title:'Flowz v4.4.1 · Duo Battle',
+  footer:'✅ Last updated 2026.08.14 · Flowz v4.4.1 Unified Build'
 };
 
 /* ============================== STORAGE KEYS ============================== */
@@ -367,9 +367,11 @@ function commutePrompt(mission){
    "Today's hidden mission is: Theme: "+(mission.theme||'')+". Target phrase: \""+(mission.phrase||'')+"\". Meaning: "+(mission.meaning||'')+". Treat it as hidden and bring it in only when the conversation naturally connects.",
    "Use the current conversation as the main context. Avoid repetitive default topics. Do not default to after-work plans, dinner, or weekends unless kedy introduces them. Rotate real-life topics.",
    "Conversation should be about 80 percent and shadowing about 20 percent. If he asks to talk or says stay in chat, stop repetition immediately and do not suggest it again that session.",
-   "Shadowing should usually be one compact mini-set of two or three sentences that summarizes what kedy actually talked about. Say one sentence, let him repeat once, then continue. If he casually echoes your praise or backchannel, acknowledge it once and continue; do not turn phrases such as 'nailed it', 'spot on', or 'sounds natural' into a repetition chain. If he explicitly asks for more shadowing, give it.",
+   "Plan shadowing as one compact set of two or three short sentences overall, but speak exactly one short sentence per assistant turn. Never combine multiple shadowing sentences in one spoken turn. After each sentence, wait for exactly one repetition before giving the next. If a sentence is long, split it into natural spoken chunks and ask for one chunk at a time. Each chunk must be short enough to repeat from audio alone. If he casually echoes your praise or backchannel, acknowledge it once and continue; do not turn phrases such as 'nailed it', 'spot on', or 'sounds natural' into a repetition chain. If he explicitly asks for more shadowing, give it.",
+   "If kedy says he is tired, low, unmotivated, anxious, or not in the mood, do not offer an easier lesson, rest, stopping, or ending because of that. You may slow the pacing slightly, but keep normal English practice active unless he explicitly asks to stop English practice.",
+   "If kedy rejects or redirects your advice or topic—for example, says he wants to understand his mind or feeling instead of hearing 'small steps'—immediately follow the new direction. Do not repeat or defend the previous coaching frame.",
    "Use short natural spoken English. Correct only meaning-changing or strongly unnatural mistakes. Allow one retry, then return to conversation.",
-   "Never end a turn with only praise, acknowledgement, or a closing phrase such as 'Perfect', 'You're welcome', 'Got it', or 'Thanks'. After a brief acknowledgement, immediately continue with a natural question, topic, or next sentence. Do not close the conversation until kedy explicitly ends it.",
+   "Never end a turn with only praise, acknowledgement, or a closing phrase such as 'Perfect', 'You're welcome', 'Got it', or 'Thanks'. After a brief acknowledgement, immediately continue with a natural question, topic, or next sentence. Never proactively offer to end the session. Do not close the conversation until kedy explicitly ends it.",
    "Assume the screen is not visible. Do not rely on spelling, markdown, headings, tables, or visual bullet lists.",
    "When he is almost at work or home, give a brief Arrival Review without ending: three phrases he used, up to two corrections, and one phrase to reuse next time. Then keep chatting unless he says 'まとめて' or 'Wrap up'.",
    "Never ask or prompt him to say 'Wrap up'. Continue naturally until he says 'まとめて' or 'Wrap up'.",
@@ -714,20 +716,20 @@ function setCloudPanel(status,message,extra){
 function renderCloudPanel(){
   var panel=$('flowzCloudPanel');if(!panel)return;
   var codeInput=$('flowzRoomCode'),typedCode=codeInput?codeInput.value:'';
-  var cloud=loadCloud(),connected=!!cloud.roomId;
-  panel.dataset.status=connected?'connected':cloudPanelState.status;
-  var html='<div class="cloud-head"><div class="cloud-title">☁️ DUO SYNC</div><span class="cloud-status">'+escapeHtml(connected?'CONNECTED':cloudPanelState.status==='error'?'ERROR':'SETUP')+'</span></div>';
-  if(!connected){
+  var cloud=loadCloud(),linked=!!cloud.roomId,connected=linked&&cloudPanelState.status==='connected';
+  var visibleStatus=cloudPanelState.status==='error'?'error':connected?'connected':linked?'loading':cloudPanelState.status;
+  var statusLabel=cloudPanelState.status==='error'?'ERROR':connected?'CONNECTED':linked?'SYNCING':'SETUP';
+  panel.dataset.status=visibleStatus;
+  panel.dataset.linked=linked?'true':'false';
+  var html='<div class="cloud-head"><div class="cloud-title">☁️ DUO SYNC</div><span class="cloud-status">'+escapeHtml(statusLabel)+'</span></div>';
+  if(!linked){
     html+='<p class="cloud-message">'+escapeHtml(cloudPanelState.message||'この端末を現在のプロフィール「'+profileName(current)+'」として接続する。')+'</p>'+
       '<div class="cloud-actions"><button class="cloud-btn primary" data-cloud-action="create">6桁コードを作る</button><div><input class="cloud-input" id="flowzRoomCode" inputmode="numeric" maxlength="6" placeholder="000000"><button class="cloud-btn" style="width:100%;margin-top:8px" data-cloud-action="join">コードで参加</button></div></div>'+
       '<div class="cloud-note">現在のプロフィール：'+escapeHtml(profileName(current))+'／端末ごとに一度だけ接続</div>';
   }else{
     var members=cloudPanelState.members||[],hasKedy=members.indexOf('kedy')>=0,hasLeni=members.indexOf('leni')>=0;
-    html+='<p class="cloud-message">この端末は <b>'+escapeHtml(profileName(cloud.profile))+'</b> として同期中</p>'+
-      '<div class="cloud-code"><span>Duo Code</span><b>'+escapeHtml(cloud.roomCode||'------')+'</b><button class="cloud-copy" data-cloud-action="copy">COPY</button></div>'+
-      '<div class="cloud-members"><span class="cloud-member '+(hasKedy?'on':'')+'">'+(hasKedy?'✓ ':'')+'kedy</span><span class="cloud-member '+(hasLeni?'on':'')+'">'+(hasLeni?'✓ ':'')+'Leni</span><button class="cloud-member" data-cloud-action="sync">↻ SYNC</button></div>';
-    html+=cloudPanelState.latest?'<div class="cloud-latest">🔥 '+escapeHtml(profileName(cloudPanelState.latest.profile))+' completed '+escapeHtml(cloudPanelState.latest.title||cloudPanelState.latest.mode||'SESSION')+' · +'+escapeHtml(cloudPanelState.latest.xp)+' XP · '+escapeHtml(relativeTime(cloudPanelState.latest.completed_at))+'</div>':'<div class="cloud-latest">相手の学習完了がここへ即時表示される</div>';
-    html+='<div class="cloud-note">既存履歴は保持／オフライン時は端末保存し、復帰後に同期</div>';
+    html+='<div class="cloud-compact"><div class="cloud-compact-members"><span class="cloud-member '+(hasKedy?'on':'')+'">'+(hasKedy?'✓ ':'')+'kedy</span><span class="cloud-member '+(hasLeni?'on':'')+'">'+(hasLeni?'✓ ':'')+'Leni</span></div><button class="cloud-room" data-cloud-action="copy">ROOM '+escapeHtml(cloud.roomCode||'------')+'</button></div>';
+    if(cloudPanelState.status==='error')html+='<div class="cloud-error">'+escapeHtml(cloudPanelState.message||'同期エラー')+'</div>';
   }
   panel.innerHTML=html;
   /* A redraw must never eat a Duo Code the user is halfway through typing. */
