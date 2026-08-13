@@ -11,6 +11,22 @@
 <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
 <title>Flowz v4.4.0 (2026.8.7) · Duo Battle</title>
 <link rel="stylesheet" href="flowz-v3-duo.css?v=4.4.0">
+<script>
+(function(){
+  var CLOUD_KEY='flowz_duo_cloud_v1';
+  var CLOUD_BACKUP_KEY='flowz_duo_cloud_v1_room_switch_backup';
+  var SUPABASE_AUTH_PREFIX='sb-efnlwlnujhxkvifkooqy-auth-token';
+  var ROOM_SWITCH_FLAG='flowz_room_switch_pending';
+  function removeByPrefix(storage,prefix){try{for(var i=storage.length-1;i>=0;i--){var key=storage.key(i);if(key&&key.indexOf(prefix)===0)storage.removeItem(key)}}catch(e){}}
+  function clearCloudIdentity(){try{localStorage.removeItem(CLOUD_KEY)}catch(e){}removeByPrefix(localStorage,SUPABASE_AUTH_PREFIX);removeByPrefix(sessionStorage,SUPABASE_AUTH_PREFIX)}
+  function isConnected(){try{var cloud=JSON.parse(localStorage.getItem(CLOUD_KEY)||'{}');return !!(cloud&&cloud.roomId)}catch(e){return false}}
+  function updateRoomSwitchVisibility(){var wrap=document.getElementById('flowzRoomSwitchWrap');if(wrap)wrap.hidden=!isConnected()}
+  window.flowzChangeRoom=function(){try{var current=localStorage.getItem(CLOUD_KEY);if(current)localStorage.setItem(CLOUD_BACKUP_KEY,current);sessionStorage.setItem(ROOM_SWITCH_FLAG,'1')}catch(e){}clearCloudIdentity();location.reload()};
+  try{if(sessionStorage.getItem(ROOM_SWITCH_FLAG)==='1'){clearCloudIdentity();sessionStorage.removeItem(ROOM_SWITCH_FLAG)}}catch(e){}
+  document.addEventListener('DOMContentLoaded',function(){updateRoomSwitchVisibility();var button=document.getElementById('flowzRoomSwitchBtn');if(button)button.addEventListener('click',window.flowzChangeRoom)});
+  window.addEventListener('pageshow',updateRoomSwitchVisibility);
+})();
+</script>
 </head>
 <body data-profile="kedy">
 <header class="top"><div class="brand"><h1>Flow<span>z</span></h1><p>DUO LANGUAGE BATTLE</p></div><div class="version">v4.4.0 (2026.8.7)</div></header>
@@ -28,6 +44,7 @@
 <section class="panel" id="flowzAssessment"></section>
 <section class="panel"><div class="section-head"><div class="section-title" id="weekTitle">📅 LAST 7 DAYS</div><span class="chip" id="weekSessions">0 / 7 days</span></div><div class="week-strip" id="weekStrip"></div></section>
 <section class="panel" id="flowzCloudPanel"></section>
+<div id="flowzRoomSwitchWrap" hidden style="margin:-12px 4px 18px;text-align:right"><button class="small-btn" id="flowzRoomSwitchBtn" type="button">ROOM変更</button></div>
 <details class="panel data-panel"><summary><span class="section-title" id="dataTitle">💾 DATA & BACKUP</span><span class="chip" id="storageLabel">AUTO BACKUP</span></summary><div class="io"><button class="small-btn" id="exportBtn">COPY RECORD</button><button class="small-btn" id="importBtn">RESTORE RECORD</button><button class="small-btn" id="resetPendingBtn">CLEAR PENDING</button></div></details>
 <p class="note" id="historyVaultNote">🛡️ HISTORY VAULT ON</p>
 <p class="note" id="historyBackfillNote"></p>
