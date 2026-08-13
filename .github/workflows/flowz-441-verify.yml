@@ -1,0 +1,27 @@
+name: Verify Flowz v4.4.1
+
+on:
+  push:
+    branches:
+      - agent/flowz-4.4.1-commute-duo-compact
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Static syntax
+        run: node --check flowz-app.js
+      - name: Install dependencies
+        run: npm ci
+      - name: Install Chromium
+        run: npx playwright install chromium
+      - name: Run regression suite
+        run: npm test
