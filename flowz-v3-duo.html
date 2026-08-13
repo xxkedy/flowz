@@ -15,6 +15,7 @@
 (function(){
   var CLOUD_KEY='flowz_duo_cloud_v1';
   var CLOUD_BACKUP_KEY='flowz_duo_cloud_v1_room_switch_backup';
+  var RECOVERY_KEY='flowz_duo_room_recovery_v2';
   var SUPABASE_URL='https://efnlwlnujhxkvifkooqy.supabase.co';
   var SUPABASE_KEY='sb_publishable_3drPy_UK0ojzsan6wde_0Q_iYOMzo03';
 
@@ -31,7 +32,15 @@
   function currentProfile(){
     try{return new URLSearchParams(location.search).get('profile')==='leni'?'leni':'kedy'}catch(e){return 'kedy'}
   }
-  async function joinWithFreshIdentity(code,profile){
+  function profileCollision(error){
+    var message=error&&error.message?error.message:String(error||'');
+    return /that profile is already connected|profile is already.*connected/i.test(message);
+  }
+  function identityCollision(error){
+    var message=error&&error.message?error.message:String(error||'');
+    return /already connected to a room/i.test(message);
+  }
+  async function freshClientAndSession(){
     var temp=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{
       auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false}
     });
@@ -39,9 +48,41 @@
     if(signed.error)throw signed.error;
     var freshSession=signed.data&&signed.data.session;
     if(!freshSession)throw new Error('Could not create a new sync identity');
-    var joined=await temp.rpc('flowz_join_room',{p_code:code,p_profile:profile});
+    return {client:temp,session:freshSession};
+  }
+  async function joinWithFreshIdentity(code,profile){
+    var fresh=await freshClientAndSession();
+    var joined=await fresh.client.rpc('flowz_join_room',{p_code:code,p_profile:profile});
     if(joined.error)throw joined.error;
-    return {roomId:joined.data,session:freshSession};
+    return {roomId:joined.data,roomCode:code,session:fresh.session,replacement:false};
+  }
+  async function createReplacementRoom(profile){
+    var fresh=await freshClientAndSession();
+    var created=await fresh.client.rpc('flowz_create_room',{p_profile:profile});
+    if(created.error)throw created.error;
+    var row=Array.isArray(created.data)?created.data[0]:created.data;
+    if(!row||!row.room_id||!row.room_code)throw new Error('Replacement Room creation returned no data');
+    return {roomId:row.room_id,roomCode:String(row.room_code),session:fresh.session,replacement:true};
+  }
+  async function adoptSession(client,session){
+    var switched=await client.auth.setSession({
+      access_token:session.access_token,
+      refresh_token:session.refresh_token
+    });
+    if(switched.error)throw switched.error;
+  }
+  async function recoverJoin(client,code,profile,firstError){
+    if(profileCollision(firstError)){
+      if(profile!=='kedy')throw firstError;
+      return createReplacementRoom(profile);
+    }
+    if(!identityCollision(firstError))throw firstError;
+    try{
+      return await joinWithFreshIdentity(code,profile);
+    }catch(freshError){
+      if(profile==='kedy'&&profileCollision(freshError))return createReplacementRoom(profile);
+      throw freshError;
+    }
   }
   window.flowzChangeRoom=async function(){
     var profile=currentProfile();
@@ -59,25 +100,30 @@
         if(signed.error)throw signed.error;
       }
       var result=await client.rpc('flowz_join_room',{p_code:code,p_profile:profile});
-      if(result.error&&/already connected to a room/i.test(result.error.message||'')){
-        var fresh=await joinWithFreshIdentity(code,profile);
-        var switched=await client.auth.setSession({
-          access_token:fresh.session.access_token,
-          refresh_token:fresh.session.refresh_token
-        });
-        if(switched.error)throw switched.error;
-        result={data:fresh.roomId,error:null};
+      var resolved;
+      if(result.error){
+        resolved=await recoverJoin(client,code,profile,result.error);
+        await adoptSession(client,resolved.session);
+      }else{
+        resolved={roomId:result.data,roomCode:code,replacement:false};
       }
-      if(result.error)throw result.error;
       var previous=localStorage.getItem(CLOUD_KEY);
       if(previous)localStorage.setItem(CLOUD_BACKUP_KEY,previous);
       localStorage.setItem(CLOUD_KEY,JSON.stringify({
-        roomId:result.data,
-        roomCode:code,
+        roomId:resolved.roomId,
+        roomCode:resolved.roomCode,
         profile:profile,
         linkedAt:new Date().toISOString(),
         migratedAt:new Date(0).toISOString()
       }));
+      if(resolved.replacement){
+        localStorage.setItem(RECOVERY_KEY,JSON.stringify({
+          at:new Date().toISOString(),
+          profile:profile,
+          requestedCode:code,
+          replacementCode:resolved.roomCode
+        }));
+      }
       location.reload();
     }catch(error){
       alert((profile==='leni'?'ROOM変更に失敗：':'Room change failed: ')+(error&&error.message?error.message:String(error)));
