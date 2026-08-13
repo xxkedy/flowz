@@ -11,6 +11,64 @@
 <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
 <title>Flowz v4.4.0 (2026.8.7) · Duo Battle</title>
 <link rel="stylesheet" href="flowz-v3-duo.css?v=4.4.0">
+<script>
+(function(){
+  var CLOUD_KEY='flowz_duo_cloud_v1';
+  var CLOUD_BACKUP_KEY='flowz_duo_cloud_v1_room_switch_backup';
+  var SUPABASE_URL='https://efnlwlnujhxkvifkooqy.supabase.co';
+  var SUPABASE_KEY='sb_publishable_3drPy_UK0ojzsan6wde_0Q_iYOMzo03';
+
+  function isConnected(){
+    try{
+      var cloud=JSON.parse(localStorage.getItem(CLOUD_KEY)||'{}');
+      return !!(cloud&&cloud.roomId);
+    }catch(e){return false}
+  }
+  function updateVisibility(){
+    var wrap=document.getElementById('flowzRoomSwitchWrap');
+    if(wrap)wrap.hidden=!isConnected();
+  }
+  function currentProfile(){
+    try{return new URLSearchParams(location.search).get('profile')==='leni'?'leni':'kedy'}catch(e){return 'kedy'}
+  }
+  window.flowzChangeRoom=async function(){
+    var code=prompt(currentProfile()==='leni'?'参加する6桁Duo Codeを入力：':'Enter the 6-digit Duo Code:');
+    if(code==null)return;
+    code=String(code).trim();
+    if(!/^\d{6}$/.test(code)){alert(currentProfile()==='leni'?'6桁の数字を入力して':'Enter a 6-digit code');return}
+    try{
+      if(!(window.supabase&&window.supabase.createClient))throw new Error('Cloud client is not ready');
+      var client=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+      var session=await client.auth.getSession();
+      if(session.error)throw session.error;
+      if(!(session.data&&session.data.session)){
+        var signed=await client.auth.signInAnonymously();
+        if(signed.error)throw signed.error;
+      }
+      var result=await client.rpc('flowz_join_room',{p_code:code,p_profile:currentProfile()});
+      if(result.error)throw result.error;
+      var previous=localStorage.getItem(CLOUD_KEY);
+      if(previous)localStorage.setItem(CLOUD_BACKUP_KEY,previous);
+      localStorage.setItem(CLOUD_KEY,JSON.stringify({
+        roomId:result.data,
+        roomCode:code,
+        profile:currentProfile(),
+        linkedAt:new Date().toISOString(),
+        migratedAt:new Date(0).toISOString()
+      }));
+      location.reload();
+    }catch(error){
+      alert((currentProfile()==='leni'?'ROOM変更に失敗：':'Room change failed: ')+(error&&error.message?error.message:String(error)));
+    }
+  };
+  document.addEventListener('DOMContentLoaded',function(){
+    updateVisibility();
+    var button=document.getElementById('flowzRoomSwitchBtn');
+    if(button)button.addEventListener('click',window.flowzChangeRoom);
+  });
+  window.addEventListener('pageshow',updateVisibility);
+})();
+</script>
 </head>
 <body data-profile="kedy">
 <header class="top"><div class="brand"><h1>Flow<span>z</span></h1><p>DUO LANGUAGE BATTLE</p></div><div class="version">v4.4.0 (2026.8.7)</div></header>
@@ -28,6 +86,7 @@
 <section class="panel" id="flowzAssessment"></section>
 <section class="panel"><div class="section-head"><div class="section-title" id="weekTitle">📅 LAST 7 DAYS</div><span class="chip" id="weekSessions">0 / 7 days</span></div><div class="week-strip" id="weekStrip"></div></section>
 <section class="panel" id="flowzCloudPanel"></section>
+<div id="flowzRoomSwitchWrap" hidden style="margin:-12px 4px 18px;text-align:right"><button class="small-btn" id="flowzRoomSwitchBtn" type="button">ROOM変更</button></div>
 <details class="panel data-panel"><summary><span class="section-title" id="dataTitle">💾 DATA & BACKUP</span><span class="chip" id="storageLabel">AUTO BACKUP</span></summary><div class="io"><button class="small-btn" id="exportBtn">COPY RECORD</button><button class="small-btn" id="importBtn">RESTORE RECORD</button><button class="small-btn" id="resetPendingBtn">CLEAR PENDING</button></div></details>
 <p class="note" id="historyVaultNote">🛡️ HISTORY VAULT ON</p>
 <p class="note" id="historyBackfillNote"></p>
