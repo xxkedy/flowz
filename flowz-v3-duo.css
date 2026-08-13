@@ -115,6 +115,16 @@ body[data-profile="leni"] .prep{display:none}
 #flowzCloudPanel .cloud-member.on{color:#50dd8a;border-color:#287a4b}
 #flowzCloudPanel .cloud-latest{margin-top:11px;padding-top:11px;border-top:1px solid #2c3138;color:#d9ddd8;font-size:12px;line-height:1.45}
 #flowzCloudPanel .cloud-note{margin-top:9px;color:#747b84;font-size:10px;line-height:1.45}
+#flowzCloudPanel .cloud-compact{display:flex;align-items:center;justify-content:space-between;gap:8px}
+#flowzCloudPanel .cloud-compact-members{display:flex;align-items:center;gap:6px;min-width:0}
+#flowzCloudPanel .cloud-compact .cloud-member{padding:4px 8px;font-size:10px}
+#flowzCloudPanel .cloud-room{border:1px solid #343a42;background:transparent;color:#8f969f;border-radius:999px;padding:4px 8px;font:850 9px/1 -apple-system,BlinkMacSystemFont,"Hiragino Sans",sans-serif;white-space:nowrap}
+#flowzCloudPanel .cloud-room:active{transform:translateY(1px)}
+#flowzCloudPanel .cloud-error{margin-top:7px;color:#ff9e6d;font-size:10px;line-height:1.35}
+#flowzCloudPanel[data-linked="true"]{padding:10px 12px}
+#flowzCloudPanel[data-linked="true"] .cloud-head{margin-bottom:7px}
+#flowzCloudPanel[data-linked="true"] .cloud-title{font-size:13px}
+#flowzCloudPanel[data-linked="true"] .cloud-status{padding:5px 8px;font-size:9px}
 @media(max-width:420px){#flowzCloudPanel .cloud-actions{grid-template-columns:1fr}}
 
 /* ---- TOEIC result modal ---- */
