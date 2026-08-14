@@ -33,7 +33,7 @@ jobs:
       - name: Install dependencies
         run: |
           npm ci
-          npx playwright install chromium
+          npx playwright install --with-deps webkit
 
       - name: Regression tests
         run: npm test
