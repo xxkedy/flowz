@@ -83,6 +83,15 @@ body[data-profile="leni"] .prep{display:none}
 .prep-row span{font-size:9px;font-weight:950;letter-spacing:.1em;color:var(--muted)}
 .prep-row b{font-size:14px;line-height:1.3;color:var(--text)}
 .prep-row small{display:block;margin-top:2px;color:var(--muted);font-size:10px}
+.prep-row[data-prep-action]{position:relative;cursor:pointer;padding-right:38px;transition:background .15s ease,border-color .15s ease,transform .08s ease,filter .15s ease}
+.prep-row[data-prep-action]::after{content:"↻";position:absolute;right:13px;top:50%;transform:translateY(-50%);font-size:16px;font-weight:950;opacity:.82}
+.prep-row[data-prep-action="today"]{background:linear-gradient(135deg,rgba(255,158,44,.17),rgba(255,107,53,.07));border-color:rgba(255,158,44,.50)}
+.prep-row[data-prep-action="today"]>span{color:#ffc36e}
+.prep-row[data-prep-action="today"]::after{color:var(--amber)}
+.prep-row[data-prep-action="reuse"]{background:linear-gradient(135deg,rgba(39,211,223,.16),rgba(39,211,223,.055));border-color:rgba(39,211,223,.46)}
+.prep-row[data-prep-action="reuse"]>span{color:#7fe8ef}
+.prep-row[data-prep-action="reuse"]::after{color:var(--cyan)}
+.prep-row[data-prep-action]:active{transform:scale(.99);filter:brightness(1.18)}
 #flowzTalkPrepBtn{width:100%;margin-top:10px;padding:14px;border:0;border-radius:13px;background:linear-gradient(135deg,var(--amber),#ff7138);color:#111;font:950 15px/1 -apple-system,BlinkMacSystemFont,"Hiragino Sans",sans-serif}
 
 /* ---- Kedy mode grid: fixed curated layout (COMMUTE lives in Talk Prep) ---- */
