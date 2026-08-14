@@ -27,10 +27,10 @@
 
 /* ============================== RELEASE ============================== */
 var RELEASE={
-  number:'4.5.0',
-  label:'v4.5.0 (2026.8.14)',
-  title:'Flowz v4.5.0 · Duo Battle',
-  footer:'✅ Last updated 2026.08.14 · Flowz v4.5.0 Unified Build'
+  number:'4.5.1',
+  label:'v4.5.1 (2026.8.14)',
+  title:'Flowz v4.5.1 · Duo Battle',
+  footer:'✅ Last updated 2026.08.14 · Flowz v4.5.1 Unified Build'
 };
 
 /* ============================== STORAGE KEYS ============================== */
@@ -264,12 +264,21 @@ var UI={
 var MISSIONS={
  kedy:{
   commute:[
-   {theme:'Dinner plans after work',phrase:"I haven't decided yet.",meaning:'まだ決めてない',guide:'Use it once when plans are unclear.'},
    {theme:'Weather on the way home',phrase:"It's cooler than usual.",meaning:'いつもより涼しい',guide:'Compare today with a normal day.'},
    {theme:'Getting home soon',phrase:"I'll be home in five minutes.",meaning:'あと5分で家に着く',guide:'Change the number naturally.'},
    {theme:'Finishing the workday',phrase:'I just finished work.',meaning:'仕事が終わったばかり',guide:'Use it near the start.'},
-   {theme:'Choosing where to eat',phrase:"I'm not sure yet.",meaning:'まだ分からない／未定',guide:'Use it before giving options.'},
-   {theme:'Traffic and road conditions',phrase:'Traffic is lighter than usual.',meaning:'いつもより交通量が少ない',guide:'Describe what you see now.'}
+   {theme:'Choosing between options',phrase:"I'm not sure yet.",meaning:'まだ分からない／未定',guide:'Use it before giving options.'},
+   {theme:'Traffic and road conditions',phrase:'Traffic is lighter than usual.',meaning:'いつもより交通量が少ない',guide:'Describe what you notice now.'},
+   {theme:'Remembering an earlier thought',phrase:'I was thinking about that earlier.',meaning:'さっきそれについて考えてた',guide:'Connect it to something from today.'},
+   {theme:'Connecting ideas',phrase:'That reminds me of something.',meaning:'それで思い出したことがある',guide:'Use it before changing to a related topic.'},
+   {theme:'Changing a decision',phrase:'I changed my mind.',meaning:'考えが変わった',guide:'Add what changed.'},
+   {theme:'Unexpected moments',phrase:"I didn't expect that.",meaning:'それは予想してなかった',guide:'Add one short reason.'},
+   {theme:'Getting comfortable with something',phrase:"I'm getting used to it.",meaning:'だんだん慣れてきた',guide:'Say what you are getting used to.'},
+   {theme:'Trying a different approach',phrase:'I want to try something different.',meaning:'何か違うことを試したい',guide:'Add what you want to change.'},
+   {theme:'Recent thoughts',phrase:"I've been thinking about it lately.",meaning:'最近それについて考えてる',guide:'Add one detail.'},
+   {theme:'Solving something',phrase:'I need to figure it out.',meaning:'それを考えて解決しないと',guide:'Say what you need to figure out.'},
+   {theme:'Clarifying your meaning',phrase:"That's what I meant.",meaning:'そういう意味だった',guide:'Use it after clarifying yourself.'},
+   {theme:'Talking about preference',phrase:'It depends on how I feel.',meaning:'気分による',guide:'Give one example.'}
   ],
   toeic:[
    {theme:'Office requests',phrase:'Could you send it again?',meaning:'もう一度送ってもらえますか',guide:'Answer with a short reason.'},
@@ -344,13 +353,37 @@ function generateMission(profile,modeId,key){
   var item=list[missionSeed(profile,modeId,key)%list.length];
   return {theme:item.theme,phrase:item.phrase,reading:item.reading||'',meaning:item.meaning||'',guide:item.guide||''};
 }
-function previousPhrase(){
-  var sessions=state.profiles.kedy.sessions,todayMission=generateMission('kedy','commute',today);
-  for(var i=sessions.length-1;i>=0;i--){
-    var phrase=sessions[i]&&sessions[i].phrase;
-    if(phrase&&phrase!==todayMission.phrase)return phrase;
+var commuteMissionOffset=0,commuteReuseOffset=0;
+var STALE_PREP_PHRASES={"I haven't decided yet.":true,'I feel good.':true};
+function recentCommutePhrases(limit){
+  var sessions=state.profiles.kedy.sessions||[],out=[],seen={};
+  for(var i=sessions.length-1;i>=0&&out.length<(limit||4);i--){
+    var s=sessions[i]||{},phrase=s.phrase||'';
+    if(s.mode!=='commute'||!phrase||seen[phrase])continue;
+    seen[phrase]=true;out.push(phrase);
   }
-  return 'I feel good.';
+  return out;
+}
+function currentCommuteMission(){
+  var list=MISSIONS.kedy.commute,recent=recentCommutePhrases(3),blocked={};
+  recent.forEach(function(p){blocked[p]=true});
+  var start=(missionSeed('kedy','commute',today)+sessionCount('kedy')+commuteMissionOffset)%list.length;
+  for(var step=0;step<list.length;step++){
+    var item=list[(start+step)%list.length];
+    if(!blocked[item.phrase])return {theme:item.theme,phrase:item.phrase,reading:'',meaning:item.meaning||'',guide:item.guide||''};
+  }
+  var fallback=list[start];
+  return {theme:fallback.theme,phrase:fallback.phrase,reading:'',meaning:fallback.meaning||'',guide:fallback.guide||''};
+}
+function currentReusePhrase(currentPhrase){
+  var recent=recentCommutePhrases(8).filter(function(p){return p!==currentPhrase&&!STALE_PREP_PHRASES[p]});
+  if(recent.length)return recent[commuteReuseOffset%recent.length];
+  var list=MISSIONS.kedy.commute,start=(missionSeed('kedy','reuse',today)+sessionCount('kedy')+commuteReuseOffset)%list.length;
+  for(var step=0;step<list.length;step++){
+    var phrase=list[(start+step)%list.length].phrase;
+    if(phrase!==currentPhrase&&!STALE_PREP_PHRASES[phrase])return phrase;
+  }
+  return '';
 }
 
 /* ============================== PROMPT BUILDERS ============================== */
@@ -528,12 +561,12 @@ function renderRelease(){
 }
 function renderTalkPrep(){
   var card=$('flowzTalkPrep');if(!card||current!=='kedy')return;
-  var m=generateMission('kedy','commute',today),reuse=previousPhrase();
-  card.innerHTML='<div class="prep-head"><div class="prep-title">🗣️ TALK PREP</div><span class="prep-chip">COMMUTE</span></div>'+
+  var m=currentCommuteMission(),reuse=currentReusePhrase(m.phrase);
+  card.innerHTML='<div class="prep-head"><div class="prep-title">🗣️ TALK PREP</div><span class="prep-chip">COMMUTE</span></div>'+ 
     '<div class="prep-grid">'+
-      '<div class="prep-row"><span>OPEN</span><div><b>Hey ChatGPT, how’s it going?</b><small>普通に挨拶から始めてOK</small></div></div>'+
-      '<div class="prep-row"><span>TODAY</span><div><b>'+escapeHtml(m.phrase)+'</b><small>'+escapeHtml(m.meaning)+'</small></div></div>'+
-      '<div class="prep-row"><span>REUSE</span><div><b>'+escapeHtml(reuse)+'</b><small>前回表現をもう一度使う</small></div></div>'+
+      '<div class="prep-row"><span>OPEN</span><div><b>Hey ChatGPT, how’s it going?</b><small>普通に挨拶から始めてOK</small></div></div>'+ 
+      '<div class="prep-row" data-prep-action="today" role="button" tabindex="0"><span>TODAY</span><div><b>'+escapeHtml(m.phrase)+'</b><small>'+escapeHtml(m.meaning)+' · タップで切替</small></div></div>'+ 
+      '<div class="prep-row" data-prep-action="reuse" role="button" tabindex="0"><span>REUSE</span><div><b>'+escapeHtml(reuse)+'</b><small>最近の表現から選択 · タップで切替</small></div></div>'+ 
     '</div><button id="flowzTalkPrepBtn" type="button">⚡ START COMMUTE</button>';
 }
 function renderModes(){
@@ -644,8 +677,8 @@ function render(){
 }
 
 /* ============================== SESSION FLOW ============================== */
-function selectMission(mode){
-  pending={profile:current,mode:mode.id,title:mode.title,selectedAt:new Date().toISOString(),startedAt:'',mission:generateMission(current,mode.id,today)};
+function selectMission(mode,missionOverride){
+  pending={profile:current,mode:mode.id,title:mode.title,selectedAt:new Date().toISOString(),startedAt:'',mission:missionOverride||generateMission(current,mode.id,today)};
   savePending();render();
   var el=$('mission');if(el)el.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
@@ -662,7 +695,7 @@ function startSession(){
 }
 function beginCommute(){
   if(current!=='kedy')return;
-  selectMission({id:'commute',title:'COMMUTE'});
+  selectMission({id:'commute',title:'COMMUTE'},currentCommuteMission());
   startSession();
 }
 function completeSession(){
@@ -971,9 +1004,20 @@ function bindInteractions(){
     selectMission(findMode(current,btn.dataset.modeId));
   });
   var talkPrep=$('flowzTalkPrep');
-  if(talkPrep)talkPrep.addEventListener('click',function(e){
-    if(e.target.closest&&e.target.closest('#flowzTalkPrepBtn'))beginCommute();
-  });
+  if(talkPrep){
+    talkPrep.addEventListener('click',function(e){
+      if(e.target.closest&&e.target.closest('#flowzTalkPrepBtn')){beginCommute();return}
+      var row=e.target.closest&&e.target.closest('[data-prep-action]');if(!row)return;
+      if(row.dataset.prepAction==='today')commuteMissionOffset++;
+      if(row.dataset.prepAction==='reuse')commuteReuseOffset++;
+      renderTalkPrep();
+    });
+    talkPrep.addEventListener('keydown',function(e){
+      if(e.key!=='Enter'&&e.key!==' ')return;
+      var row=e.target.closest&&e.target.closest('[data-prep-action]');if(!row)return;
+      e.preventDefault();row.click();
+    });
+  }
   var assessment=$('flowzAssessment');
   if(assessment)assessment.addEventListener('click',function(e){
     if(e.target.closest&&e.target.closest('#flowzToeicResultBtn'))openToeicModal();
@@ -1016,6 +1060,7 @@ window.FlowzApp={
   getState:function(){return state},
   getCurrentProfile:function(){return current},
   buildPromptFor:buildPromptFor,
+  getTalkPrep:function(){var m=currentCommuteMission();return {today:m,reuse:currentReusePhrase(m.phrase)}},
   render:render
 };
 
