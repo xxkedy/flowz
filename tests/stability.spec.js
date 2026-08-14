@@ -99,8 +99,8 @@ test('stays visually still for 30s, across profile switches and resume, with no 
   }));
 
   const initial = await snapshot();
-  expect(initial.version).toBe('v4.5.2 (2026.8.14)');
-  expect(initial.title).toBe('Flowz v4.5.2 · Duo Battle');
+  expect(initial.version).toBe('v4.6.0 (2026.8.14)');
+  expect(initial.title).toBe('Flowz v4.6.0 · Duo Battle');
   // kedy's final tile order. COMMUTE is the Talk Prep card above the grid.
   expect(initial.modeIds).toEqual(['toeic', 'bath', 'free']);
   expect(initial.labels).toEqual(['🛁 BATH ROUTINE · mikan 30 → Flowz', '🎲 ANYTIME · OPEN TALK']);
@@ -341,6 +341,52 @@ test('Talk Prep TODAY and REUSE look tappable without coloring OPEN', async ({ p
   expect(styles.reuse.after).toContain('↻');
   expect(styles.today.border).not.toBe(styles.open.border);
   expect(styles.reuse.border).not.toBe(styles.open.border);
+});
+
+test('Leni gets a Talk Prep quick start that rotates Japanese phrases and stays visually distinct', async ({ page }) => {
+  const seeded = JSON.stringify({
+    version: 4,
+    profiles: {
+      kedy: { days:{}, sessions:[] },
+      leni: {
+        days:{},
+        sessions:[
+          { date:'2026-08-12', mode:'free', title:'フリー', phrase:'まだ決めていません。', at:'2026-08-12T20:00:00+09:00' },
+          { date:'2026-08-13', mode:'work', title:'仕事', phrase:'確認してから対応いたします。', at:'2026-08-13T20:00:00+09:00' }
+        ]
+      }
+    },
+    migrated:true,
+    updatedAt:''
+  });
+  await seed(page, { flowz_duo_data: seeded });
+  await page.goto(`${baseURL}/flowz-v3-duo.html`);
+  await page.click('.profile-btn[data-profile="leni"]');
+  await page.waitForSelector('#flowzTalkPrep [data-prep-action="today"]');
+
+  await expect(page.locator('#flowzTalkPrep')).toBeVisible();
+  await expect(page.locator('#flowzTalkPrep .prep-chip')).toHaveText('FREE');
+  await expect(page.locator('#flowzTalkPrepBtn')).toHaveText(/START FREE/);
+  await expect(page.locator('#flowzTalkPrep .prep-row').first()).toContainText('ChatGPTさん、こんにちは。');
+
+  const first = await page.evaluate(() => window.FlowzApp.getTalkPrep());
+  expect(first.profile).toBe('leni');
+  expect(first.today.phrase).not.toBe('まだ決めていません。');
+  expect(first.reuse).not.toBe(first.today.phrase);
+
+  await page.click('#flowzTalkPrep [data-prep-action="today"]');
+  const afterToday = await page.evaluate(() => window.FlowzApp.getTalkPrep());
+  expect(afterToday.today.phrase).not.toBe(first.today.phrase);
+
+  const styles = await page.evaluate(() => {
+    const today = document.querySelector('#flowzTalkPrep [data-prep-action="today"]');
+    const reuse = document.querySelector('#flowzTalkPrep [data-prep-action="reuse"]');
+    const t = getComputedStyle(today), r = getComputedStyle(reuse);
+    return { todayBg:t.backgroundImage, reuseBg:r.backgroundImage, todayBorder:t.borderTopColor, reuseBorder:r.borderTopColor };
+  });
+  expect(styles.todayBg).toContain('linear-gradient');
+  expect(styles.reuseBg).toContain('linear-gradient');
+  expect(styles.todayBorder).not.toBe(styles.reuseBorder);
 });
 
 test('a linked Duo Room renders as a compact status strip', async ({ page }) => {
