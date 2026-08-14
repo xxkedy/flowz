@@ -1,5 +1,5 @@
 /*
- * Regression suite for the v4.4.1 frontend consolidation.
+ * Regression suite for the v4.5.0 feedback loop + entry consolidation.
  *
  * Run with: npm install && npx playwright install chromium && npm test
  *
@@ -99,10 +99,10 @@ test('stays visually still for 30s, across profile switches and resume, with no 
   }));
 
   const initial = await snapshot();
-  expect(initial.version).toBe('v4.4.1 (2026.8.14)');
-  expect(initial.title).toBe('Flowz v4.4.1 · Duo Battle');
+  expect(initial.version).toBe('v4.5.0 (2026.8.14)');
+  expect(initial.title).toBe('Flowz v4.5.0 · Duo Battle');
   // kedy's final tile order. COMMUTE is the Talk Prep card above the grid.
-  expect(initial.modeIds).toEqual(['toeic', 'bath', 'review', 'free']);
+  expect(initial.modeIds).toEqual(['toeic', 'bath', 'free']);
   expect(initial.labels).toEqual(['🛁 BATH ROUTINE · mikan 30 → Flowz', '🎲 ANYTIME · OPEN TALK']);
   expect(initial.cloudIndex).toBeGreaterThan(0);
 
@@ -117,7 +117,7 @@ test('stays visually still for 30s, across profile switches and resume, with no 
     await page.click('.profile-btn[data-profile="leni"]');
     await expect(page.locator('#modes .mode')).toHaveCount(4);
     await page.click('.profile-btn[data-profile="kedy"]');
-    await expect(page.locator('#modes .mode')).toHaveCount(4);
+    await expect(page.locator('#modes .mode')).toHaveCount(3);
   }
   expect(await snapshot()).toEqual(initial);
 
@@ -167,7 +167,7 @@ test('no always-on DOM watchers or polling timers are installed', async ({ page 
   expect(intervals.filter((i) => /flowz-app\.js/.test(i.stack))).toEqual([]);
 });
 
-test('every kedy mode opens its own prompt with the required rules', async ({ page }) => {
+test('every visible kedy mode carries the current coaching and feedback rules', async ({ page }) => {
   await seed(page, {});
   await page.goto(`${baseURL}/flowz-v3-duo.html`);
   await page.waitForSelector('#modes .mode');
@@ -177,75 +177,73 @@ test('every kedy mode opens its own prompt with the required rules', async ({ pa
     const m = { theme: 't', phrase: 'p', meaning: 'm' };
     return {
       commute: b({ profile: 'kedy', mode: 'commute', mission: m }),
-      toeic:   b({ profile: 'kedy', mode: 'toeic',   mission: m }),
-      bath:    b({ profile: 'kedy', mode: 'bath',    mission: m }),
-      review:  b({ profile: 'kedy', mode: 'review',  mission: m }),
-      free:    b({ profile: 'kedy', mode: 'free',    mission: m }),
-      leni:    b({ profile: 'leni', mode: 'work',    mission: { theme: 't', phrase: 'p', reading: 'r', meaning: 'm' } })
+      toeic:   b({ profile: 'kedy', mode: 'toeic', mission: m }),
+      bath:    b({ profile: 'kedy', mode: 'bath', mission: m }),
+      review:  b({ profile: 'kedy', mode: 'review', mission: m }),
+      free:    b({ profile: 'kedy', mode: 'free', mission: m }),
+      leni:    b({ profile: 'leni', mode: 'work', mission: { theme: 't', phrase: 'p', reading: 'r', meaning: 'm' } })
     };
   });
 
-  // COMMUTE: no Notion before/during, Diary only at wrap-up, 80/20,
-  // one short shadowing sentence at a time, no fatigue softening,
-  // immediate topic redirection, never a praise-only turn, voice-only,
-  // arrival review, and no self-ending.
-  expect(p.commute).toMatch(/Do not call Notion, web, or any connected tool before your first reply/);
-  expect(p.commute).toMatch(/Only use Notion after he says 'まとめて' or 'Wrap up'/);
+  expect(p.commute).toMatch(/never delay the first visible reply/i);
+  expect(p.commute).toMatch(/Flowz Coach Rules/);
   expect(p.commute).toMatch(/about 80 percent and shadowing about 20 percent/);
-  expect(p.commute).toMatch(/Never end a turn with only praise/);
-  expect(p.commute).toMatch(/Assume the screen is not visible/);
-  expect(p.commute).toMatch(/Arrival Review/);
-  expect(p.commute).toMatch(/Do not close the conversation until kedy explicitly ends it/);
-  expect(p.commute).toMatch(/reply like a normal conversation partner once/); // no greeting ping-pong
   expect(p.commute).toMatch(/speak exactly one short sentence per assistant turn/);
-  expect(p.commute).toMatch(/Never combine multiple shadowing sentences in one spoken turn/);
-  expect(p.commute).toMatch(/wait for exactly one repetition before giving the next/);
+  expect(p.commute).toMatch(/wait for exactly one repetition/);
   expect(p.commute).toMatch(/do not offer an easier lesson, rest, stopping, or ending/);
-  expect(p.commute).toMatch(/immediately follow the new direction/);
-  expect(p.commute).toMatch(/Never proactively offer to end the session/);
+  expect(p.commute).toMatch(/three to six English words/);
+  expect(p.commute).toMatch(/Do not use 'Say: \.\.\.'/);
+  expect(p.commute).toMatch(/generic backchannels/);
+  expect(p.commute).toMatch(/at most twice in the whole session/);
+  expect(p.commute).toMatch(/Complaints, frustration/);
+  expect(p.commute).toMatch(/switch immediately to a genuinely different topic/);
+  expect(p.commute).toMatch(/Arrival Review/);
+  expect(p.commute).toMatch(/30–45 seconds/);
+  expect(p.commute).toMatch(/Flowz Feedback Loop/);
 
-  // TOEIC CHECK: 5 questions, L3/R2, 5-8 minutes.
   expect(p.toeic).toMatch(/five-question TOEIC Listening & Reading mini-check in about five to eight minutes/);
-  expect(p.toeic).toMatch(/three listening-style questions and two reading-style questions/);
+  expect(p.toeic).toMatch(/exactly three listening-style questions and two reading-style questions/);
+  expect(p.toeic).toMatch(/latest two TOEIC Check results/);
+  expect(p.toeic).toMatch(/both are at least 4\/5/);
+  expect(p.toeic).toMatch(/Do not give Japanese explanations for correctly answered questions/);
+  expect(p.toeic).toMatch(/FLOWZ TOEIC RESULT: Lx\/3 Ry\/2/);
+  expect(p.toeic).toMatch(/Flowz Feedback Loop/);
 
-  // TOEIC STUDY: voice, 5 questions, 5-8 minutes, and explicitly no score.
-  expect(p.bath).toMatch(/Voice Talk/);
   expect(p.bath).toMatch(/exactly five practice questions/);
-  expect(p.bath).toMatch(/about five to eight minutes/);
-  expect(p.bath).toMatch(/Do not give a TOEIC score/);
+  expect(p.bath).toMatch(/five to eight minutes/);
+  expect(p.bath).toMatch(/mikan for 30 vocabulary questions/);
+  expect(p.bath).toMatch(/without Japanese explanation/);
+  expect(p.bath).toMatch(/If wrong, give one short Japanese explanation/);
+  expect(p.bath).toMatch(/Flowz Feedback Loop/);
 
-  // REVIEW: 3-5 min, 3 phrases from recent Diary logs, one at a time,
-  // appends to the existing Diary and re-fetches to verify.
-  expect(p.review).toMatch(/3–5 minute review/);
-  expect(p.review).toMatch(/recent Diary English Logs and choose three/);
-  expect(p.review).toMatch(/one short Japanese situation at a time/);
-  expect(p.review).toMatch(/append a Review Log to today's existing Diary page and fetch it again to verify/);
-  expect(p.review).toMatch(/Do not create a new Diary page/);
+  expect(p.free).toMatch(/normal open English conversation/);
+  expect(p.free).toMatch(/old standalone REVIEW mode is absorbed into FREE/);
+  expect(p.free).toMatch(/explicitly asks to review or revise recent English/);
+  expect(p.free).toMatch(/short listening-friendly recap/);
+  expect(p.free).toMatch(/Flowz Feedback Loop/);
+  expect(p.review).toMatch(/legacy REVIEW pending state/);
+  expect(p.review).toMatch(/Do not create or expose a separate REVIEW mode/);
 
-  // FREE: no fixed lesson, and never stops on an acknowledgement.
-  expect(p.free).toMatch(/Never end a turn with only praise, acknowledgement/);
-  expect(p.free).toMatch(/continue a real conversation/);
-  expect(p.free).not.toMatch(/five-question|shadowing about 20 percent/);
-
-  // FREE and REVIEW stay separate modes.
-  expect(p.free).not.toBe(p.review);
-
-  // Leni's Japanese coaching is untouched.
   expect(p.leni).toMatch(/guru bahasa Jepang pribadi Leni/);
   expect(p.leni).toMatch(/bacaan hiragana/);
-  expect(p.leni).toMatch(/介護現場の報告・敬語・体調説明/);
+  expect(p.leni).not.toMatch(/Flowz Coach Rules/);
 });
 
-test('selecting each tile shows the matching mission card and start label', async ({ page }) => {
+test('selecting visible kedy entries keeps only COMMUTE, BATH TOEIC, and colored FREE', async ({ page }) => {
   await seed(page, {});
   await page.goto(`${baseURL}/flowz-v3-duo.html`);
   await page.waitForSelector('#modes .mode');
 
+  expect(await page.evaluate(() => [...document.querySelectorAll('#modes .mode')].map((b) => b.dataset.modeId)))
+    .toEqual(['toeic', 'bath', 'free']);
+  await expect(page.locator('#modes .mode[data-mode-id="review"]')).toHaveCount(0);
+  await expect(page.locator('#modes .mode[data-mode-id="free"]')).toHaveClass(/m5/);
+  await expect(page.locator('#flowzTalkPrepBtn')).toHaveText(/START COMMUTE/);
+
   const cases = [
-    ['toeic',  'START TOEIC CHECK · 5Q', 'Voice 5問チェック。Listening 3問＋Reading 2問を約5〜8分で採点。'],
-    ['bath',   'START TOEIC STUDY · 5Q', 'Voice Talk専用。画面を見ながら話さず、耳だけで答える5問・約5〜8分。'],
-    ['review', 'START REVIEW',           '約3〜5分。直近のDiary English Logから3フレーズを1問ずつ復習。'],
-    ['free',   'START FREE TALK',        '固定レッスンなし。今日話したいことを自然な英会話で続ける。']
+    ['toeic', 'START TOEIC CHECK · 5Q', 'Voice 5問チェック。Listening 3問＋Reading 2問を約5〜8分で採点。'],
+    ['bath',  'START TOEIC STUDY · 5Q', 'Voice Talk専用。画面を見ながら話さず、耳だけで答える5問・約5〜8分。'],
+    ['free',  'START FREE TALK',        '自由英会話。必要な時だけ最近の表現も自然に復習。']
   ];
   for (const [id, startLabel, guide] of cases) {
     await page.click(`#modes .mode[data-mode-id="${id}"]`);
@@ -254,7 +252,6 @@ test('selecting each tile shows the matching mission card and start label', asyn
     expect(await page.evaluate(() => window.FlowzApp.getPending().mode)).toBe(id);
   }
 
-  // Leni keeps her four Japanese modes.
   await page.click('.profile-btn[data-profile="leni"]');
   expect(await page.evaluate(() => [...document.querySelectorAll('#modes .mode')].map((b) => b.dataset.modeId)))
     .toEqual(['free', 'work', 'n2', 'kanji']);
