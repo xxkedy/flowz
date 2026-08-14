@@ -73,11 +73,12 @@ button{font:inherit}
 
 /* ---- Talk Prep (COMMUTE quick-start card, kedy only) ---- */
 .prep{border-color:#5d4a32;background:linear-gradient(155deg,#171512,#111315);padding:15px;min-height:0}
-body[data-profile="leni"] .prep{display:none}
+body[data-profile="leni"] .prep{border-color:rgba(39,211,223,.46);background:linear-gradient(155deg,#10191a,#111315)}
 .prep:empty{padding:0;margin-bottom:0;border:0;background:none;box-shadow:none}
 .prep-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
 .prep-title{font-size:14px;font-weight:950;letter-spacing:.1em}
 .prep-chip{padding:6px 9px;border:1px solid #5d4a32;border-radius:999px;font-size:10px;font-weight:900;color:#ffae48}
+body[data-profile="leni"] .prep-chip{border-color:rgba(39,211,223,.46);color:#7fe8ef}
 .prep-grid{display:grid;gap:7px}
 .prep-row{display:grid;grid-template-columns:54px 1fr;gap:8px;align-items:center;padding:9px 10px;border:1px solid var(--line);border-radius:12px;background:var(--panel2)}
 .prep-row span{font-size:9px;font-weight:950;letter-spacing:.1em;color:var(--muted)}
@@ -92,7 +93,14 @@ body[data-profile="leni"] .prep{display:none}
 .prep-row[data-prep-action="reuse"]>span{color:#7fe8ef}
 .prep-row[data-prep-action="reuse"]::after{color:var(--cyan)}
 .prep-row[data-prep-action]:active{transform:scale(.99);filter:brightness(1.18)}
+body[data-profile="leni"] .prep-row[data-prep-action="today"]{background:linear-gradient(135deg,rgba(39,211,223,.17),rgba(39,211,223,.06));border-color:rgba(39,211,223,.50)}
+body[data-profile="leni"] .prep-row[data-prep-action="today"]>span{color:#7fe8ef}
+body[data-profile="leni"] .prep-row[data-prep-action="today"]::after{color:var(--cyan)}
+body[data-profile="leni"] .prep-row[data-prep-action="reuse"]{background:linear-gradient(135deg,rgba(85,217,130,.16),rgba(85,217,130,.055));border-color:rgba(85,217,130,.46)}
+body[data-profile="leni"] .prep-row[data-prep-action="reuse"]>span{color:#91edaf}
+body[data-profile="leni"] .prep-row[data-prep-action="reuse"]::after{color:var(--green)}
 #flowzTalkPrepBtn{width:100%;margin-top:10px;padding:14px;border:0;border-radius:13px;background:linear-gradient(135deg,var(--amber),#ff7138);color:#111;font:950 15px/1 -apple-system,BlinkMacSystemFont,"Hiragino Sans",sans-serif}
+body[data-profile="leni"] #flowzTalkPrepBtn{background:linear-gradient(135deg,var(--cyan),var(--green));color:#002329}
 
 /* ---- Kedy mode grid: fixed curated layout (COMMUTE lives in Talk Prep) ---- */
 .modes.kedy-modes{grid-template-columns:1fr 1fr}

@@ -27,10 +27,10 @@
 
 /* ============================== RELEASE ============================== */
 var RELEASE={
-  number:'4.5.2',
-  label:'v4.5.2 (2026.8.14)',
-  title:'Flowz v4.5.2 · Duo Battle',
-  footer:'✅ Last updated 2026.08.14 · Flowz v4.5.2 Unified Build'
+  number:'4.6.0',
+  label:'v4.6.0 (2026.8.14)',
+  title:'Flowz v4.6.0 · Duo Battle',
+  footer:'✅ Last updated 2026.08.14 · Flowz v4.6.0 Unified Build'
 };
 
 /* ============================== STORAGE KEYS ============================== */
@@ -353,7 +353,7 @@ function generateMission(profile,modeId,key){
   var item=list[missionSeed(profile,modeId,key)%list.length];
   return {theme:item.theme,phrase:item.phrase,reading:item.reading||'',meaning:item.meaning||'',guide:item.guide||''};
 }
-var commuteMissionOffset=0,commuteReuseOffset=0;
+var commuteMissionOffset=0,commuteReuseOffset=0,leniPrepMissionOffset=0,leniPrepReuseOffset=0;
 var STALE_PREP_PHRASES={"I haven't decided yet.":true,'I feel good.':true};
 function recentCommutePhrases(limit){
   var sessions=state.profiles.kedy.sessions||[],out=[],seen={};
@@ -382,6 +382,36 @@ function currentReusePhrase(currentPhrase){
   for(var step=0;step<list.length;step++){
     var phrase=list[(start+step)%list.length].phrase;
     if(phrase!==currentPhrase&&!STALE_PREP_PHRASES[phrase])return phrase;
+  }
+  return '';
+}
+function recentLeniPhrases(limit){
+  var sessions=state.profiles.leni.sessions||[],out=[],seen={};
+  for(var i=sessions.length-1;i>=0&&out.length<(limit||4);i--){
+    var s=sessions[i]||{},phrase=s.phrase||'';
+    if(!phrase||seen[phrase])continue;
+    seen[phrase]=true;out.push(phrase);
+  }
+  return out;
+}
+function currentLeniPrepMission(){
+  var list=MISSIONS.leni.free,recent=recentLeniPhrases(2),blocked={};
+  recent.forEach(function(p){blocked[p]=true});
+  var start=(missionSeed('leni','free',today)+sessionCount('leni')+leniPrepMissionOffset)%list.length;
+  for(var step=0;step<list.length;step++){
+    var item=list[(start+step)%list.length];
+    if(!blocked[item.phrase])return {theme:item.theme,phrase:item.phrase,reading:item.reading||'',meaning:item.meaning||'',guide:item.guide||''};
+  }
+  var fallback=list[start];
+  return {theme:fallback.theme,phrase:fallback.phrase,reading:fallback.reading||'',meaning:fallback.meaning||'',guide:fallback.guide||''};
+}
+function currentLeniReusePhrase(currentPhrase){
+  var recent=recentLeniPhrases(8).filter(function(p){return p!==currentPhrase});
+  if(recent.length)return recent[leniPrepReuseOffset%recent.length];
+  var list=MISSIONS.leni.free,start=(missionSeed('leni','reuse',today)+sessionCount('leni')+leniPrepReuseOffset)%list.length;
+  for(var step=0;step<list.length;step++){
+    var phrase=list[(start+step)%list.length].phrase;
+    if(phrase!==currentPhrase)return phrase;
   }
   return '';
 }
@@ -560,14 +590,24 @@ function renderRelease(){
   document.querySelectorAll('body>.note').forEach(function(n){if(/Last updated/i.test(n.textContent||''))text(n,RELEASE.footer)});
 }
 function renderTalkPrep(){
-  var card=$('flowzTalkPrep');if(!card||current!=='kedy')return;
-  var m=currentCommuteMission(),reuse=currentReusePhrase(m.phrase);
-  card.innerHTML='<div class="prep-head"><div class="prep-title">🗣️ TALK PREP</div><span class="prep-chip">COMMUTE</span></div>'+ 
+  var card=$('flowzTalkPrep');if(!card)return;
+  if(current==='kedy'){
+    var m=currentCommuteMission(),reuse=currentReusePhrase(m.phrase);
+    card.innerHTML='<div class="prep-head"><div class="prep-title">🗣️ TALK PREP</div><span class="prep-chip">COMMUTE</span></div>'+ 
+      '<div class="prep-grid">'+
+        '<div class="prep-row"><span>OPEN</span><div><b>Hey ChatGPT, how’s it going?</b><small>普通に挨拶から始めてOK</small></div></div>'+ 
+        '<div class="prep-row" data-prep-action="today" role="button" tabindex="0"><span>TODAY</span><div><b>'+escapeHtml(m.phrase)+'</b><small>'+escapeHtml(m.meaning)+' · タップで切替</small></div></div>'+ 
+        '<div class="prep-row" data-prep-action="reuse" role="button" tabindex="0"><span>REUSE</span><div><b>'+escapeHtml(reuse)+'</b><small>最近の表現から選択 · タップで切替</small></div></div>'+ 
+      '</div><button id="flowzTalkPrepBtn" type="button">⚡ START COMMUTE</button>';
+    return;
+  }
+  var lm=currentLeniPrepMission(),lreuse=currentLeniReusePhrase(lm.phrase);
+  card.innerHTML='<div class="prep-head"><div class="prep-title">🗣️ TALK PREP</div><span class="prep-chip">FREE</span></div>'+ 
     '<div class="prep-grid">'+
-      '<div class="prep-row"><span>OPEN</span><div><b>Hey ChatGPT, how’s it going?</b><small>普通に挨拶から始めてOK</small></div></div>'+ 
-      '<div class="prep-row" data-prep-action="today" role="button" tabindex="0"><span>TODAY</span><div><b>'+escapeHtml(m.phrase)+'</b><small>'+escapeHtml(m.meaning)+' · タップで切替</small></div></div>'+ 
-      '<div class="prep-row" data-prep-action="reuse" role="button" tabindex="0"><span>REUSE</span><div><b>'+escapeHtml(reuse)+'</b><small>最近の表現から選択 · タップで切替</small></div></div>'+ 
-    '</div><button id="flowzTalkPrepBtn" type="button">⚡ START COMMUTE</button>';
+      '<div class="prep-row"><span>OPEN</span><div><b>ChatGPTさん、こんにちは。今日も日本語を練習したいです。</b><small>Mulai dengan sapaan biasa</small></div></div>'+ 
+      '<div class="prep-row" data-prep-action="today" role="button" tabindex="0"><span>TODAY</span><div><b>'+escapeHtml(lm.phrase)+'</b><small>'+escapeHtml(lm.meaning)+' · タップで切替</small></div></div>'+ 
+      '<div class="prep-row" data-prep-action="reuse" role="button" tabindex="0"><span>REUSE</span><div><b>'+escapeHtml(lreuse)+'</b><small>最近の表現から選択 · タップで切替</small></div></div>'+ 
+    '</div><button id="flowzTalkPrepBtn" type="button">⚡ START FREE</button>';
 }
 function renderModes(){
   var box=$('modes');if(!box)return;
@@ -672,7 +712,7 @@ function render(){
   text($('storageNote'),loadCloud().roomId?u.noteSynced:u.note);
   text($('pendingHeading'),u.pendingHeading);text($('fixLabel'),u.fix);
   text($('missionHeading'),u.missionHeading);text($('missionThemeLabel'),u.themeLabel);text($('missionPhraseLabel'),u.phraseLabel);
-  var talkPrep=$('flowzTalkPrep');if(talkPrep)talkPrep.style.display=current==='kedy'?'':'none';
+  var talkPrep=$('flowzTalkPrep');if(talkPrep)talkPrep.style.display='';
   renderModes();renderTalkPrep();renderMission();renderPending();renderWeek();renderAssessment();renderCloudPanel();renderVault();renderRelease();
 }
 
@@ -697,6 +737,15 @@ function beginCommute(){
   if(current!=='kedy')return;
   selectMission({id:'commute',title:'COMMUTE'},currentCommuteMission());
   startSession();
+}
+function beginLeniTalkPrep(){
+  if(current!=='leni')return;
+  selectMission(findMode('leni','free'),currentLeniPrepMission());
+  startSession();
+}
+function beginTalkPrep(){
+  if(current==='kedy')beginCommute();
+  else beginLeniTalkPrep();
 }
 function completeSession(){
   if(!pending||pending.profile!==current||!pending.startedAt)return;
@@ -1006,10 +1055,15 @@ function bindInteractions(){
   var talkPrep=$('flowzTalkPrep');
   if(talkPrep){
     talkPrep.addEventListener('click',function(e){
-      if(e.target.closest&&e.target.closest('#flowzTalkPrepBtn')){beginCommute();return}
+      if(e.target.closest&&e.target.closest('#flowzTalkPrepBtn')){beginTalkPrep();return}
       var row=e.target.closest&&e.target.closest('[data-prep-action]');if(!row)return;
-      if(row.dataset.prepAction==='today')commuteMissionOffset++;
-      if(row.dataset.prepAction==='reuse')commuteReuseOffset++;
+      if(current==='kedy'){
+        if(row.dataset.prepAction==='today')commuteMissionOffset++;
+        if(row.dataset.prepAction==='reuse')commuteReuseOffset++;
+      }else{
+        if(row.dataset.prepAction==='today')leniPrepMissionOffset++;
+        if(row.dataset.prepAction==='reuse')leniPrepReuseOffset++;
+      }
       renderTalkPrep();
     });
     talkPrep.addEventListener('keydown',function(e){
@@ -1060,7 +1114,7 @@ window.FlowzApp={
   getState:function(){return state},
   getCurrentProfile:function(){return current},
   buildPromptFor:buildPromptFor,
-  getTalkPrep:function(){var m=currentCommuteMission();return {today:m,reuse:currentReusePhrase(m.phrase)}},
+  getTalkPrep:function(){if(current==='leni'){var lm=currentLeniPrepMission();return {profile:'leni',today:lm,reuse:currentLeniReusePhrase(lm.phrase)}}var m=currentCommuteMission();return {profile:'kedy',today:m,reuse:currentReusePhrase(m.phrase)}},
   render:render
 };
 
