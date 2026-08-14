@@ -99,8 +99,8 @@ test('stays visually still for 30s, across profile switches and resume, with no 
   }));
 
   const initial = await snapshot();
-  expect(initial.version).toBe('v4.5.0 (2026.8.14)');
-  expect(initial.title).toBe('Flowz v4.5.0 · Duo Battle');
+  expect(initial.version).toBe('v4.5.1 (2026.8.14)');
+  expect(initial.title).toBe('Flowz v4.5.1 · Duo Battle');
   // kedy's final tile order. COMMUTE is the Talk Prep card above the grid.
   expect(initial.modeIds).toEqual(['toeic', 'bath', 'free']);
   expect(initial.labels).toEqual(['🛁 BATH ROUTINE · mikan 30 → Flowz', '🎲 ANYTIME · OPEN TALK']);
@@ -255,6 +255,60 @@ test('selecting visible kedy entries keeps only COMMUTE, BATH TOEIC, and colored
   await page.click('.profile-btn[data-profile="leni"]');
   expect(await page.evaluate(() => [...document.querySelectorAll('#modes .mode')].map((b) => b.dataset.modeId)))
     .toEqual(['free', 'work', 'n2', 'kanji']);
+});
+
+test('Talk Prep rotates fresh phrases, removes stale fallback, and advances after a commute session', async ({ page }) => {
+  const seeded = JSON.stringify({
+    version: 4,
+    profiles: {
+      kedy: {
+        days: {},
+        sessions: [
+          { date:'2026-08-10', mode:'commute', title:'COMMUTE', phrase:"I haven't decided yet.", at:'2026-08-10T08:00:00+09:00' },
+          { date:'2026-08-11', mode:'commute', title:'COMMUTE', phrase:'I feel good.', at:'2026-08-11T08:00:00+09:00' },
+          { date:'2026-08-12', mode:'commute', title:'COMMUTE', phrase:"It's cooler than usual.", at:'2026-08-12T08:00:00+09:00' },
+          { date:'2026-08-13', mode:'commute', title:'COMMUTE', phrase:"I'll be home in five minutes.", at:'2026-08-13T08:00:00+09:00' },
+          { date:'2026-08-13', mode:'commute', title:'COMMUTE', phrase:'I just finished work.', at:'2026-08-13T18:00:00+09:00' }
+        ]
+      },
+      leni: { days:{}, sessions:[] }
+    },
+    migrated: true,
+    updatedAt: ''
+  });
+  await seed(page, { flowz_duo_data: seeded });
+  await page.goto(`${baseURL}/flowz-v3-duo.html`);
+  await page.waitForSelector('#flowzTalkPrep [data-prep-action="today"]');
+
+  const first = await page.evaluate(() => window.FlowzApp.getTalkPrep());
+  expect(first.today.phrase).not.toBe("I haven't decided yet.");
+  expect(first.today.phrase).not.toBe('I feel good.');
+  expect(first.reuse).not.toBe("I haven't decided yet.");
+  expect(first.reuse).not.toBe('I feel good.');
+  await expect(page.locator('[data-prep-action="today"] small')).toContainText('タップで切替');
+  await expect(page.locator('[data-prep-action="reuse"] small')).toContainText('タップで切替');
+
+  await page.click('[data-prep-action="today"]');
+  const afterTodayTap = await page.evaluate(() => window.FlowzApp.getTalkPrep());
+  expect(afterTodayTap.today.phrase).not.toBe(first.today.phrase);
+
+  await page.click('[data-prep-action="reuse"]');
+  const afterReuseTap = await page.evaluate(() => window.FlowzApp.getTalkPrep());
+  expect(afterReuseTap.reuse).not.toBe(afterTodayTap.reuse);
+
+  const missionBeforeSession = afterReuseTap.today;
+  await page.evaluate((mission) => {
+    localStorage.setItem('flowz_duo_pending', JSON.stringify({
+      profile:'kedy', mode:'commute', title:'COMMUTE',
+      selectedAt:new Date(Date.now()-11*60*1000).toISOString(),
+      startedAt:new Date(Date.now()-10*60*1000).toISOString(),
+      autoRecord:true, mission
+    }));
+  }, missionBeforeSession);
+  await page.reload();
+  await page.waitForFunction(() => window.FlowzApp.getPending() === null);
+  const afterCompletedCommute = await page.evaluate(() => window.FlowzApp.getTalkPrep());
+  expect(afterCompletedCommute.today.phrase).not.toBe(missionBeforeSession.phrase);
 });
 
 test('a linked Duo Room renders as a compact status strip', async ({ page }) => {
