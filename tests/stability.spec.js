@@ -99,8 +99,8 @@ test('stays visually still for 30s, across profile switches and resume, with no 
   }));
 
   const initial = await snapshot();
-  expect(initial.version).toBe('v4.5.1 (2026.8.14)');
-  expect(initial.title).toBe('Flowz v4.5.1 · Duo Battle');
+  expect(initial.version).toBe('v4.5.2 (2026.8.14)');
+  expect(initial.title).toBe('Flowz v4.5.2 · Duo Battle');
   // kedy's final tile order. COMMUTE is the Talk Prep card above the grid.
   expect(initial.modeIds).toEqual(['toeic', 'bath', 'free']);
   expect(initial.labels).toEqual(['🛁 BATH ROUTINE · mikan 30 → Flowz', '🎲 ANYTIME · OPEN TALK']);
@@ -309,6 +309,38 @@ test('Talk Prep rotates fresh phrases, removes stale fallback, and advances afte
   await page.waitForFunction(() => window.FlowzApp.getPending() === null);
   const afterCompletedCommute = await page.evaluate(() => window.FlowzApp.getTalkPrep());
   expect(afterCompletedCommute.today.phrase).not.toBe(missionBeforeSession.phrase);
+});
+
+test('Talk Prep TODAY and REUSE look tappable without coloring OPEN', async ({ page }) => {
+  await seed(page, {});
+  await page.goto(`${baseURL}/flowz-v3-duo.html`);
+  await page.waitForSelector('#flowzTalkPrep [data-prep-action="today"]');
+
+  const styles = await page.evaluate(() => {
+    const today = document.querySelector('[data-prep-action="today"]');
+    const reuse = document.querySelector('[data-prep-action="reuse"]');
+    const open = document.querySelector('.prep-row:not([data-prep-action])');
+    const read = (el) => {
+      const cs = getComputedStyle(el);
+      const after = getComputedStyle(el, '::after');
+      return {
+        bg: cs.backgroundImage,
+        border: cs.borderTopColor,
+        cursor: cs.cursor,
+        after: after.content
+      };
+    };
+    return { today: read(today), reuse: read(reuse), open: read(open) };
+  });
+
+  expect(styles.today.bg).toContain('linear-gradient');
+  expect(styles.reuse.bg).toContain('linear-gradient');
+  expect(styles.today.cursor).toBe('pointer');
+  expect(styles.reuse.cursor).toBe('pointer');
+  expect(styles.today.after).toContain('↻');
+  expect(styles.reuse.after).toContain('↻');
+  expect(styles.today.border).not.toBe(styles.open.border);
+  expect(styles.reuse.border).not.toBe(styles.open.border);
 });
 
 test('a linked Duo Room renders as a compact status strip', async ({ page }) => {
