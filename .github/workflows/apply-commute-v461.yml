@@ -61,6 +61,32 @@ jobs:
             if old not in s:
               raise SystemExit('Missing expected flowz-app.js text: '+old[:140])
             s = s.replace(old, new, 1)
+
+          old_mission = '''function currentCommuteMission(){
+  var list=MISSIONS.kedy.commute,recent=recentCommutePhrases(3),blocked={};
+  recent.forEach(function(p){blocked[p]=true});
+  var start=(missionSeed('kedy','commute',today)+sessionCount('kedy')+commuteMissionOffset)%list.length;
+  for(var step=0;step<list.length;step++){
+    var item=list[(start+step)%list.length];
+    if(!blocked[item.phrase])return {theme:item.theme,phrase:item.phrase,reading:'',meaning:item.meaning||'',guide:item.guide||''};
+  }
+  var fallback=list[start];
+  return {theme:fallback.theme,phrase:fallback.phrase,reading:'',meaning:fallback.meaning||'',guide:fallback.guide||''};
+}'''
+          new_mission = '''function currentCommuteMission(){
+  var list=MISSIONS.kedy.commute,recent=recentCommutePhrases(3),blocked={},available=[];
+  recent.forEach(function(p){blocked[p]=true});
+  var base=(missionSeed('kedy','commute',today)+sessionCount('kedy'))%list.length;
+  for(var step=0;step<list.length;step++){
+    var item=list[(base+step)%list.length];
+    if(!blocked[item.phrase])available.push(item);
+  }
+  var selected=available.length?available[commuteMissionOffset%available.length]:list[(base+commuteMissionOffset)%list.length];
+  return {theme:selected.theme,phrase:selected.phrase,reading:'',meaning:selected.meaning||'',guide:selected.guide||''};
+}'''
+          if old_mission not in s:
+            raise SystemExit('Expected currentCommuteMission source not found')
+          s = s.replace(old_mission, new_mission, 1)
           app.write_text(s, encoding='utf-8')
 
           html = Path('flowz-v3-duo.html')
@@ -114,6 +140,7 @@ jobs:
           - Repeated bike-commute safety reminders are suppressed unless safety is actually the topic or there is an immediate concern.
           - Normal corrections use brief recasts without mandatory retries.
           - Boredom/topic-change signals force a genuinely different content domain and avoid recently rejected defaults.
+          - Talk Prep TODAY rotation now advances across available non-recent phrases instead of resolving back to the same candidate after a skip.
           - Duo Sync, XP/history logic, layout, and Leni prompts are unchanged.
           EOF
       - name: Syntax check
