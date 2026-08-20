@@ -191,6 +191,30 @@
   }catch(e){}
 })();
 </script>
+<script>
+(function(){
+  var beforePhrase='',retrying=false;
+  function todayRow(target){return target&&target.closest?target.closest('#flowzTalkPrep [data-prep-action="today"]'):null}
+  function isCommute(){var chip=document.querySelector('#flowzTalkPrep .prep-chip');return !!(chip&&chip.textContent.trim()==='COMMUTE')}
+  document.addEventListener('click',function(e){
+    var row=todayRow(e.target);
+    if(!row||retrying||!isCommute())return;
+    var label=row.querySelector('b');
+    beforePhrase=label?label.textContent:'';
+  },true);
+  document.addEventListener('click',function(e){
+    var row=todayRow(e.target);
+    if(!row||retrying||!isCommute()||!beforePhrase)return;
+    var current=document.querySelector('#flowzTalkPrep [data-prep-action="today"]');
+    var label=current&&current.querySelector('b');
+    if(label&&label.textContent===beforePhrase){
+      retrying=true;
+      current.click();
+      retrying=false;
+    }
+  },false);
+})();
+</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
 <script src="flowz-app.js?v=4.6.0" defer></script>
 </body>
