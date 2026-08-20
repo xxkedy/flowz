@@ -1,0 +1,26 @@
+name: QA commute natural conversation
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'flowz-v3-duo.html'
+      - 'tests/**'
+      - '.github/workflows/qa-commute-natural.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  webkit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps webkit
+      - run: npx playwright test --browser=webkit
