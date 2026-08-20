@@ -99,8 +99,8 @@ test('stays visually still for 30s, across profile switches and resume, with no 
   }));
 
   const initial = await snapshot();
-  expect(initial.version).toBe('v4.6.0 (2026.8.14)');
-  expect(initial.title).toBe('Flowz v4.6.0 · Duo Battle');
+  expect(initial.version).toBe('v4.6.1 (2026.8.21)');
+  expect(initial.title).toBe('Flowz v4.6.1 · Duo Battle');
   // kedy's final tile order. COMMUTE is the Talk Prep card above the grid.
   expect(initial.modeIds).toEqual(['toeic', 'bath', 'free']);
   expect(initial.labels).toEqual(['🛁 BATH ROUTINE · mikan 30 → Flowz', '🎲 ANYTIME · OPEN TALK']);
@@ -187,7 +187,14 @@ test('every visible kedy mode carries the current coaching and feedback rules', 
 
   expect(p.commute).toMatch(/never delay the first visible reply/i);
   expect(p.commute).toMatch(/Flowz Coach Rules/);
-  expect(p.commute).toMatch(/about 80 percent and shadowing about 20 percent/);
+  expect(p.commute).toMatch(/about 90 percent and shadowing at most 10 percent/);
+  expect(p.commute).toMatch(/conversation partner and coach/);
+  expect(p.commute).toMatch(/enter conversation-only mode for the rest of that session/);
+  expect(p.commute).toMatch(/respond as a real conversation partner/);
+  expect(p.commute).toMatch(/Do not turn the whole conversation into an interview/);
+  expect(p.commute).toMatch(/do not silently replace a key noun or idea/);
+  expect(p.commute).toMatch(/Commute is background context/);
+  expect(p.commute).toMatch(/do not require a retry/);
   expect(p.commute).toMatch(/speak exactly one short sentence per assistant turn/);
   expect(p.commute).toMatch(/wait for exactly one repetition/);
   expect(p.commute).toMatch(/do not offer an easier lesson, rest, stopping, or ending/);
@@ -196,7 +203,9 @@ test('every visible kedy mode carries the current coaching and feedback rules', 
   expect(p.commute).toMatch(/generic backchannels/);
   expect(p.commute).toMatch(/at most twice in the whole session/);
   expect(p.commute).toMatch(/Complaints, frustration/);
-  expect(p.commute).toMatch(/switch immediately to a genuinely different topic/);
+  expect(p.commute).toMatch(/switch immediately to a genuinely different content domain/);
+  expect(p.commute).toMatch(/recently rejected defaults such as mood, weather, music, food, plans, or commute conditions/);
+  expect(p.commute).toMatch(/prefer a concrete subject with something to react to/);
   expect(p.commute).toMatch(/Arrival Review/);
   expect(p.commute).toMatch(/30–45 seconds/);
   expect(p.commute).toMatch(/Flowz Feedback Loop/);

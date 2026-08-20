@@ -9,8 +9,8 @@
 <meta name="apple-mobile-web-app-title" content="Flowz Duo">
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
-<title>Flowz v4.6.0 (2026.8.14) · Duo Battle</title>
-<link rel="stylesheet" href="flowz-v3-duo.css?v=4.6.0">
+<title>Flowz v4.6.1 (2026.8.21) · Duo Battle</title>
+<link rel="stylesheet" href="flowz-v3-duo.css?v=4.6.1">
 <script>
 (function(){
   var CLOUD_KEY='flowz_duo_cloud_v1';
@@ -139,7 +139,7 @@
 </script>
 </head>
 <body data-profile="kedy">
-<header class="top"><div class="brand"><h1>Flow<span>z</span></h1><p>DUO LANGUAGE BATTLE</p></div><div class="version">v4.6.0 (2026.8.14)</div></header>
+<header class="top"><div class="brand"><h1>Flow<span>z</span></h1><p>DUO LANGUAGE BATTLE</p></div><div class="version">v4.6.1 (2026.8.21)</div></header>
 <section class="profile-switch" aria-label="Select learner">
   <button class="profile-btn active" data-profile="kedy"><span class="pname">🌙 kedy</span><span class="plang">ENGLISH</span><span class="pmini" id="mini-kedy">LV.1</span></button>
   <button class="profile-btn" data-profile="leni"><span class="pname">☀️ Leni</span><span class="plang">JAPANESE</span><span class="pmini" id="mini-leni">LV.1</span></button>
@@ -159,63 +159,9 @@
 <p class="note" id="historyVaultNote">🛡️ HISTORY VAULT ON</p>
 <p class="note" id="historyBackfillNote"></p>
 <p class="note" id="storageNote">Records are saved in this browser. Connect Duo Sync to share progress across devices.</p>
-<p class="note">✅ Last updated 2026.08.14 · Flowz v4.6.0 Unified Build</p>
+<p class="note">✅ Last updated 2026.08.21 · Flowz v4.6.1 Unified Build</p>
 <div class="toast" id="toast"></div>
-<script>
-(function(){
-  var marker="You are kedy's English coach in Flowz Duo Battle.";
-  var guardMarker='COMMUTE VOICE FALLBACK:';
-  var extra=[
-    guardMarker+' These built-in rules apply even when connected Coach Rules cannot be loaded.',
-    'Natural conversation is the default. Aim for about 90 percent conversation and at most 10 percent optional shadowing.',
-    'If kedy asks to talk, says he wants natural conversation, says stay in chat, or otherwise chooses conversation instead of repetition, enter conversation-only mode for the rest of that session. In conversation-only mode, do not start or suggest shadowing, repetition drills, model-sentence drills, lesson framing, or requests to repeat. Do not suggest them again unless he explicitly asks for shadowing.',
-    'In conversation-only mode, respond as a real conversation partner. Answer his actual point first, share a short opinion or idea when natural, and ask only questions that genuinely move that topic forward. Do not turn the conversation into repeated A1 either-or prompts just because his English is simple.',
-    'If his speech is fragmented or voice recognition is uncertain, do not silently replace a key noun or idea with a different word. Use the word you heard when possible, or ask one very short confirmation only when the meaning would materially change. After one clarification, continue the topic instead of starting a correction loop.',
-    'Commute is background context. Do not repeatedly tell him to stay safe, focus on the road, keep steady, or use similar riding-safety reminders unless he asks about safety or there is an immediate safety concern.',
-    'During normal conversation, prefer one brief natural recast for a meaning-changing or strongly unnatural mistake and keep the topic moving. Do not require a retry unless kedy clearly wants to practice the corrected line.',
-    'If kedy says the same words keep coming up, says he is bored, or asks for another topic, switch immediately to a genuinely different content domain. Do not rephrase the previous topic and do not immediately return to recently rejected defaults such as mood, weather, music, food, or commute conditions.'
-  ].join(' ');
-  function transform(value){
-    var text=String(value==null?'':value);
-    if(text.indexOf(marker)>=0&&text.indexOf(guardMarker)<0)return text+' '+extra;
-    return text;
-  }
-  window.FlowzCommuteVoiceGuard={transform:transform};
-  var nativeEncode=window.encodeURIComponent;
-  window.encodeURIComponent=function(value){return nativeEncode(transform(value));};
-  try{
-    if(navigator.clipboard&&navigator.clipboard.writeText){
-      var nativeWrite=navigator.clipboard.writeText.bind(navigator.clipboard);
-      navigator.clipboard.writeText=function(value){return nativeWrite(transform(value));};
-    }
-  }catch(e){}
-})();
-</script>
-<script>
-(function(){
-  var beforePhrase='',retrying=false;
-  function todayRow(target){return target&&target.closest?target.closest('#flowzTalkPrep [data-prep-action="today"]'):null}
-  function isCommute(){var chip=document.querySelector('#flowzTalkPrep .prep-chip');return !!(chip&&chip.textContent.trim()==='COMMUTE')}
-  document.addEventListener('click',function(e){
-    var row=todayRow(e.target);
-    if(!row||retrying||!isCommute())return;
-    var label=row.querySelector('b');
-    beforePhrase=label?label.textContent:'';
-  },true);
-  document.addEventListener('click',function(e){
-    var row=todayRow(e.target);
-    if(!row||retrying||!isCommute()||!beforePhrase)return;
-    var current=document.querySelector('#flowzTalkPrep [data-prep-action="today"]');
-    var label=current&&current.querySelector('b');
-    if(label&&label.textContent===beforePhrase){
-      retrying=true;
-      current.click();
-      retrying=false;
-    }
-  },false);
-})();
-</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
-<script src="flowz-app.js?v=4.6.0" defer></script>
+<script src="flowz-app.js?v=4.6.1" defer></script>
 </body>
 </html>
