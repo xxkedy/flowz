@@ -99,11 +99,11 @@ test('stays visually still for 30s, across profile switches and resume, with no 
   }));
 
   const initial = await snapshot();
-  expect(initial.version).toBe('v4.7.1 (2026.8.21)');
-  expect(initial.title).toBe('Flowz v4.7.1 · Duo Battle');
+  expect(initial.version).toBe('v4.8.0 (2026.8.21)');
+  expect(initial.title).toBe('Flowz v4.8.0 · Duo Battle');
   // kedy's final tile order. COMMUTE is the Talk Prep card above the grid.
-  expect(initial.modeIds).toEqual(['toeic', 'bath', 'free']);
-  expect(initial.labels).toEqual(['🛁 BATH ROUTINE · mikan 30 → Flowz', '🎲 ANYTIME · OPEN TALK']);
+  expect(initial.modeIds).toEqual(['toeic', 'free']);
+  expect(initial.labels).toEqual([]);
   expect(initial.cloudIndex).toBeGreaterThan(0);
 
   // The core bug: nothing may rewrite the version, the tiles, the panel
@@ -117,7 +117,7 @@ test('stays visually still for 30s, across profile switches and resume, with no 
     await page.click('.profile-btn[data-profile="leni"]');
     await expect(page.locator('#modes .mode')).toHaveCount(4);
     await page.click('.profile-btn[data-profile="kedy"]');
-    await expect(page.locator('#modes .mode')).toHaveCount(3);
+    await expect(page.locator('#modes .mode')).toHaveCount(2);
   }
   expect(await snapshot()).toEqual(initial);
 
@@ -258,32 +258,18 @@ test('every visible kedy mode carries the current coaching and feedback rules', 
   expect(p.leni).not.toMatch(/Flowz Coach Rules/);
 });
 
-test('selecting visible kedy entries keeps only COMMUTE, BATH TOEIC, and colored FREE', async ({ page }) => {
+test('kedy home exposes only COMMUTE, TOEIC, and FREE entry points with one-tap TOEIC/FREE', async ({ page }) => {
   await seed(page, {});
   await page.goto(`${baseURL}/flowz-v3-duo.html`);
   await page.waitForSelector('#modes .mode');
-
-  expect(await page.evaluate(() => [...document.querySelectorAll('#modes .mode')].map((b) => b.dataset.modeId)))
-    .toEqual(['toeic', 'bath', 'free']);
-  await expect(page.locator('#modes .mode[data-mode-id="review"]')).toHaveCount(0);
-  await expect(page.locator('#modes .mode[data-mode-id="free"]')).toHaveClass(/m5/);
+  expect(await page.evaluate(() => [...document.querySelectorAll('#modes .mode')].map((b) => b.dataset.modeId))).toEqual(['toeic','free']);
   await expect(page.locator('#flowzTalkPrepBtn')).toHaveText(/START COMMUTE/);
-
-  const cases = [
-    ['toeic', 'START TOEIC CHECK · 5Q', 'Voice 5問チェック。Listening 3問＋Reading 2問を約5〜8分で採点。'],
-    ['bath',  'START TOEIC STUDY · 5Q', 'Voice Talk専用。画面を見ながら話さず、耳だけで答える5問・約5〜8分。'],
-    ['free',  'START FREE TALK',        '自由英会話。必要な時だけ最近の表現も自然に復習。']
-  ];
-  for (const [id, startLabel, guide] of cases) {
-    await page.click(`#modes .mode[data-mode-id="${id}"]`);
-    await expect(page.locator('#startBtn')).toHaveText(startLabel);
-    await expect(page.locator('#missionGuide')).toHaveText(guide);
-    expect(await page.evaluate(() => window.FlowzApp.getPending().mode)).toBe(id);
-  }
-
+  await expect(page.locator('#modes .mode[data-mode-id="bath"]')).toHaveCount(0);
+  await expect(page.locator('#weekStrip')).toHaveCount(0);
+  const order=await page.evaluate(()=>{const prep=document.querySelector('#flowzTalkPrep'),today=document.querySelector('#todayCard');return prep.compareDocumentPosition(today)&Node.DOCUMENT_POSITION_FOLLOWING});
+  expect(order).toBeTruthy();
   await page.click('.profile-btn[data-profile="leni"]');
-  expect(await page.evaluate(() => [...document.querySelectorAll('#modes .mode')].map((b) => b.dataset.modeId)))
-    .toEqual(['free', 'work', 'n2', 'kanji']);
+  expect(await page.evaluate(() => [...document.querySelectorAll('#modes .mode')].map((b) => b.dataset.modeId))).toEqual(['free','work','n2','kanji']);
 });
 
 test('Talk Prep rotates fresh phrases, removes stale fallback, and advances after a commute session', async ({ page }) => {
@@ -314,18 +300,14 @@ test('Talk Prep rotates fresh phrases, removes stale fallback, and advances afte
   expect(first.today.phrase).not.toBe('I feel good.');
   expect(first.reuse).not.toBe("I haven't decided yet.");
   expect(first.reuse).not.toBe('I feel good.');
-  await expect(page.locator('[data-prep-action="today"] small')).toContainText('タップで切替');
-  await expect(page.locator('[data-prep-action="reuse"] small')).toContainText('タップで切替');
+  await expect(page.locator('[data-prep-action="today"] small')).toContainText('タップで次へ');
+  await expect(page.locator('#flowzTalkPrep .prep-row')).toHaveCount(1);
 
   await page.click('[data-prep-action="today"]');
   const afterTodayTap = await page.evaluate(() => window.FlowzApp.getTalkPrep());
   expect(afterTodayTap.today.phrase).not.toBe(first.today.phrase);
 
-  await page.click('[data-prep-action="reuse"]');
-  const afterReuseTap = await page.evaluate(() => window.FlowzApp.getTalkPrep());
-  expect(afterReuseTap.reuse).not.toBe(afterTodayTap.reuse);
-
-  const missionBeforeSession = afterReuseTap.today;
+  const missionBeforeSession = afterTodayTap.today;
   await page.evaluate((mission) => {
     localStorage.setItem('flowz_duo_pending', JSON.stringify({
       profile:'kedy', mode:'commute', title:'COMMUTE',
@@ -340,36 +322,18 @@ test('Talk Prep rotates fresh phrases, removes stale fallback, and advances afte
   expect(afterCompletedCommute.today.phrase).not.toBe(missionBeforeSession.phrase);
 });
 
-test('Talk Prep TODAY and REUSE look tappable without coloring OPEN', async ({ page }) => {
+test('kedy Talk Prep is one tappable rotating phrase with no OPEN or REUSE rows', async ({ page }) => {
   await seed(page, {});
   await page.goto(`${baseURL}/flowz-v3-duo.html`);
   await page.waitForSelector('#flowzTalkPrep [data-prep-action="today"]');
-
-  const styles = await page.evaluate(() => {
-    const today = document.querySelector('[data-prep-action="today"]');
-    const reuse = document.querySelector('[data-prep-action="reuse"]');
-    const open = document.querySelector('.prep-row:not([data-prep-action])');
-    const read = (el) => {
-      const cs = getComputedStyle(el);
-      const after = getComputedStyle(el, '::after');
-      return {
-        bg: cs.backgroundImage,
-        border: cs.borderTopColor,
-        cursor: cs.cursor,
-        after: after.content
-      };
-    };
-    return { today: read(today), reuse: read(reuse), open: read(open) };
-  });
-
-  expect(styles.today.bg).toContain('linear-gradient');
-  expect(styles.reuse.bg).toContain('linear-gradient');
-  expect(styles.today.cursor).toBe('pointer');
-  expect(styles.reuse.cursor).toBe('pointer');
-  expect(styles.today.after).toContain('↻');
-  expect(styles.reuse.after).toContain('↻');
-  expect(styles.today.border).not.toBe(styles.open.border);
-  expect(styles.reuse.border).not.toBe(styles.open.border);
+  await expect(page.locator('#flowzTalkPrep .prep-row')).toHaveCount(1);
+  await expect(page.locator('#flowzTalkPrep .prep-row')).toContainText('PHRASE');
+  await expect(page.locator('#flowzTalkPrep')).not.toContainText('OPEN');
+  await expect(page.locator('#flowzTalkPrep')).not.toContainText('REUSE');
+  const before=await page.locator('#flowzTalkPrep [data-prep-action="today"] b').textContent();
+  await page.click('#flowzTalkPrep [data-prep-action="today"]');
+  const after=await page.locator('#flowzTalkPrep [data-prep-action="today"] b').textContent();
+  expect(after).not.toBe(before);
 });
 
 test('Leni gets a Talk Prep quick start that rotates Japanese phrases and stays visually distinct', async ({ page }) => {

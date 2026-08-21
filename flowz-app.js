@@ -27,10 +27,10 @@
 
 /* ============================== RELEASE ============================== */
 var RELEASE={
-  number:'4.7.1',
-  label:'v4.7.1 (2026.8.21)',
-  title:'Flowz v4.7.1 · Duo Battle',
-  footer:'✅ Last updated 2026.08.21 · Flowz v4.7.1 Unified Build'
+  number:'4.8.0',
+  label:'v4.8.0 (2026.8.21)',
+  title:'Flowz v4.8.0 · Duo Battle',
+  footer:'✅ Last updated 2026.08.21 · Flowz v4.8.0 Unified Build'
 };
 
 /* ============================== STORAGE KEYS ============================== */
@@ -335,11 +335,8 @@ var LENI_MODES=[
 /* Kedy's grid is a fixed curated layout: COMMUTE lives only in the Talk
    Prep card above the grid, so it is never rendered as a tile here. */
 var KEDY_GRID=[
- {type:'label',text:'🛁 BATH ROUTINE · mikan 30 → Flowz'},
- {type:'tile',id:'toeic',title:'TOEIC CHECK',sub:'Voice 5Q · L3/R2 · 5–8min',icon:'🎯🎤',cls:'m2'},
- {type:'tile',id:'bath',title:'TOEIC STUDY',sub:'Voice 5Q · 5–8min',icon:'🛁🎤',cls:'m3'},
- {type:'label',text:'🎲 ANYTIME · OPEN TALK'},
- {type:'tile',id:'free',title:'FREE',sub:'Open talk · review inside',icon:'🎲',cls:'m5 wide'}
+ {type:'tile',id:'toeic',title:'TOEIC',sub:'Voice 5Q · L3/R2 · 5–8min',icon:'🎯🎤',cls:'m2'},
+ {type:'tile',id:'free',title:'FREE',sub:'Open talk · review inside',icon:'🎲',cls:'m5'}
 ];
 function findKedyTile(id){for(var i=0;i<KEDY_GRID.length;i++){if(KEDY_GRID[i].type==='tile'&&KEDY_GRID[i].id===id)return KEDY_GRID[i]}return null}
 function findMode(profile,id){
@@ -560,7 +557,7 @@ function renderAssessment(){
     html+='<div class="stat"><b>A1→A2</b><span>CURRENT CEFR</span></div>';
     html+='<div class="stat"><b>'+(est?escapeHtml(est.band):'NOT TESTED')+'</b><span>TOEIC EST.'+(est?(' · '+est.confidence):'')+'</span></div>';
     html+='<div class="stat"><b>毎回更新</b><span>VOICE REVIEW</span></div>';
-    html+='</div><p class="note">mikan＝単語30問／TOEIC STUDY＝5問練習／TOEIC CHECK＝L3＋R2の5問推定。スコアは非公式の目安。</p>';
+    html+='</div><p class="note">mikan＝単語30問／Flowz TOEIC＝L3＋R2のVoice 5問。スコアは非公式の目安。</p>';
     html+='<button class="small-btn" id="flowzToeicResultBtn" type="button">TOEIC CHECK結果を入力（L/3・R/2）</button>';
   }else{
     html+='<div class="stat"><b>'+escapeHtml(a.a)+'</b><span>'+escapeHtml(a.al)+'</span></div>';
@@ -599,20 +596,18 @@ function renderTalkPrep(){
   var card=$('flowzTalkPrep');if(!card)return;
   if(current==='kedy'){
     var m=currentCommuteMission(),reuse=currentReusePhrase(m.phrase);
-    card.innerHTML='<div class="prep-head"><div class="prep-title">🗣️ TALK PREP</div><span class="prep-chip">COMMUTE</span></div>'+ 
+    card.innerHTML='<div class="prep-head"><div class="prep-title">🗣️ TALK PREP</div><span class="prep-chip">COMMUTE</span></div>'+
       '<div class="prep-grid">'+
-        '<div class="prep-row"><span>OPEN</span><div><b>Hey ChatGPT, how’s it going?</b><small>普通に挨拶から始めてOK</small></div></div>'+ 
-        '<div class="prep-row" data-prep-action="today" role="button" tabindex="0"><span>TODAY</span><div><b>'+escapeHtml(m.phrase)+'</b><small>'+escapeHtml(m.meaning)+' · タップで切替</small></div></div>'+ 
-        '<div class="prep-row" data-prep-action="reuse" role="button" tabindex="0"><span>REUSE</span><div><b>'+escapeHtml(reuse)+'</b><small>最近の表現から選択 · タップで切替</small></div></div>'+ 
+        '<div class="prep-row" data-prep-action="today" role="button" tabindex="0"><span>PHRASE</span><div><b>'+escapeHtml(m.phrase)+'</b><small>'+escapeHtml(m.meaning)+' · タップで次へ</small></div></div>'+
       '</div><button id="flowzTalkPrepBtn" type="button">⚡ START COMMUTE</button>';
     return;
   }
   var lm=currentLeniPrepMission(),lreuse=currentLeniReusePhrase(lm.phrase);
-  card.innerHTML='<div class="prep-head"><div class="prep-title">🗣️ TALK PREP</div><span class="prep-chip">FREE</span></div>'+ 
+  card.innerHTML='<div class="prep-head"><div class="prep-title">🗣️ TALK PREP</div><span class="prep-chip">FREE</span></div>'+
     '<div class="prep-grid">'+
-      '<div class="prep-row"><span>OPEN</span><div><b>ChatGPTさん、こんにちは。今日も日本語を練習したいです。</b><small>Mulai dengan sapaan biasa</small></div></div>'+ 
-      '<div class="prep-row" data-prep-action="today" role="button" tabindex="0"><span>TODAY</span><div><b>'+escapeHtml(lm.phrase)+'</b><small>'+escapeHtml(lm.meaning)+' · タップで切替</small></div></div>'+ 
-      '<div class="prep-row" data-prep-action="reuse" role="button" tabindex="0"><span>REUSE</span><div><b>'+escapeHtml(lreuse)+'</b><small>最近の表現から選択 · タップで切替</small></div></div>'+ 
+      '<div class="prep-row"><span>OPEN</span><div><b>ChatGPTさん、こんにちは。今日も日本語を練習したいです。</b><small>Mulai dengan sapaan biasa</small></div></div>'+
+      '<div class="prep-row" data-prep-action="today" role="button" tabindex="0"><span>TODAY</span><div><b>'+escapeHtml(lm.phrase)+'</b><small>'+escapeHtml(lm.meaning)+' · タップで切替</small></div></div>'+
+      '<div class="prep-row" data-prep-action="reuse" role="button" tabindex="0"><span>REUSE</span><div><b>'+escapeHtml(lreuse)+'</b><small>最近の表現から選択 · タップで切替</small></div></div>'+
     '</div><button id="flowzTalkPrepBtn" type="button">⚡ START FREE</button>';
 }
 function renderModes(){
@@ -719,7 +714,7 @@ function render(){
   text($('pendingHeading'),u.pendingHeading);text($('fixLabel'),u.fix);
   text($('missionHeading'),u.missionHeading);text($('missionThemeLabel'),u.themeLabel);text($('missionPhraseLabel'),u.phraseLabel);
   var talkPrep=$('flowzTalkPrep');if(talkPrep)talkPrep.style.display='';
-  renderModes();renderTalkPrep();renderMission();renderPending();renderWeek();renderAssessment();renderCloudPanel();renderVault();renderRelease();
+  renderModes();renderTalkPrep();renderMission();renderPending();renderAssessment();renderCloudPanel();renderVault();renderRelease();
 }
 
 /* ============================== SESSION FLOW ============================== */
@@ -1057,6 +1052,7 @@ function bindInteractions(){
     var btn=e.target.closest&&e.target.closest('.mode');
     if(!btn||!btn.dataset.modeId)return;
     selectMission(findMode(current,btn.dataset.modeId));
+    if(current==='kedy'&&(btn.dataset.modeId==='toeic'||btn.dataset.modeId==='free'))startSession();
   });
   var talkPrep=$('flowzTalkPrep');
   if(talkPrep){
