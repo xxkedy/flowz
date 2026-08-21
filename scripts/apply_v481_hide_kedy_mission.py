@@ -51,15 +51,28 @@ replacement = """  await expect(page.locator('#modes .mode[data-mode-id=\"bath\"
 if needle not in t:
     raise SystemExit('kedy home assertion block mismatch')
 t = t.replace(needle,replacement,1)
-leni_needle = """  await page.click('.profile-btn[data-profile=\"leni\"]');
-  expect(await page.evaluate(() => [...document.querySelectorAll('#modes .mode')].map((b) => b.dataset.modeId))).toEqual(['free','work','n2','kanji']);"""
-leni_replacement = """  await page.click('.profile-btn[data-profile=\"leni\"]');
-  expect(await page.evaluate(() => [...document.querySelectorAll('#modes .mode')].map((b) => b.dataset.modeId))).toEqual(['free','work','n2','kanji']);
-  await page.click('#modes .mode[data-mode-id=\"work\"]');
-  await expect(page.locator('#mission')).toHaveClass(/show/);"""
-if leni_needle not in t:
-    raise SystemExit('Leni mode assertion block mismatch')
-t = t.replace(leni_needle,leni_replacement,1)
+
+old_pending = """  await expect(page.locator('#mission')).toHaveClass(/show/);
+  await expect(page.locator('#missionMode')).toHaveText('TOEIC CHECK');
+  await expect(page.locator('#startBtn')).toHaveText('SESSION STARTED ✓');
+  await expect(page.locator('#startBtn')).toBeDisabled();
+  await expect(page.locator('#pending')).toHaveClass(/show/);
+
+  // Too recent to auto-record: still pending, no XP yet.
+  expect(await page.evaluate(() => window.FlowzApp.getPending() !== null)).toBe(true);"""
+new_pending = """  // kedy's redundant mission card stays hidden even when a session is pending.
+  await expect(page.locator('#mission')).not.toHaveClass(/show/);
+  await expect(page.locator('#pending')).toHaveClass(/show/);
+
+  // Too recent to auto-record: the underlying pending session is still restored, with no XP yet.
+  const restored = await page.evaluate(() => window.FlowzApp.getPending());
+  expect(restored).not.toBeNull();
+  expect(restored.mode).toBe('toeic');
+  expect(restored.title).toBe('TOEIC CHECK');"""
+if old_pending not in t:
+    raise SystemExit('pending restore assertion block mismatch')
+t = t.replace(old_pending,new_pending,1)
+
 tests.write_text(t,encoding='utf-8')
 
 Path('CHANGELOG-v4.8.1.md').write_text('''# Flowz v4.8.1 — single TOEIC entry\n\n- kedy home no longer shows the redundant TODAY’S MISSION / START TOEIC CHECK card.\n- COMMUTE, TOEIC, and FREE are the only practical kedy entry points.\n- TOEIC keeps the existing one-tap 5-question L3/R2 flow and long-term score tracking internally.\n- Leni mission UI, Japanese-learning modes, Duo Sync, XP, History Vault, and Personal Context are unchanged.\n''',encoding='utf-8')
