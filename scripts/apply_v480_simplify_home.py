@@ -77,18 +77,16 @@ html.write_text(h,encoding='utf-8')
 
 idx=Path('index.html'); idx.write_text(idx.read_text(encoding='utf-8').replace('4.7.1','4.8.0'),encoding='utf-8')
 
-p=Path('package.json');
-# package version is changed separately by npm version in CI
-
 tests=Path('tests/stability.spec.js')
 t=tests.read_text(encoding='utf-8')
 t=t.replace("expect(initial.version).toBe('v4.7.1 (2026.8.21)');","expect(initial.version).toBe('v4.8.0 (2026.8.21)');")
 t=t.replace("expect(initial.title).toBe('Flowz v4.7.1 · Duo Battle');","expect(initial.title).toBe('Flowz v4.8.0 · Duo Battle');")
+t=t.replace("expect(initial.modeIds).toEqual(['toeic', 'bath', 'free']);","expect(initial.modeIds).toEqual(['toeic', 'free']);")
+t=t.replace("expect(initial.labels).toEqual(['🛁 BATH ROUTINE · mikan 30 → Flowz', '🎲 ANYTIME · OPEN TALK']);","expect(initial.labels).toEqual([]);")
 start=t.index("test('selecting visible kedy entries")
 end=t.index("test('Talk Prep rotates fresh phrases",start)
 new_test='''test('kedy home exposes only COMMUTE, TOEIC, and FREE entry points with one-tap TOEIC/FREE', async ({ page }) => {\n  await seed(page, {});\n  await page.goto(`${baseURL}/flowz-v3-duo.html`);\n  await page.waitForSelector('#modes .mode');\n  expect(await page.evaluate(() => [...document.querySelectorAll('#modes .mode')].map((b) => b.dataset.modeId))).toEqual(['toeic','free']);\n  await expect(page.locator('#flowzTalkPrepBtn')).toHaveText(/START COMMUTE/);\n  await expect(page.locator('#modes .mode[data-mode-id="bath"]')).toHaveCount(0);\n  await expect(page.locator('#weekStrip')).toHaveCount(0);\n  const order=await page.evaluate(()=>{const prep=document.querySelector('#flowzTalkPrep'),today=document.querySelector('#todayCard');return prep.compareDocumentPosition(today)&Node.DOCUMENT_POSITION_FOLLOWING});\n  expect(order).toBeTruthy();\n  await page.click('.profile-btn[data-profile="leni"]');\n  expect(await page.evaluate(() => [...document.querySelectorAll('#modes .mode')].map((b) => b.dataset.modeId))).toEqual(['free','work','n2','kanji']);\n});\n\n'''
 t=t[:start]+new_test+t[end:]
-# adapt kedy Talk Prep assertions only; leave Leni regression intact
 t=t.replace("  await expect(page.locator('[data-prep-action=\"today\"] small')).toContainText('タップで切替');\n  await expect(page.locator('[data-prep-action=\"reuse\"] small')).toContainText('タップで切替');","  await expect(page.locator('[data-prep-action=\"today\"] small')).toContainText('タップで次へ');\n  await expect(page.locator('#flowzTalkPrep .prep-row')).toHaveCount(1);")
 t=t.replace("  await page.click('[data-prep-action=\"reuse\"]');\n  const afterReuseTap = await page.evaluate(() => window.FlowzApp.getTalkPrep());\n  expect(afterReuseTap.reuse).not.toBe(afterTodayTap.reuse);\n\n  const missionBeforeSession = afterReuseTap.today;","  const missionBeforeSession = afterTodayTap.today;")
 style_start=t.find("test('Talk Prep TODAY and REUSE look tappable without coloring OPEN'")
