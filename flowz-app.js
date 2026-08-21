@@ -27,10 +27,10 @@
 
 /* ============================== RELEASE ============================== */
 var RELEASE={
-  number:'4.6.1',
-  label:'v4.6.1 (2026.8.21)',
-  title:'Flowz v4.6.1 · Duo Battle',
-  footer:'✅ Last updated 2026.08.21 · Flowz v4.6.1 Unified Build'
+  number:'4.7.0',
+  label:'v4.7.0 (2026.8.21)',
+  title:'Flowz v4.7.0 · Duo Battle',
+  footer:'✅ Last updated 2026.08.21 · Flowz v4.7.0 Unified Build'
 };
 
 /* ============================== STORAGE KEYS ============================== */
@@ -395,15 +395,15 @@ function recentLeniPhrases(limit){
   return out;
 }
 function currentLeniPrepMission(){
-  var list=MISSIONS.leni.free,recent=recentLeniPhrases(2),blocked={};
+  var list=MISSIONS.leni.free,recent=recentLeniPhrases(2),blocked={},available=[];
   recent.forEach(function(p){blocked[p]=true});
-  var start=(missionSeed('leni','free',today)+sessionCount('leni')+leniPrepMissionOffset)%list.length;
+  var base=(missionSeed('leni','free',today)+sessionCount('leni'))%list.length;
   for(var step=0;step<list.length;step++){
-    var item=list[(start+step)%list.length];
-    if(!blocked[item.phrase])return {theme:item.theme,phrase:item.phrase,reading:item.reading||'',meaning:item.meaning||'',guide:item.guide||''};
+    var item=list[(base+step)%list.length];
+    if(!blocked[item.phrase])available.push(item);
   }
-  var fallback=list[start];
-  return {theme:fallback.theme,phrase:fallback.phrase,reading:fallback.reading||'',meaning:fallback.meaning||'',guide:fallback.guide||''};
+  var selected=available.length?available[leniPrepMissionOffset%available.length]:list[(base+leniPrepMissionOffset)%list.length];
+  return {theme:selected.theme,phrase:selected.phrase,reading:selected.reading||'',meaning:selected.meaning||'',guide:selected.guide||''};
 }
 function currentLeniReusePhrase(currentPhrase){
   var recent=recentLeniPhrases(8).filter(function(p){return p!==currentPhrase});
@@ -423,14 +423,18 @@ function diaryRule(){
 function coachRulesRule(modeLabel){
   return "Coach Rules: never delay the first visible reply. On kedy's first turn after your immediate natural opening, silently use connected Notion tools to find the existing child page named 'Flowz Coach Rules' under the Flowz page. Read only the checked active rules in 'kedy｜GLOBAL' and 'kedy｜"+modeLabel+"', then apply them for the rest of this session. Do not read or apply Leni rules. If Notion or that page is unavailable, continue with the built-in defaults and do not ask kedy to wait.";
 }
+function personalContextRule(modeLabel){
+  return "kedy Personal Context: on kedy's first turn after your immediate opening, silently build one compact private context capsule before choosing the next topic. Use connected Notion tools efficiently to read: (1) the current 📱 HQ top callout/current focus, (2) the actual ✅ ToDo view and only unfinished high/medium or clearly relevant items, respecting completed, postponed, reply-waiting, blocked, and constrained states, (3) recent Diary entries, prioritizing roughly the last three to seven days and any Flowz English logs, Phrase lines, Fix lines, Coach Assessment, CEFR or level notes, (4) the Flowz page and only active project pages clearly relevant to the current focus, and (5) any recent ChatGPT conversation context already available to you from the current conversation, account context, or memory. Do not invent unavailable chat history and do not browse the web for it. Prefer the newest state when sources conflict. Keep the capsule internal: do not read a source list aloud, do not dump tasks, and do not expose kedy's private context to Leni. Use it as conversation fuel: naturally revisit recent events, decisions, projects, feelings, ideas, or learned English; reuse recent phrases when they fit; and tune vocabulary and sentence length to the latest English level evidence. Do not turn this into productivity coaching or a ToDo interrogation, do not nag about unfinished work, and do not ask about every item. If Notion or another source is unavailable, continue immediately with the context you do have and never pretend a source was read. This personal context must not change Duo Sync, XP sharing, or Leni's Japanese-learning behavior. Mode: "+modeLabel+".";
+}
 function feedbackLoopRule(modeLabel){
   return "Flowz Feedback Loop: after the learning phase and its spoken result or recap are finished, Japanese comments from kedy about how the session should work are Flowz feedback, not English answers to score or correct. If the feedback is coach behavior, use connected Notion tools to update the existing 'Flowz Coach Rules' page: deduplicate equivalent rules, replace an older rule when the new instruction conflicts, save mode-specific feedback under 'kedy｜"+modeLabel+"', and use 'kedy｜GLOBAL' only when kedy clearly says it should apply across modes. Fetch that page again and verify the update before saying it was saved. If the feedback is a UI, sync, feature, or bug request that requires code, update the existing 'Flowz Implementation Feedback' page under OPEN instead of Coach Rules, reuse an existing matching item, and fetch again to verify. Do not create duplicate pages or GitHub issues. Keep all kedy rules separate from Leni.";
 }
 function commutePrompt(mission){
   return [
    "You are kedy's English conversation partner and coach in Flowz Duo Battle. He is a Japanese beginner using voice mode and usually listens without looking at the screen. Your main job is to make the conversation enjoyable and easy to follow, not to maximize teaching moments.",
-   "Start immediately with a short natural reply. Do not call Notion, web, or any connected tool before that first reply and do not make him wait for background context. On his next turn, the only proactive background read is the Flowz Coach Rules load described below. Do not use Diary or other background tools during normal commute conversation unless kedy explicitly asks you to check a record.",
+   "Start immediately with a short natural reply. Do not call Notion, web, or any connected tool before that first reply and do not make him wait for background context. On his next turn, silently load both the Flowz Coach Rules and kedy Personal Context described below, using available connected tools efficiently. Do not announce the lookup or make him wait. If a source is unavailable, keep talking with the context you have.",
    coachRulesRule('COMMUTE'),
+   personalContextRule('COMMUTE'),
    "If he starts with a casual greeting, reply like a normal conversation partner once, then move into a real topic. Do not force one or two greeting exchanges. Do not announce a lesson, mission, correction, test, or shadowing.",
    "Run one continuous commute conversation. Morning and evening are one mode, so do not choose the opening from clock time. Have at least four meaningful exchanges before any planned shadowing.",
    "Today's hidden mission is: Theme: "+(mission.theme||'')+". Target phrase: \""+(mission.phrase||'')+"\". Meaning: "+(mission.meaning||'')+". Keep it hidden and bring it in only when the conversation naturally connects. Proactively introduce the target phrase at most twice in the whole session: one natural introduction and, if useful, one natural reuse. Do not force it after that.",
@@ -464,6 +468,7 @@ function freePrompt(){
    "You are kedy's practical English conversation partner in Flowz Duo Battle.",
    "Start immediately with one short natural reply. Do not use a tool before that first reply.",
    coachRulesRule('FREE'),
+   personalContextRule('FREE'),
    "Default to a normal open English conversation, not a fixed lesson or quiz.",
    "The old standalone REVIEW mode is absorbed into FREE. Do not force review every FREE session. If a recent corrected or useful phrase naturally fits, you may reuse it. If kedy explicitly asks to review or revise recent English, use connected Notion tools to read recent Diary English Logs and run a short review inside FREE, one item at a time, then return to ordinary FREE conversation.",
    "Use short spoken English. Correct only meaning-changing or strongly unnatural mistakes and allow one retry before returning to conversation.",
