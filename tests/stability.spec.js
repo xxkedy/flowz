@@ -100,8 +100,8 @@ test('stays visually still for 30s, across profile switches and resume, with no 
   }));
 
   const initial = await snapshot();
-  expect(initial.version).toBe('v4.8.3 (2026.8.21)');
-  expect(initial.title).toBe('Flowz v4.8.3 · Duo Battle');
+  expect(initial.version).toBe('v4.8.4 (2026.8.21)');
+  expect(initial.title).toBe('Flowz v4.8.4 · Duo Battle');
   // kedy's final tile order. COMMUTE is the Talk Prep card above the grid.
   expect(initial.modeIds).toEqual(['toeic', 'free']);
   expect(initial.labels).toEqual([]);
@@ -598,9 +598,23 @@ test('bottom study calendar restores recent activity from both day records and s
   await seed(page,{flowz_duo_data:JSON.stringify(state)});
   await page.goto(`${baseURL}/flowz-v3-duo.html`);
   await page.waitForSelector('#weekStrip .day-dot');
-  await expect(page.locator('#weekStrip .day-dot')).toHaveCount(7);
+  await expect(page.locator('#weekStrip')).toHaveClass(/heatmap/);
+  await expect(page.locator('#weekStrip .day-dot')).toHaveCount(30);
   await expect(page.locator('#weekStrip .day-dot.done')).toHaveCount(2);
-  await expect(page.locator('#weekSessions')).toHaveText('2 / 7 days');
+  await expect(page.locator('#weekSessions')).toHaveText('2 / 30 days');
+  await expect(page.locator('#weekTitle')).toHaveText('📅 LAST 30 DAYS');
   const belowCloud=await page.evaluate(()=>{const cloud=document.querySelector('#flowzCloudPanel'),week=document.querySelector('#weekStrip').closest('.panel');return !!(cloud.compareDocumentPosition(week)&Node.DOCUMENT_POSITION_FOLLOWING)});
   expect(belowCloud).toBeTruthy();
+});
+
+
+test('Leni keeps the existing seven-day calendar while kedy uses the compact 30-day heatmap', async ({ page }) => {
+  await seed(page,{});
+  await page.goto(`${baseURL}/flowz-v3-duo.html`);
+  await page.waitForSelector('#weekStrip .day-dot');
+  await expect(page.locator('#weekStrip .day-dot')).toHaveCount(30);
+  await page.click('.profile-btn[data-profile="leni"]');
+  await expect(page.locator('#weekStrip')).not.toHaveClass(/heatmap/);
+  await expect(page.locator('#weekStrip .day-dot')).toHaveCount(7);
+  await expect(page.locator('#weekTitle')).toHaveText('📅 過去7日');
 });
