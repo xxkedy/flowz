@@ -99,8 +99,8 @@ test('stays visually still for 30s, across profile switches and resume, with no 
   }));
 
   const initial = await snapshot();
-  expect(initial.version).toBe('v4.8.0 (2026.8.21)');
-  expect(initial.title).toBe('Flowz v4.8.0 · Duo Battle');
+  expect(initial.version).toBe('v4.8.1 (2026.8.21)');
+  expect(initial.title).toBe('Flowz v4.8.1 · Duo Battle');
   // kedy's final tile order. COMMUTE is the Talk Prep card above the grid.
   expect(initial.modeIds).toEqual(['toeic', 'free']);
   expect(initial.labels).toEqual([]);
@@ -266,6 +266,10 @@ test('kedy home exposes only COMMUTE, TOEIC, and FREE entry points with one-tap 
   await expect(page.locator('#flowzTalkPrepBtn')).toHaveText(/START COMMUTE/);
   await expect(page.locator('#modes .mode[data-mode-id="bath"]')).toHaveCount(0);
   await expect(page.locator('#weekStrip')).toHaveCount(0);
+  await expect(page.locator('#mission')).not.toHaveClass(/show/);
+  await page.click('#modes .mode[data-mode-id="toeic"]');
+  await page.waitForTimeout(100);
+  await expect(page.locator('#mission')).not.toHaveClass(/show/);
   const order=await page.evaluate(()=>{const prep=document.querySelector('#flowzTalkPrep'),today=document.querySelector('#todayCard');return prep.compareDocumentPosition(today)&Node.DOCUMENT_POSITION_FOLLOWING});
   expect(order).toBeTruthy();
   await page.click('.profile-btn[data-profile="leni"]');
@@ -413,14 +417,15 @@ test('a pending session is restored on reload and shown as started', async ({ pa
   await page.goto(`${baseURL}/flowz-v3-duo.html`);
   await page.waitForSelector('#modes .mode');
 
-  await expect(page.locator('#mission')).toHaveClass(/show/);
-  await expect(page.locator('#missionMode')).toHaveText('TOEIC CHECK');
-  await expect(page.locator('#startBtn')).toHaveText('SESSION STARTED ✓');
-  await expect(page.locator('#startBtn')).toBeDisabled();
+  // kedy's redundant mission card stays hidden even when a session is pending.
+  await expect(page.locator('#mission')).not.toHaveClass(/show/);
   await expect(page.locator('#pending')).toHaveClass(/show/);
 
-  // Too recent to auto-record: still pending, no XP yet.
-  expect(await page.evaluate(() => window.FlowzApp.getPending() !== null)).toBe(true);
+  // Too recent to auto-record: the underlying pending session is still restored, with no XP yet.
+  const restored = await page.evaluate(() => window.FlowzApp.getPending());
+  expect(restored).not.toBeNull();
+  expect(restored.mode).toBe('toeic');
+  expect(restored.title).toBe('TOEIC CHECK');
   expect(await page.evaluate(() => Object.keys(window.FlowzApp.getState().profiles.kedy.days).length)).toBe(0);
 });
 

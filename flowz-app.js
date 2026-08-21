@@ -27,10 +27,10 @@
 
 /* ============================== RELEASE ============================== */
 var RELEASE={
-  number:'4.8.0',
-  label:'v4.8.0 (2026.8.21)',
-  title:'Flowz v4.8.0 · Duo Battle',
-  footer:'✅ Last updated 2026.08.21 · Flowz v4.8.0 Unified Build'
+  number:'4.8.1',
+  label:'v4.8.1 (2026.8.21)',
+  title:'Flowz v4.8.1 · Duo Battle',
+  footer:'✅ Last updated 2026.08.21 · Flowz v4.8.1 Unified Build'
 };
 
 /* ============================== STORAGE KEYS ============================== */
@@ -645,6 +645,7 @@ var MISSION_GUIDE_OVERRIDE={
 var MISSION_START_OVERRIDE={toeic:'START TOEIC CHECK · 5Q',bath:'START TOEIC STUDY · 5Q',review:'START REVIEW',free:'START FREE TALK'};
 function renderMission(){
   var panel=$('mission'),u=UI[current];
+  if(current==='kedy'){panel.classList.remove('show');return}
   if(!pending||pending.profile!==current||!pending.mission){panel.classList.remove('show');return}
   var m=pending.mission;
   panel.classList.add('show');panel.classList.toggle('leni',current==='leni');
