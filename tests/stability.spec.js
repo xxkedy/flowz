@@ -99,8 +99,8 @@ test('stays visually still for 30s, across profile switches and resume, with no 
   }));
 
   const initial = await snapshot();
-  expect(initial.version).toBe('v4.6.1 (2026.8.21)');
-  expect(initial.title).toBe('Flowz v4.6.1 · Duo Battle');
+  expect(initial.version).toBe('v4.7.0 (2026.8.21)');
+  expect(initial.title).toBe('Flowz v4.7.0 · Duo Battle');
   // kedy's final tile order. COMMUTE is the Talk Prep card above the grid.
   expect(initial.modeIds).toEqual(['toeic', 'bath', 'free']);
   expect(initial.labels).toEqual(['🛁 BATH ROUTINE · mikan 30 → Flowz', '🎲 ANYTIME · OPEN TALK']);
@@ -185,7 +185,15 @@ test('every visible kedy mode carries the current coaching and feedback rules', 
     };
   });
 
-  expect(p.commute).toMatch(/never delay the first visible reply/i);
+  expect(p.commute).toMatch(/Kedy Personal Context Preflight/);
+  expect(p.commute).toMatch(/before the first spoken reply/);
+  expect(p.commute).toMatch(/current HQ page/);
+  expect(p.commute).toMatch(/active visible ToDo view/);
+  expect(p.commute).toMatch(/recent Diary entries with Flowz English logs/);
+  expect(p.commute).toMatch(/recent useful English phrases/);
+  expect(p.commute).toMatch(/repeated mistakes or weak points/);
+  expect(p.commute).toMatch(/Do not recite the snapshot/);
+  expect(p.commute).toMatch(/Do not turn ToDo into reminders or nagging/);
   expect(p.commute).toMatch(/Flowz Coach Rules/);
   expect(p.commute).toMatch(/about 90 percent and shadowing at most 10 percent/);
   expect(p.commute).toMatch(/conversation partner and coach/);
@@ -225,6 +233,9 @@ test('every visible kedy mode carries the current coaching and feedback rules', 
   expect(p.bath).toMatch(/If wrong, give one short Japanese explanation/);
   expect(p.bath).toMatch(/Flowz Feedback Loop/);
 
+  expect(p.free).toMatch(/Kedy Personal Context Preflight/);
+  expect(p.free).toMatch(/current HQ page/);
+  expect(p.free).toMatch(/recent Diary entries with Flowz English logs/);
   expect(p.free).toMatch(/normal open English conversation/);
   expect(p.free).toMatch(/old standalone REVIEW mode is absorbed into FREE/);
   expect(p.free).toMatch(/explicitly asks to review or revise recent English/);
