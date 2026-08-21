@@ -51,6 +51,7 @@ test.beforeAll(async () => {
 test.afterAll(async () => { await new Promise((r) => server.close(r)); });
 
 const BACKFILL_MARKER = 'flowz_backfill_2026_07_08_to_08_05_v1';
+const CONFIRMED_REPAIR_MARKER = 'flowz_repair_kedy_2026_08_19_20_v1';
 
 /* Seed localStorage before any page script runs. Marking the one-off backfill
    as already applied keeps XP assertions independent of it.
@@ -63,7 +64,7 @@ function seed(page, entries){
     if (sessionStorage.getItem('__flowzSeeded__')) return;
     sessionStorage.setItem('__flowzSeeded__', '1');
     for (const [k, v] of Object.entries(data)) localStorage.setItem(k, v);
-  }, { [BACKFILL_MARKER]: 'done', ...entries });
+  }, { [BACKFILL_MARKER]: 'done', [CONFIRMED_REPAIR_MARKER]: 'done', ...entries });
 }
 
 function trackErrors(page){
@@ -99,8 +100,8 @@ test('stays visually still for 30s, across profile switches and resume, with no 
   }));
 
   const initial = await snapshot();
-  expect(initial.version).toBe('v4.8.2 (2026.8.21)');
-  expect(initial.title).toBe('Flowz v4.8.2 · Duo Battle');
+  expect(initial.version).toBe('v4.8.3 (2026.8.21)');
+  expect(initial.title).toBe('Flowz v4.8.3 · Duo Battle');
   // kedy's final tile order. COMMUTE is the Talk Prep card above the grid.
   expect(initial.modeIds).toEqual(['toeic', 'free']);
   expect(initial.labels).toEqual([]);
@@ -466,6 +467,58 @@ test('an elapsed session auto-completes and records XP exactly once', async ({ p
   await page.reload();
   await page.waitForSelector('#modes .mode');
   expect(await read()).toEqual(once);
+});
+
+
+test('an overdue pending session records on its original start date, not the day Flowz is reopened', async ({ page }) => {
+  const started = new Date();
+  started.setDate(started.getDate()-1);
+  started.setHours(20,0,0,0);
+  const startedAt=started.toISOString();
+  const startKey=`${started.getFullYear()}-${String(started.getMonth()+1).padStart(2,'0')}-${String(started.getDate()).padStart(2,'0')}`;
+  await seed(page, {
+    flowz_duo_data: emptyState,
+    flowz_duo_pending: JSON.stringify({
+      profile:'kedy', mode:'commute', title:'COMMUTE', startedAt, autoRecord:true,
+      mission:{theme:'Yesterday commute',phrase:'I was thinking about it.',meaning:'それについて考えてた'}
+    })
+  });
+  await page.goto(`${baseURL}/flowz-v3-duo.html`);
+  await page.waitForSelector('#modes .mode');
+  await page.waitForFunction(() => window.FlowzApp.getPending() === null);
+  const result=await page.evaluate(() => {
+    const k=window.FlowzApp.getState().profiles.kedy;
+    return {keys:Object.keys(k.days).sort(),today:document.querySelector('#todayTitle').textContent,todayXp:document.querySelector('#todayXp').textContent,session:k.sessions[0]};
+  });
+  expect(result.keys).toEqual([startKey]);
+  expect(result.today).toBe('NOT STARTED');
+  expect(result.todayXp).toBe('0');
+  expect(result.session.date).toBe(startKey);
+  expect(result.session.at).toBe(startedAt);
+});
+
+test('v4.8.3 restores the two user-confirmed kedy study days exactly once', async ({ page }) => {
+  await page.addInitScript((state) => {
+    localStorage.setItem('flowz_backfill_2026_07_08_to_08_05_v1','done');
+    localStorage.setItem('flowz_duo_data',JSON.stringify(state));
+  }, JSON.parse(emptyState));
+  await page.goto(`${baseURL}/flowz-v3-duo.html`);
+  await page.waitForSelector('#modes .mode');
+  let repaired=await page.evaluate(() => {
+    const k=window.FlowzApp.getState().profiles.kedy;
+    return {days:Object.keys(k.days).sort(),sessions:k.sessions.map(s=>s.date),marker:localStorage.getItem('flowz_repair_kedy_2026_08_19_20_v1')};
+  });
+  expect(repaired.days).toEqual(['2026-08-19','2026-08-20']);
+  expect(repaired.sessions).toEqual(['2026-08-19','2026-08-20']);
+  expect(repaired.marker).toBe('done');
+  await page.reload();
+  await page.waitForSelector('#modes .mode');
+  repaired=await page.evaluate(() => {
+    const k=window.FlowzApp.getState().profiles.kedy;
+    return {days:Object.keys(k.days).sort(),sessions:k.sessions.map(s=>s.date)};
+  });
+  expect(repaired.days).toEqual(['2026-08-19','2026-08-20']);
+  expect(repaired.sessions).toEqual(['2026-08-19','2026-08-20']);
 });
 
 test('legacy localStorage shapes migrate into flowz_duo_data without loss', async ({ page }) => {
