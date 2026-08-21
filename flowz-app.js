@@ -27,10 +27,10 @@
 
 /* ============================== RELEASE ============================== */
 var RELEASE={
-  number:'4.8.2',
-  label:'v4.8.2 (2026.8.21)',
-  title:'Flowz v4.8.2 · Duo Battle',
-  footer:'✅ Last updated 2026.08.21 · Flowz v4.8.2 Unified Build'
+  number:'4.8.3',
+  label:'v4.8.3 (2026.8.21)',
+  title:'Flowz v4.8.3 · Duo Battle',
+  footer:'✅ Last updated 2026.08.21 · Flowz v4.8.3 Unified Build'
 };
 
 /* ============================== STORAGE KEYS ============================== */
@@ -45,6 +45,8 @@ var TOEIC_RESULTS_KEY='flowz_toeic_results_v1';
 var SYNC_LOCK_KEY='flowz_duo_sync_lock';
 var BACKFILL_MARKER='flowz_backfill_2026_07_08_to_08_05_v1';
 var BACKFILL_DATES=['2026-07-08','2026-07-09','2026-07-10','2026-07-13','2026-07-14','2026-07-15','2026-07-16','2026-07-17','2026-07-20','2026-07-21','2026-07-22','2026-07-23','2026-07-24','2026-07-27','2026-07-28','2026-07-29','2026-07-30','2026-07-31','2026-08-03','2026-08-04','2026-08-05'];
+var CONFIRMED_REPAIR_MARKER='flowz_repair_kedy_2026_08_19_20_v1';
+var CONFIRMED_REPAIR_DATES=['2026-08-19','2026-08-20'];
 var MIN_SESSION_MS=120000;
 
 /* ============================== SMALL HELPERS ============================== */
@@ -157,10 +159,31 @@ function applyBackfill(target){
   try{localStorage.setItem(BACKFILL_MARKER,'done')}catch(e){}
   return target;
 }
+function applyConfirmedRepair(target){
+  if(localStorage.getItem(CONFIRMED_REPAIR_MARKER)==='done')return target;
+  var profile=target.profiles.kedy,seen={};
+  profile.sessions.forEach(function(row){seen[sessionKey(row)]=true});
+  CONFIRMED_REPAIR_DATES.forEach(function(date){
+    var current=normalizeRecord(profile.days[date]);
+    if(!current.base)current.base=10;
+    if(!current.count)current.count=1;
+    if(!current.mode)current.mode='commute';
+    profile.days[date]=current;
+    var hasDate=profile.sessions.some(function(row){return String(row.date||'')===date});
+    if(!hasDate){
+      var session={date:date,mode:'commute',title:'COMMUTE',theme:'User-confirmed study day repair',phrase:'',xp:10,at:new Date().toISOString(),startedAt:date+'T18:00:00+09:00',auto:true,confirmed:true,repair:'v4.8.3'};
+      var key=sessionKey(session);if(!seen[key]){seen[key]=true;profile.sessions.push(session)}
+    }
+  });
+  profile.sessions.sort(function(a,b){return String(a.date||a.at||a.completed_at||'').localeCompare(String(b.date||b.at||b.completed_at||''))});
+  try{localStorage.setItem(CONFIRMED_REPAIR_MARKER,'done')}catch(e){}
+  return target;
+}
 function bootstrapState(){
   var merged=defaultState();
   candidateStates().forEach(function(c){merged=mergeState(merged,c)});
   merged=applyBackfill(merged);
+  merged=applyConfirmedRepair(merged);
   return merged;
 }
 function persist(next){
@@ -765,14 +788,14 @@ function completeSession(){
 }
 function autoComplete(){
   if(!pending||!pending.startedAt||!pending.autoRecord)return false;
-  var elapsed=Date.now()-new Date(pending.startedAt).getTime();
+  var started=new Date(pending.startedAt),elapsed=Date.now()-started.getTime();
   if(!isFinite(elapsed)||elapsed<MIN_SESSION_MS)return false;
-  var id=pending.profile==='leni'?'leni':'kedy',key=dateKey(new Date());
+  var id=pending.profile==='leni'?'leni':'kedy',key=dateKey(started);
   var r=dayRecord(id,key),gain=r.base?0:10;
   if(!r.base)r.base=10;
   r.count=(r.count||0)+1;r.mode=pending.mode||r.mode||'session';
   state.profiles[id].days[key]=r;
-  state.profiles[id].sessions.push({date:key,mode:pending.mode||'session',title:pending.title||'',theme:pending.mission&&pending.mission.theme||'',phrase:pending.mission&&pending.mission.phrase||'',xp:gain,at:new Date().toISOString(),auto:true,release:RELEASE.number});
+  state.profiles[id].sessions.push({date:key,mode:pending.mode||'session',title:pending.title||'',theme:pending.mission&&pending.mission.theme||'',phrase:pending.mission&&pending.mission.phrase||'',xp:gain,at:pending.startedAt,auto:true,release:RELEASE.number});
   saveState();pending=null;savePending();
   return true;
 }
