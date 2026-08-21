@@ -24,6 +24,7 @@ jobs:
       - name: Apply Personal Context v1
         run: |
           python scripts/apply_personal_context_v1.py
+          python scripts/fix_leni_rotation.py
           npm version 4.7.0 --no-git-tag-version
       - name: Syntax check
         run: node --check flowz-app.js
@@ -35,10 +36,10 @@ jobs:
       - name: Commit verified final tree
         shell: bash
         run: |
-          rm -f .github/workflows/context-v1.yml scripts/apply_personal_context_v1.py
+          rm -f .github/workflows/context-v1.yml scripts/apply_personal_context_v1.py scripts/fix_leni_rotation.py
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -- flowz-app.js flowz-v3-duo.html index.html package.json package-lock.json tests/stability.spec.js CHANGELOG-v4.7.0.md .github/workflows/context-v1.yml scripts/apply_personal_context_v1.py
+          git add -- flowz-app.js flowz-v3-duo.html index.html package.json package-lock.json tests/stability.spec.js CHANGELOG-v4.7.0.md .github/workflows/context-v1.yml scripts/apply_personal_context_v1.py scripts/fix_leni_rotation.py
           git diff --cached --check
           git commit -m "Flowz v4.7.0: add kedy Personal Context Layer v1"
           git push origin HEAD:${{ github.head_ref }}
