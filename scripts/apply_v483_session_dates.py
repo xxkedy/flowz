@@ -27,22 +27,18 @@ new="""function applyConfirmedRepair(target){
   var profile=target.profiles.kedy,seen={};
   profile.sessions.forEach(function(row){seen[sessionKey(row)]=true});
   CONFIRMED_REPAIR_DATES.forEach(function(date){
-    if(!completed('kedy',date)&&!profile.days[date]){
-      profile.days[date]={base:10,phrase:0,fix:0,duo:0,count:1,mode:'commute'};
-    }else{
-      var current=normalizeRecord(profile.days[date]);
-      if(!current.base)current.base=10;
-      if(!current.count)current.count=1;
-      if(!current.mode)current.mode='commute';
-      profile.days[date]=current;
-    }
+    var current=normalizeRecord(profile.days[date]);
+    if(!current.base)current.base=10;
+    if(!current.count)current.count=1;
+    if(!current.mode)current.mode='commute';
+    profile.days[date]=current;
     var hasDate=profile.sessions.some(function(row){return String(row.date||'')===date});
     if(!hasDate){
-      var session={date:date,mode:'commute',title:'COMMUTE',theme:'User-confirmed study day repair',phrase:'',xp:10,at:date+'T18:00:00+09:00',auto:true,confirmed:true,repair:'v4.8.3'};
+      var session={date:date,mode:'commute',title:'COMMUTE',theme:'User-confirmed study day repair',phrase:'',xp:10,at:new Date().toISOString(),startedAt:date+'T18:00:00+09:00',auto:true,confirmed:true,repair:'v4.8.3'};
       var key=sessionKey(session);if(!seen[key]){seen[key]=true;profile.sessions.push(session)}
     }
   });
-  profile.sessions.sort(function(a,b){return String(a.at||a.completed_at||a.date||'').localeCompare(String(b.at||b.completed_at||b.date||''))});
+  profile.sessions.sort(function(a,b){return String(a.date||a.at||a.completed_at||'').localeCompare(String(b.date||b.at||b.completed_at||''))});
   try{localStorage.setItem(CONFIRMED_REPAIR_MARKER,'done')}catch(e){}
   return target;
 }
@@ -164,4 +160,4 @@ if extra.strip() not in txt:
     txt=txt.replace(anchor,extra+anchor,1)
 t.write_text(txt,encoding='utf-8')
 
-Path('CHANGELOG-v4.8.3.md').write_text('''# Flowz v4.8.3 — session date reliability\n\n- Auto-complete now records a session on the calendar date when it was started, even when Flowz is reopened the next day or later.\n- The session history timestamp also keeps the original startedAt value, so cloud migration preserves the correct study date.\n- Restores kedy's user-confirmed 2026-08-19 and 2026-08-20 study days once, with a migration marker preventing duplicate XP or sessions.\n- LAST 7 DAYS, COMMUTE / TOEIC / FREE, Personal Context, Duo Sync, History Vault, and Leni learning behavior otherwise stay unchanged.\n''',encoding='utf-8')
+Path('CHANGELOG-v4.8.3.md').write_text('''# Flowz v4.8.3 — session date reliability\n\n- Auto-complete now records a session on the calendar date when it was started, even when Flowz is reopened the next day or later.\n- The session history timestamp also keeps the original startedAt value, so cloud migration preserves the correct study date.\n- Restores kedy's user-confirmed 2026-08-19 and 2026-08-20 study days once, with a migration marker preventing duplicate XP or sessions. Repair events use the current sync timestamp while keeping their intended session_date so they can still reach Duo Sync after prior migrations.\n- LAST 7 DAYS, COMMUTE / TOEIC / FREE, Personal Context, Duo Sync, History Vault, and Leni learning behavior otherwise stay unchanged.\n''',encoding='utf-8')
