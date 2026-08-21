@@ -1,0 +1,46 @@
+name: QA Flowz v4.8.4 heatmap
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scripts/apply_v484_heatmap.py'
+      - '.github/workflows/qa-v484.yml'
+      - 'flowz-app.js'
+      - 'flowz-v3-duo.html'
+      - 'flowz-v3-duo.css'
+      - 'tests/stability.spec.js'
+permissions:
+  contents: write
+jobs:
+  webkit:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feat/30day-heatmap-v484
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Apply v4.8.4 heatmap patch
+        run: |
+          python scripts/apply_v484_heatmap.py
+          npm version 4.8.4 --no-git-tag-version
+      - name: Syntax check
+        run: node --check flowz-app.js
+      - name: iPhone WebKit regression
+        run: |
+          npm ci
+          npx playwright install --with-deps webkit
+          npx playwright test --browser=webkit
+      - name: Commit verified tree
+        if: success()
+        run: |
+          rm -f scripts/apply_v484_heatmap.py .github/workflows/qa-v484.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git diff --cached --check
+          git commit -m 'Flowz v4.8.4: show kedy 30-day study heatmap'
+          git push origin HEAD:feat/30day-heatmap-v484
