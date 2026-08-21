@@ -99,8 +99,8 @@ test('stays visually still for 30s, across profile switches and resume, with no 
   }));
 
   const initial = await snapshot();
-  expect(initial.version).toBe('v4.7.0 (2026.8.21)');
-  expect(initial.title).toBe('Flowz v4.7.0 · Duo Battle');
+  expect(initial.version).toBe('v4.7.1 (2026.8.21)');
+  expect(initial.title).toBe('Flowz v4.7.1 · Duo Battle');
   // kedy's final tile order. COMMUTE is the Talk Prep card above the grid.
   expect(initial.modeIds).toEqual(['toeic', 'bath', 'free']);
   expect(initial.labels).toEqual(['🛁 BATH ROUTINE · mikan 30 → Flowz', '🎲 ANYTIME · OPEN TALK']);
@@ -186,6 +186,15 @@ test('every visible kedy mode carries the current coaching and feedback rules', 
   });
 
   expect(p.commute).toMatch(/Kedy Personal Context Preflight/);
+  expect(p.commute).toMatch(/actual ✅ ToDo view/);
+  expect(p.commute).toMatch(/completed, postponed, reply-waiting, blocked, and constrained states/);
+  expect(p.commute).toMatch(/last three to seven days/);
+  expect(p.commute).toMatch(/Phrase lines, Fix lines, Coach Assessment, CEFR\/level/);
+  expect(p.commute).toMatch(/Active Project source pages/);
+  expect(p.commute).toMatch(/Do not crawl unrelated projects/);
+  expect(p.commute).toMatch(/never browse the web to reconstruct them/);
+  expect(p.commute).toMatch(/Prefer the newest source state/);
+  expect(p.commute).toMatch(/productivity coaching or an interrogation/);
   expect(p.commute).toMatch(/before the first spoken reply/);
   expect(p.commute).toMatch(/current HQ page/);
   expect(p.commute).toMatch(/active visible ToDo view/);
