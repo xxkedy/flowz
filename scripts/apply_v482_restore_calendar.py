@@ -82,7 +82,7 @@ append="""
 test('bottom study calendar restores recent activity from both day records and session history', async ({ page }) => {
   const now=new Date();
   const key=(daysAgo)=>{const d=new Date(now);d.setDate(d.getDate()-daysAgo);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
-  const state=JSON.parse(JSON.stringify(emptyState));
+  const state={version:4,profiles:{kedy:{days:{},sessions:[]},leni:{days:{},sessions:[]}},migrated:true,updatedAt:''};
   state.profiles.kedy.days[key(2)]={base:10,phrase:0,fix:0,duo:0,count:1,mode:'commute'};
   state.profiles.kedy.sessions=[{date:key(1),mode:'free',title:'FREE',xp:10,at:key(1)+'T20:00:00+09:00'}];
   await seed(page,{flowz_duo_data:state});
