@@ -7,4 +7,5 @@
 - Context is conversation fuel, not productivity nagging or a task interrogation.
 - Missing connectors never block the conversation and unavailable history is never invented.
 - kedy private context is never exposed to Leni.
-- Duo Sync, shared XP/streak behavior, and Leni Japanese-learning prompts remain unchanged.
+- Leni Japanese-learning prompts and Duo Sync / shared XP-streak behavior remain unchanged.
+- Leni Talk Prep TODAY rotation now advances across available non-recent phrases; this fixes the existing same-phrase tap regression found by QA.
