@@ -99,8 +99,8 @@ test('stays visually still for 30s, across profile switches and resume, with no 
   }));
 
   const initial = await snapshot();
-  expect(initial.version).toBe('v4.8.1 (2026.8.21)');
-  expect(initial.title).toBe('Flowz v4.8.1 · Duo Battle');
+  expect(initial.version).toBe('v4.8.2 (2026.8.21)');
+  expect(initial.title).toBe('Flowz v4.8.2 · Duo Battle');
   // kedy's final tile order. COMMUTE is the Talk Prep card above the grid.
   expect(initial.modeIds).toEqual(['toeic', 'free']);
   expect(initial.labels).toEqual([]);
@@ -265,10 +265,7 @@ test('kedy home exposes only COMMUTE, TOEIC, and FREE entry points with one-tap 
   expect(await page.evaluate(() => [...document.querySelectorAll('#modes .mode')].map((b) => b.dataset.modeId))).toEqual(['toeic','free']);
   await expect(page.locator('#flowzTalkPrepBtn')).toHaveText(/START COMMUTE/);
   await expect(page.locator('#modes .mode[data-mode-id="bath"]')).toHaveCount(0);
-  await expect(page.locator('#weekStrip')).toHaveCount(0);
-  await expect(page.locator('#mission')).not.toHaveClass(/show/);
-  await page.click('#modes .mode[data-mode-id="toeic"]');
-  await page.waitForTimeout(100);
+  await expect(page.locator('#weekStrip')).toHaveCount(1);
   await expect(page.locator('#mission')).not.toHaveClass(/show/);
   const order=await page.evaluate(()=>{const prep=document.querySelector('#flowzTalkPrep'),today=document.querySelector('#todayCard');return prep.compareDocumentPosition(today)&Node.DOCUMENT_POSITION_FOLLOWING});
   expect(order).toBeTruthy();
@@ -536,4 +533,21 @@ test('repeated renders do not duplicate DOM nodes', async ({ page }) => {
   }
   expect(await counts()).toEqual(before);
   expect(errors).toEqual([]);
+});
+
+
+test('bottom study calendar restores recent activity from both day records and session history', async ({ page }) => {
+  const now=new Date();
+  const key=(daysAgo)=>{const d=new Date(now);d.setDate(d.getDate()-daysAgo);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
+  const state={version:4,profiles:{kedy:{days:{},sessions:[]},leni:{days:{},sessions:[]}},migrated:true,updatedAt:''};
+  state.profiles.kedy.days[key(2)]={base:10,phrase:0,fix:0,duo:0,count:1,mode:'commute'};
+  state.profiles.kedy.sessions=[{date:key(1),mode:'free',title:'FREE',xp:10,at:key(1)+'T20:00:00+09:00'}];
+  await seed(page,{flowz_duo_data:JSON.stringify(state)});
+  await page.goto(`${baseURL}/flowz-v3-duo.html`);
+  await page.waitForSelector('#weekStrip .day-dot');
+  await expect(page.locator('#weekStrip .day-dot')).toHaveCount(7);
+  await expect(page.locator('#weekStrip .day-dot.done')).toHaveCount(2);
+  await expect(page.locator('#weekSessions')).toHaveText('2 / 7 days');
+  const belowCloud=await page.evaluate(()=>{const cloud=document.querySelector('#flowzCloudPanel'),week=document.querySelector('#weekStrip').closest('.panel');return !!(cloud.compareDocumentPosition(week)&Node.DOCUMENT_POSITION_FOLLOWING)});
+  expect(belowCloud).toBeTruthy();
 });

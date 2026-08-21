@@ -27,10 +27,10 @@
 
 /* ============================== RELEASE ============================== */
 var RELEASE={
-  number:'4.8.1',
-  label:'v4.8.1 (2026.8.21)',
-  title:'Flowz v4.8.1 · Duo Battle',
-  footer:'✅ Last updated 2026.08.21 · Flowz v4.8.1 Unified Build'
+  number:'4.8.2',
+  label:'v4.8.2 (2026.8.21)',
+  title:'Flowz v4.8.2 · Duo Battle',
+  footer:'✅ Last updated 2026.08.21 · Flowz v4.8.2 Unified Build'
 };
 
 /* ============================== STORAGE KEYS ============================== */
@@ -670,14 +670,19 @@ function renderPending(){
   if(checks)checks.style.display='none';
   if(completeBtn)completeBtn.style.display='none';
 }
+function studiedOn(id,key){
+  if(completed(id,key))return true;
+  var rows=state.profiles[id]&&Array.isArray(state.profiles[id].sessions)?state.profiles[id].sessions:[];
+  return rows.some(function(row){return String(row.date||'')===key||String(row.at||row.completed_at||'').slice(0,10)===key});
+}
 function renderWeek(){
-  var box=$('weekStrip');box.innerHTML='';
+  var box=$('weekStrip');if(!box)return;box.innerHTML='';
   var start=new Date();start.setDate(start.getDate()-6);
   var names=current==='kedy'?['S','M','T','W','T','F','S']:['日','月','火','水','木','金','土'];
   var count=0;
   for(var i=0;i<7;i++){
     var d=new Date(start);d.setDate(start.getDate()+i);
-    var key=dateKey(d),done=completed(current,key);
+    var key=dateKey(d),done=studiedOn(current,key);
     if(done)count++;
     var el=document.createElement('div');
     el.className='day-dot'+(current==='leni'?' leni':'')+(done?' done':'');
@@ -715,7 +720,7 @@ function render(){
   text($('pendingHeading'),u.pendingHeading);text($('fixLabel'),u.fix);
   text($('missionHeading'),u.missionHeading);text($('missionThemeLabel'),u.themeLabel);text($('missionPhraseLabel'),u.phraseLabel);
   var talkPrep=$('flowzTalkPrep');if(talkPrep)talkPrep.style.display='';
-  renderModes();renderTalkPrep();renderMission();renderPending();renderAssessment();renderCloudPanel();renderVault();renderRelease();
+  renderModes();renderTalkPrep();renderMission();renderPending();renderAssessment();renderCloudPanel();renderWeek();renderVault();renderRelease();
 }
 
 /* ============================== SESSION FLOW ============================== */
