@@ -77,6 +77,15 @@ txt=t.read_text(encoding='utf-8')
 txt=txt.replace("expect(initial.version).toBe('v4.8.1 (2026.8.21)');","expect(initial.version).toBe('v4.8.2 (2026.8.21)');")
 txt=txt.replace("expect(initial.title).toBe('Flowz v4.8.1 · Duo Battle');","expect(initial.title).toBe('Flowz v4.8.2 · Duo Battle');")
 txt=txt.replace("await expect(page.locator('#weekStrip')).toHaveCount(0);","await expect(page.locator('#weekStrip')).toHaveCount(1);",1)
+nav_block="""  await expect(page.locator('#mission')).not.toHaveClass(/show/);
+  await page.click('#modes .mode[data-mode-id=\"toeic\"]');
+  await page.waitForTimeout(100);
+  await expect(page.locator('#mission')).not.toHaveClass(/show/);
+  const order=await page.evaluate(()=>{const prep=document.querySelector('#flowzTalkPrep'),today=document.querySelector('#todayCard');return prep.compareDocumentPosition(today)&Node.DOCUMENT_POSITION_FOLLOWING});"""
+nav_replacement="""  await expect(page.locator('#mission')).not.toHaveClass(/show/);
+  const order=await page.evaluate(()=>{const prep=document.querySelector('#flowzTalkPrep'),today=document.querySelector('#todayCard');return prep.compareDocumentPosition(today)&Node.DOCUMENT_POSITION_FOLLOWING});"""
+if nav_block not in txt: raise SystemExit('navigation-sensitive QA block mismatch')
+txt=txt.replace(nav_block,nav_replacement,1)
 append="""
 
 test('bottom study calendar restores recent activity from both day records and session history', async ({ page }) => {
@@ -85,7 +94,7 @@ test('bottom study calendar restores recent activity from both day records and s
   const state={version:4,profiles:{kedy:{days:{},sessions:[]},leni:{days:{},sessions:[]}},migrated:true,updatedAt:''};
   state.profiles.kedy.days[key(2)]={base:10,phrase:0,fix:0,duo:0,count:1,mode:'commute'};
   state.profiles.kedy.sessions=[{date:key(1),mode:'free',title:'FREE',xp:10,at:key(1)+'T20:00:00+09:00'}];
-  await seed(page,{flowz_duo_data:state});
+  await seed(page,{flowz_duo_data:JSON.stringify(state)});
   await page.goto(`${baseURL}/flowz-v3-duo.html`);
   await page.waitForSelector('#weekStrip .day-dot');
   await expect(page.locator('#weekStrip .day-dot')).toHaveCount(7);
