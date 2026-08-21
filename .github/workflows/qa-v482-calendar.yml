@@ -1,0 +1,44 @@
+name: QA Flowz v4.8.2 study calendar
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  webkit:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+      - name: Apply v4.8.2 calendar patch
+        run: |
+          python scripts/apply_v482_restore_calendar.py
+          npm version 4.8.2 --no-git-tag-version
+      - name: Syntax check
+        run: node --check flowz-app.js
+      - name: iPhone WebKit regression
+        run: |
+          npm ci
+          npx playwright install --with-deps webkit
+          npx playwright test --browser=webkit
+      - name: Commit verified tree
+        shell: bash
+        run: |
+          rm -f .github/workflows/qa-v482-calendar.yml scripts/apply_v482_restore_calendar.py
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- flowz-app.js flowz-v3-duo.html index.html package.json package-lock.json tests/stability.spec.js CHANGELOG-v4.8.2.md .github/workflows/qa-v482-calendar.yml scripts/apply_v482_restore_calendar.py
+          git diff --cached --check
+          git commit -m "Flowz v4.8.2: restore reliable study calendar"
+          git push origin HEAD:${{ github.head_ref }}
