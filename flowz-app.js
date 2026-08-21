@@ -27,10 +27,10 @@
 
 /* ============================== RELEASE ============================== */
 var RELEASE={
-  number:'4.8.3',
-  label:'v4.8.3 (2026.8.21)',
-  title:'Flowz v4.8.3 · Duo Battle',
-  footer:'✅ Last updated 2026.08.21 · Flowz v4.8.3 Unified Build'
+  number:'4.8.4',
+  label:'v4.8.4 (2026.8.21)',
+  title:'Flowz v4.8.4 · Duo Battle',
+  footer:'✅ Last updated 2026.08.21 · Flowz v4.8.4 Unified Build'
 };
 
 /* ============================== STORAGE KEYS ============================== */
@@ -267,7 +267,7 @@ var UI={
   modeTitle:'🎙️ ENGLISH SESSION',pendingHeading:'✅ SESSION RESULT',pendingBack:'Return after speaking. The session records automatically.',
   complete:'COMPLETE SESSION +10 XP',switchTo:'Switch profile to finish',phrase:'Used today’s phrase',fix:'Fixed a sentence',
   missionHeading:'🎯 TODAY’S MISSION',themeLabel:'THEME',phraseLabel:'TARGET PHRASE',start:'START SESSION',
-  weekTitle:'📅 LAST 7 DAYS',dataTitle:'💾 DATA & BACKUP',storage:'AUTO BACKUP',exportLabel:'COPY RECORD',importLabel:'RESTORE RECORD',clearLabel:'CLEAR PENDING',
+  weekTitle:'📅 LAST 30 DAYS',dataTitle:'💾 DATA & BACKUP',storage:'AUTO BACKUP',exportLabel:'COPY RECORD',importLabel:'RESTORE RECORD',clearLabel:'CLEAR PENDING',
   note:'Records are saved in this browser. Connect Duo Sync to share progress across devices.',
   noteSynced:'Records sync between connected devices. A local backup is also kept.'
  },
@@ -700,19 +700,23 @@ function studiedOn(id,key){
 }
 function renderWeek(){
   var box=$('weekStrip');if(!box)return;box.innerHTML='';
-  var start=new Date();start.setDate(start.getDate()-6);
-  var names=current==='kedy'?['S','M','T','W','T','F','S']:['日','月','火','水','木','金','土'];
+  var span=current==='kedy'?30:7;
+  var start=new Date();start.setDate(start.getDate()-(span-1));
+  var names=['日','月','火','水','木','金','土'];
   var count=0;
-  for(var i=0;i<7;i++){
+  box.classList.toggle('heatmap',current==='kedy');
+  for(var i=0;i<span;i++){
     var d=new Date(start);d.setDate(start.getDate()+i);
     var key=dateKey(d),done=studiedOn(current,key);
     if(done)count++;
     var el=document.createElement('div');
-    el.className='day-dot'+(current==='leni'?' leni':'')+(done?' done':'');
-    el.innerHTML='<span>'+(done?'✓':d.getDate())+'</span><em>'+names[d.getDay()]+'</em>';
+    el.className='day-dot'+(current==='leni'?' leni':'')+(current==='kedy'?' heat':'')+(done?' done':'');
+    el.title=key;
+    if(current==='kedy')el.innerHTML='<span>'+d.getDate()+'</span>';
+    else el.innerHTML='<span>'+(done?'✓':d.getDate())+'</span><em>'+names[d.getDay()]+'</em>';
     box.appendChild(el);
   }
-  text($('weekSessions'),count+' / 7 '+(current==='kedy'?'days':'日'));
+  text($('weekSessions'),count+' / '+span+' '+(current==='kedy'?'days':'日'));
 }
 function render(){
   document.documentElement.lang=current==='leni'?'ja':'en';
