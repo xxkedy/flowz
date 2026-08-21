@@ -13,7 +13,7 @@ anchor = '''function feedbackLoopRule(modeLabel){
 }
 '''
 insert = anchor + '''function personalContextRule(modeLabel){
-  return "Kedy Personal Context Preflight: before the first spoken reply, silently use connected Notion tools to read only the minimum current context needed for a personal conversation: the current HQ page, the active visible ToDo view, the Flowz page, and recent Diary entries with Flowz English logs. From those sources, build a tiny internal snapshot of current focus, active projects or decisions, recent real-life events worth talking about, important unfinished items, recent useful English phrases, repeated mistakes or weak points, and the latest stated English level or next focus. Also use recent ChatGPT conversation context only when it is already available in this conversation or product context; never claim access to unseen chats. Read Flowz Coach Rules for kedy GLOBAL and kedy｜"+modeLabel+" during the same preflight. Never read or expose Leni private context. Do not recite the snapshot, quote private notes, or turn ToDo into reminders or nagging; use it only to choose relevant topics and remember what kedy has been learning. If connected Notion or any source is unavailable, skip that source and continue with built-in defaults without asking kedy to wait. Keep the preflight brief and start the spoken conversation as soon as it finishes.";
+  return "Kedy Personal Context Preflight: before the first spoken reply, silently use connected Notion tools to read only the minimum current context needed for a personal conversation: the current HQ page, the active visible ToDo view, the Flowz page, and recent Diary entries with Flowz English logs. From those sources, build a tiny internal snapshot of current focus, active projects or decisions, recent real-life events worth talking about, important unfinished items, recent useful English phrases, repeated mistakes or weak points, and the latest stated English level or next focus. Also use recent ChatGPT conversation context only when it is already available in this conversation or product context; never claim access to unseen chats. Read Flowz Coach Rules for kedy GLOBAL and kedy｜"+modeLabel+" during the same preflight. Never read or expose Leni private context. Do not recite the snapshot or quote private notes. Do not turn ToDo into reminders or nagging. Use the snapshot only to choose relevant topics and remember what kedy has been learning. If connected Notion or any source is unavailable, skip that source and continue with built-in defaults without asking kedy to wait. Keep the preflight brief and start the spoken conversation as soon as it finishes.";
 }
 '''
 if anchor not in s:
@@ -33,6 +33,32 @@ new_free = '''   personalContextRule('FREE'),'''
 if old_free not in s:
     raise SystemExit('free preflight source not found')
 s = s.replace(old_free, new_free, 1)
+
+old_leni = '''function currentLeniPrepMission(){
+  var list=MISSIONS.leni.free,recent=recentLeniPhrases(2),blocked={};
+  recent.forEach(function(p){blocked[p]=true});
+  var start=(missionSeed('leni','free',today)+sessionCount('leni')+leniPrepMissionOffset)%list.length;
+  for(var step=0;step<list.length;step++){
+    var item=list[(start+step)%list.length];
+    if(!blocked[item.phrase])return {theme:item.theme,phrase:item.phrase,reading:item.reading||'',meaning:item.meaning||'',guide:item.guide||''};
+  }
+  var fallback=list[start];
+  return {theme:fallback.theme,phrase:fallback.phrase,reading:fallback.reading||'',meaning:fallback.meaning||'',guide:fallback.guide||''};
+}'''
+new_leni = '''function currentLeniPrepMission(){
+  var list=MISSIONS.leni.free,recent=recentLeniPhrases(2),blocked={},available=[];
+  recent.forEach(function(p){blocked[p]=true});
+  var base=(missionSeed('leni','free',today)+sessionCount('leni'))%list.length;
+  for(var step=0;step<list.length;step++){
+    var item=list[(base+step)%list.length];
+    if(!blocked[item.phrase])available.push(item);
+  }
+  var selected=available.length?available[leniPrepMissionOffset%available.length]:list[(base+leniPrepMissionOffset)%list.length];
+  return {theme:selected.theme,phrase:selected.phrase,reading:selected.reading||'',meaning:selected.meaning||'',guide:selected.guide||''};
+}'''
+if old_leni not in s:
+    raise SystemExit('Leni Talk Prep rotation source not found')
+s = s.replace(old_leni, new_leni, 1)
 
 app.write_text(s, encoding='utf-8')
 
@@ -66,5 +92,6 @@ Path('CHANGELOG-v4.7.0.md').write_text('''# Flowz v4.7.0 — kedy Personal Conte
 - ToDo is conversation context only; the coach must not nag or turn the session into task management.
 - Recent ChatGPT conversation context may be used only when already available; unseen chats must never be claimed.
 - If connected context is unavailable, COMMUTE/FREE continue with built-in defaults instead of blocking.
-- Duo Sync, XP/history, Leni Japanese practice, and Leni prompts are unchanged.
+- Leni Talk Prep TODAY rotation now advances across available non-recent Japanese phrases without changing Leni's learning prompt.
+- Duo Sync, XP/history, and Leni Japanese practice behavior are otherwise unchanged.
 ''', encoding='utf-8')
