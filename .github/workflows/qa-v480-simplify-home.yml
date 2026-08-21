@@ -25,6 +25,7 @@ jobs:
         run: |
           python scripts/apply_v480_simplify_home.py
           npm version 4.8.0 --no-git-tag-version
+          sed -i 's/[[:space:]]\+$//' flowz-app.js
       - name: Syntax check
         run: node --check flowz-app.js
       - name: iPhone WebKit regression
