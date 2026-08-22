@@ -100,8 +100,8 @@ test('stays visually still for 30s, across profile switches and resume, with no 
   }));
 
   const initial = await snapshot();
-  expect(initial.version).toBe('v4.8.4 (2026.8.21)');
-  expect(initial.title).toBe('Flowz v4.8.4 · Duo Battle');
+  expect(initial.version).toBe('v4.8.6 (2026.8.22)');
+  expect(initial.title).toBe('Flowz v4.8.6 · Duo Battle');
   // kedy's final tile order. COMMUTE is the Talk Prep card above the grid.
   expect(initial.modeIds).toEqual(['toeic', 'free']);
   expect(initial.labels).toEqual([]);

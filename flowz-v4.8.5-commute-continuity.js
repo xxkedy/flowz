@@ -4,8 +4,6 @@
 (function(){
 'use strict';
 
-var VERSION='4.8.5';
-var DATE='2026.8.21';
 var PENDING_KEY='flowz_duo_pending';
 
 function enhanceCommutePrompt(prompt){
@@ -30,13 +28,8 @@ function enhanceCommutePrompt(prompt){
   return prompt+' '+rules;
 }
 
-function patchRelease(){
-  if(!window.FlowzApp||!window.FlowzApp.release)return;
-  window.FlowzApp.release.number=VERSION;
-  window.FlowzApp.release.label='v'+VERSION+' ('+DATE+')';
-  window.FlowzApp.release.title='Flowz v'+VERSION+' · Duo Battle';
-  window.FlowzApp.release.footer='✅ Last updated 2026.08.21 · Flowz v'+VERSION+' Unified Build';
-
+function patchApp(){
+  if(!window.FlowzApp)return;
   var originalBuild=window.FlowzApp.buildPromptFor;
   if(typeof originalBuild==='function'&&!originalBuild.__flowz485){
     var wrapped=function(p){
@@ -74,7 +67,7 @@ function launchCommute(){
   return true;
 }
 
-patchRelease();
+patchApp();
 
 document.addEventListener('click',function(e){
   var target=e.target&&e.target.closest&&e.target.closest('#flowzTalkPrepBtn');

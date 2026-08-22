@@ -6,6 +6,8 @@ const ROOT = path.join(__dirname, '..');
 
 test('v4.8.6 enforces verified Diary sync wiring for all kedy modes', async () => {
   const adapter = fs.readFileSync(path.join(ROOT, 'flowz-v4.8.6-diary-sync.js'), 'utf8');
+  const core = fs.readFileSync(path.join(ROOT, 'flowz-app.js'), 'utf8');
+  const commute = fs.readFileSync(path.join(ROOT, 'flowz-v4.8.5-commute-continuity.js'), 'utf8');
   const html = fs.readFileSync(path.join(ROOT, 'flowz-v3-duo.html'), 'utf8');
   const entry = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
   const pkg = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8'));
@@ -25,6 +27,12 @@ test('v4.8.6 enforces verified Diary sync wiring for all kedy modes', async () =
   expect(adapter).toContain("modeId==='toeic'?'TOEIC':'FREE'");
   expect(adapter).toContain("{theme:'Schedule changes',phrase:'Has the meeting been moved?'");
   expect(adapter).toContain("{theme:'Music and current projects',phrase:\"I'm working on a new track.\"");
+  expect(core).toContain("number:'4.8.6'");
+  expect(core).toContain("label:'v4.8.6 (2026.8.22)'");
+  expect(core).toContain("title:'Flowz v4.8.6 · Duo Battle'");
+  expect(core).toContain("footer:'✅ Last updated 2026.08.22 · Flowz v4.8.6 Unified Build'");
+  expect(adapter).not.toContain('FlowzApp.release.');
+  expect(commute).not.toContain('FlowzApp.release.');
   expect(html).toContain('flowz-v4.8.6-diary-sync.js?v=4.8.6');
   expect(html).toContain('v4.8.6 (2026.8.22)');
   expect(entry).toContain("params.set('v','4.8.6')");

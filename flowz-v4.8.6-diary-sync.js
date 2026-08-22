@@ -7,8 +7,6 @@
 (function(){
 'use strict';
 
-var VERSION='4.8.6';
-var DATE='2026.8.22';
 var PENDING_KEY='flowz_duo_pending';
 
 var KEDY_MISSIONS={
@@ -54,13 +52,8 @@ function enhanceDiaryPrompt(prompt,pending){
   return prompt+' '+rule;
 }
 
-function patchRelease(){
-  if(!window.FlowzApp||!window.FlowzApp.release)return;
-  window.FlowzApp.release.number=VERSION;
-  window.FlowzApp.release.label='v'+VERSION+' ('+DATE+')';
-  window.FlowzApp.release.title='Flowz v'+VERSION+' · Duo Battle';
-  window.FlowzApp.release.footer='✅ Last updated 2026.08.22 · Flowz v'+VERSION+' Unified Build';
-
+function patchApp(){
+  if(!window.FlowzApp)return;
   var originalBuild=window.FlowzApp.buildPromptFor;
   if(typeof originalBuild==='function'&&!originalBuild.__flowz486){
     var wrapped=function(p){
@@ -95,7 +88,7 @@ function launchKedyMode(modeId){
   return true;
 }
 
-patchRelease();
+patchApp();
 
 /* The unified core launches kedy TOEIC/FREE through its private lexical
  * buildPromptFor(), which cannot see adapters. Capture those two clicks before
