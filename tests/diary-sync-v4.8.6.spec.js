@@ -4,7 +4,7 @@ const path = require('path');
 
 const ROOT = path.join(__dirname, '..');
 
-test('v4.8.6 enforces verified Diary sync wiring', async () => {
+test('v4.8.6 enforces verified Diary sync wiring for all kedy modes', async () => {
   const adapter = fs.readFileSync(path.join(ROOT, 'flowz-v4.8.6-diary-sync.js'), 'utf8');
   const html = fs.readFileSync(path.join(ROOT, 'flowz-v3-duo.html'), 'utf8');
   const entry = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
@@ -17,6 +17,14 @@ test('v4.8.6 enforces verified Diary sync wiring', async () => {
   expect(adapter).toContain('fetch the same Diary page again and verify');
   expect(adapter).toContain("explicitly say 'Diary未記録'");
   expect(adapter).toContain("pending.profile!=='kedy'");
+  expect(adapter).toContain("modeId!=='toeic'&&modeId!=='free'");
+  expect(adapter).toContain("closest('.mode[data-mode-id]')");
+  expect(adapter).toContain('stopImmediatePropagation');
+  expect(adapter).toContain("PENDING_KEY='flowz_duo_pending'");
+  expect(adapter).toContain('window.FlowzApp.buildPromptFor(pending)');
+  expect(adapter).toContain("modeId==='toeic'?'TOEIC':'FREE'");
+  expect(adapter).toContain("{theme:'Schedule changes',phrase:'Has the meeting been moved?'");
+  expect(adapter).toContain("{theme:'Music and current projects',phrase:\"I'm working on a new track.\"");
   expect(html).toContain('flowz-v4.8.6-diary-sync.js?v=4.8.6');
   expect(html).toContain('v4.8.6 (2026.8.22)');
   expect(entry).toContain("params.set('v','4.8.6')");
