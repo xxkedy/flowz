@@ -17,7 +17,7 @@ test('v4.8.6 build retains the v4.8.5 commute continuity adapter', async () => {
   expect(adapter).toContain('Avoid question-after-question interviewing');
   expect(adapter).toContain('increase your share of topic-leading');
   expect(adapter).toContain("mode==='commute'");
-  expect(html).toContain('flowz-v4.8.5-commute-continuity.js?v=4.8.6');
+  expect(html).toContain('flowz-v4.8.5-commute-continuity.js?v=4.8.6-r1');
   expect(html).toContain('v4.8.6 (2026.8.22)');
   expect(entry).toContain("params.set('v','4.8.6')");
   expect(pkg.version).toBe('4.8.6');

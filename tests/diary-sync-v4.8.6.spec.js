@@ -33,7 +33,8 @@ test('v4.8.6 enforces verified Diary sync wiring for all kedy modes', async () =
   expect(core).toContain("footer:'✅ Last updated 2026.08.22 · Flowz v4.8.6 Unified Build'");
   expect(adapter).not.toContain('FlowzApp.release.');
   expect(commute).not.toContain('FlowzApp.release.');
-  expect(html).toContain('flowz-v4.8.6-diary-sync.js?v=4.8.6');
+  expect(html).toContain('flowz-app.js?v=4.8.6-r1');
+  expect(html).toContain('flowz-v4.8.6-diary-sync.js?v=4.8.6-r1');
   expect(html).toContain('v4.8.6 (2026.8.22)');
   expect(entry).toContain("params.set('v','4.8.6')");
   expect(pkg.version).toBe('4.8.6');
