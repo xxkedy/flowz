@@ -11,6 +11,11 @@
 <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
 <title>Flowz v4.8.6 (2026.8.22) · Duo Battle</title>
 <link rel="stylesheet" href="flowz-v3-duo.css?v=4.8.6">
+<style>
+.version[data-release-label]{font-size:0}
+.version[data-release-label]::after{content:attr(data-release-label);font-size:10px}
+.release-footer{display:none}
+</style>
 <script>
 (function(){
   var CLOUD_KEY='flowz_duo_cloud_v1';
@@ -139,7 +144,7 @@
 </script>
 </head>
 <body data-profile="kedy">
-<header class="top"><div class="brand"><h1>Flow<span>z</span></h1><p>DUO LANGUAGE BATTLE</p></div><div class="version">v4.8.6 (2026.8.22)</div></header>
+<header class="top"><div class="brand"><h1>Flow<span>z</span></h1><p>DUO LANGUAGE BATTLE</p></div><div class="version" data-release="4.8.6-r3" data-release-label="v4.8.6 r3 · 09/02">v4.8.6 (2026.8.22)</div></header>
 <section class="profile-switch" aria-label="Select learner">
   <button class="profile-btn active" data-profile="kedy"><span class="pname">🌙 kedy</span><span class="plang">ENGLISH</span><span class="pmini" id="mini-kedy">LV.1</span></button>
   <button class="profile-btn" data-profile="leni"><span class="pname">☀️ Leni</span><span class="plang">JAPANESE</span><span class="pmini" id="mini-leni">LV.1</span></button>
@@ -159,7 +164,7 @@
 <p class="note" id="historyVaultNote">🛡️ HISTORY VAULT ON</p>
 <p class="note" id="historyBackfillNote"></p>
 <p class="note" id="storageNote">Records are saved in this browser. Connect Duo Sync to share progress across devices.</p>
-<p class="note">✅ Last updated 2026.08.22 · Flowz v4.8.6 Unified Build</p>
+<p class="note release-footer">✅ Last updated 2026.08.22 · Flowz v4.8.6 Unified Build</p>
 <div class="toast" id="toast"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
 <script src="flowz-app.js?v=4.8.6-r1" defer></script>
