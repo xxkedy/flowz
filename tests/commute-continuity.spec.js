@@ -32,6 +32,8 @@ test('v4.8.6 build retains commute continuity, conversation quality, and low-loa
   expect(adapter).toContain('Do not ask questions, add advice, recap, switch back to conversation');
   expect(adapter).toContain('Do not recycle a sentence he already repeated');
   expect(adapter).toContain('Stay in low-load shadowing mode until kedy clearly asks to talk normally');
+  expect(adapter).toContain("if(prompt.indexOf('Low-load Shadowing Override:')<0)");
+  expect(adapter).not.toContain("if(prompt.indexOf('Low-load Shadowing Override:')>=0)return prompt;");
   expect(adapter).not.toContain("if(prompt.indexOf('Conversation Continuity Rules:')>=0)return prompt;");
   expect(adapter).toContain("mode==='commute'");
   expect(html).toContain('flowz-v4.8.5-commute-continuity.js?v=4.8.6-r3');
