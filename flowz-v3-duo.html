@@ -15,6 +15,8 @@
 .version[data-release-label]{font-size:0}
 .version[data-release-label]::after{content:attr(data-release-label);font-size:10px}
 .release-footer{display:none}
+.commute-since{display:none}
+body[data-profile="kedy"] .commute-since{display:block}
 </style>
 <script>
 (function(){
@@ -164,6 +166,7 @@
 <p class="note" id="historyVaultNote">🛡️ HISTORY VAULT ON</p>
 <p class="note" id="historyBackfillNote"></p>
 <p class="note" id="storageNote">Records are saved in this browser. Connect Duo Sync to share progress across devices.</p>
+<p class="note commute-since">COMMUTE since 2026.07.14</p>
 <p class="note release-footer">✅ Last updated 2026.08.22 · Flowz v4.8.6 Unified Build</p>
 <div class="toast" id="toast"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
