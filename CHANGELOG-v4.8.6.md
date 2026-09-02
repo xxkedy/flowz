@@ -16,7 +16,17 @@ Date: 2026-08-22
 - While kedy is asking to continue, the coach must not insert questions, advice, recaps, conversation switches, or stopping language such as `one last one` / `no more shadowing`.
 - Repeated phrases are avoided unless kedy asks for review; low-load shadowing continues until he clearly returns to conversation, changes topic, or ends the session.
 
+## Hotfix r3 — 2026-09-02
+- Strengthened kedy COMMUTE from simple continuity into conversation quality: the coach must react to the specific thing kedy said, add its own short opinion / observation / joke / mini-story, and actively extend the topic.
+- `lead me` / `you lead` / `lead us` / `talk to me` / `会話を広げて` now explicitly switch to coach-led conversation with roughly 2–4 short audio-friendly sentences of concrete content before any question.
+- Generic praise, motivational filler, and counselling-style lines such as `You've got this` / `one step at a time` are discouraged when they add no conversational content.
+- Voice direction now asks for varied tone, rhythm, pacing, pauses, surprise, amusement, mild teasing, or disagreement when appropriate instead of a flat therapeutic delivery.
+- Unusual phrases, complaints, titles, and strong wording should become material for the conversation rather than being merely repeated or praised.
+- If kedy is bored or irritated, the coach changes content domain immediately instead of defending or rephrasing the same coaching frame.
+- Immediate safety hazards may briefly interrupt the conversation, but once the hazard is resolved and kedy wants English again, generic `stop` / `breathe` / `stay safe` loops should not continue unless a new immediate hazard appears.
+- COMMUTE adapter cache token bumped to `v4.8.6-r3` and regression assertions extended.
+
 ## Scope
 - Base release remains Flowz v4.8.6.
-- Hotfix r2 changes kedy COMMUTE prompt behavior only.
-- Duo Sync, XP, history, Leni modes, storage behavior, and Diary Sync Gate are unchanged.
+- Hotfix r3 changes kedy COMMUTE prompt behavior only.
+- Duo Sync, XP, history, TOEIC, FREE, Leni modes, storage behavior, and Diary Sync Gate are unchanged.
