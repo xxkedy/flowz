@@ -25,9 +25,9 @@ Date: 2026-08-22
 - If kedy is bored or irritated, the coach changes content domain immediately instead of defending or rephrasing the same coaching frame.
 - Immediate safety hazards may briefly interrupt the conversation, but once the hazard is resolved and kedy wants English again, generic `stop` / `breathe` / `stay safe` loops should not continue unless a new immediate hazard appears.
 - COMMUTE adapter cache token bumped to `v4.8.6-r3` and regression assertions extended.
-- The top-right deployment badge now shows `v4.8.6 r3 · 09/02`, so the currently loaded hotfix is visible immediately on iPhone.
-- The duplicate bottom `Last updated` release line is removed; release verification lives in one place at the top-right.
-- The root entry cache key is `4.8.6-r3`, preventing an old entry URL from hiding the active hotfix revision.
+- The top-right badge now visually shows `v4.8.6 r3 · 09/02` and carries `data-release="4.8.6-r3"`, so the loaded hotfix can be checked immediately on iPhone.
+- The old bottom `Last updated` line is hidden from the UI, leaving one visible release indicator at the top-right. Its underlying DOM marker remains only for compatibility with the existing release-stability contract.
+- Root no-cache + timestamp cache busting remains unchanged; the COMMUTE adapter itself continues to use the explicit `v4.8.6-r3` cache token.
 
 ## Scope
 - Base release remains Flowz v4.8.6.
