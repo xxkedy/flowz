@@ -8,7 +8,7 @@ var PENDING_KEY='flowz_duo_pending';
 
 function enhanceCommutePrompt(prompt){
   if(!prompt||prompt.indexOf("You are kedy's English conversation partner and coach")<0)return prompt;
-  if(prompt.indexOf('Low-load Shadowing Override:')>=0)return prompt;
+  if(prompt.indexOf('Conversation Continuity and Quality Rules:')>=0)return prompt;
 
   var lowLoadShadowing=[
     'Low-load Shadowing Override:',
@@ -20,9 +20,13 @@ function enhanceCommutePrompt(prompt){
     'Stay in low-load shadowing mode until kedy clearly asks to talk normally, changes topic away from shadowing, or says Wrap up, まとめて, or another clear ending.'
   ].join(' ');
 
-  var shadowAnchor='If he explicitly asks for more shadowing, give it.';
-  if(prompt.indexOf(shadowAnchor)>=0){
-    return prompt.replace(shadowAnchor,shadowAnchor+' '+lowLoadShadowing);
+  if(prompt.indexOf('Low-load Shadowing Override:')<0){
+    var shadowAnchor='If he explicitly asks for more shadowing, give it.';
+    if(prompt.indexOf(shadowAnchor)>=0){
+      prompt=prompt.replace(shadowAnchor,shadowAnchor+' '+lowLoadShadowing);
+    }else{
+      prompt=prompt+' '+lowLoadShadowing;
+    }
   }
 
   var rules=[
@@ -41,8 +45,7 @@ function enhanceCommutePrompt(prompt){
     'Use clear rhythm: ordinary conversation for several turns, then only when a phrase is genuinely useful, briefly say something like This sentence is useful, try this, give exactly one short sentence, hear one repetition, react briefly, and immediately return to the same conversation. Shadowing is a small insert inside the conversation, never a mode switch that ends the conversation.',
     'After a shadowing repetition, do not stop at praise and do not wait silently for kedy to invent the next topic. Resume the prior topic yourself with a natural continuation.',
     'Prefer useful phrase pickup from what kedy is already trying to say. A phrase suggestion should feel like a human conversation partner helping in the moment, not a classroom drill.',
-    'Keep these continuity and quality rules active until kedy clearly ends the session.',
-    lowLoadShadowing
+    'Keep these continuity and quality rules active until kedy clearly ends the session.'
   ].join(' ');
 
   var anchor='Use the current conversation as the main context.';
