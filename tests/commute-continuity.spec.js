@@ -37,11 +37,12 @@ test('v4.8.6 build retains commute continuity, conversation quality, and low-loa
   expect(adapter).not.toContain("if(prompt.indexOf('Conversation Continuity Rules:')>=0)return prompt;");
   expect(adapter).toContain("mode==='commute'");
   expect(html).toContain('flowz-v4.8.5-commute-continuity.js?v=4.8.6-r3');
-  expect(html).toContain('id="flowzReleaseBadge"');
+  expect(html).toContain('class="version"');
   expect(html).toContain('data-release="4.8.6-r3"');
-  expect(html).toContain('v4.8.6 r3 · 09/02');
-  expect(html).not.toContain('class="version"');
-  expect(html).not.toContain('Last updated');
-  expect(entry).toContain("params.set('v','4.8.6-r3')");
+  expect(html).toContain('data-release-label="v4.8.6 r3 · 09/02"');
+  expect(html).toContain('content:attr(data-release-label)');
+  expect(html).toContain('class="note release-footer"');
+  expect(html).toContain('.release-footer{display:none}');
+  expect(entry).toContain("params.set('v','4.8.6')");
   expect(pkg.version).toBe('4.8.6');
 });
