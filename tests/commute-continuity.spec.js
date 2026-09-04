@@ -15,6 +15,12 @@ test('v4.8.6 build retains commute continuity, conversation quality, and low-loa
   expect(adapter).toContain('Never finish a normal conversation turn with only a short acknowledgement');
   expect(adapter).toContain('specific reaction to what kedy actually said');
   expect(adapter).toContain('enter coach-led conversation');
+  expect(adapter).toContain('treat that as a request for stronger coach-led conversation');
+  expect(adapter).toContain('Ending rule is strict');
+  expect(adapter).toContain('Take me home');
+  expect(adapter).toContain('If an ending cue is ambiguous, continue the conversation');
+  expect(adapter).toContain('do not silently replace it with a guessed different word');
+  expect(adapter).toContain('Do not answer repeated beginner difficulty with empty comfort lines');
   expect(adapter).toContain('two to four short audio-friendly sentences');
   expect(adapter).toContain('Do not default to ending every turn with a question');
   expect(adapter).toContain('Avoid generic motivational or counselling filler');
@@ -36,10 +42,10 @@ test('v4.8.6 build retains commute continuity, conversation quality, and low-loa
   expect(adapter).not.toContain("if(prompt.indexOf('Low-load Shadowing Override:')>=0)return prompt;");
   expect(adapter).not.toContain("if(prompt.indexOf('Conversation Continuity Rules:')>=0)return prompt;");
   expect(adapter).toContain("mode==='commute'");
-  expect(html).toContain('flowz-v4.8.5-commute-continuity.js?v=4.8.6-r3');
+  expect(html).toContain('flowz-v4.8.5-commute-continuity.js?v=4.8.6-r5');
   expect(html).toContain('class="version"');
-  expect(html).toContain('data-release="4.8.6-r3"');
-  expect(html).toContain('data-release-label="v4.8.6 r3 · 09/02"');
+  expect(html).toContain('data-release="4.8.6-r5"');
+  expect(html).toContain('data-release-label="v4.8.6 r5 · 09/04"');
   expect(html).toContain('content:attr(data-release-label)');
   expect(html).toContain('class="note release-footer"');
   expect(html).toContain('.release-footer{display:none}');
