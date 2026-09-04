@@ -29,7 +29,22 @@ Date: 2026-08-22
 - The old bottom `Last updated` line is hidden from the UI, leaving one visible release indicator at the top-right. Its underlying DOM marker remains only for compatibility with the existing release-stability contract.
 - Root no-cache + timestamp cache busting remains unchanged; the COMMUTE adapter itself continues to use the explicit `v4.8.6-r3` cache token.
 
+## Hotfix r4 — 2026-09-04
+- Added mandatory dead-air prevention for minimal replies such as `Yeah`, `Mm-hm`, `Right`, or a short agreement: the coach must carry the next beat with 1–3 short sentences of real content instead of mirroring a one-word acknowledgement.
+- Expanded coach-led triggers to include `say something`, `some talk`, and ordinary `another` continuation.
+- `I'm still commuting` / `I'm still riding` / `I'm not there yet` are explicit continuation cues and must not lead to passive listening or premature stopping.
+- Low-load shadowing treats `another` as the next new sentence, not the final repetition.
+- COMMUTE adapter cache token and visible badge moved to `v4.8.6-r4`.
+
+## Hotfix r5 — 2026-09-04
+- Strengthened the ending contract after a real COMMUTE failure: only explicit requests such as `Wrap up` / `まとめて` / `I want to end` may trigger recap, XP, or session closure.
+- Arrival language such as `Take me home`, `I'm home`, `I'm almost home`, or route-home talk is never treated as an ending cue; ambiguous cues default to continued conversation.
+- When kedy says he cannot carry the conversation because he is a beginner and asks the coach to talk, that now explicitly enters persistent coach-led conversation rather than reassurance or mini-lessons.
+- Voice-recognition ambiguity is handled with at most one short confirmation for meaning-changing nouns or ideas; guessed word substitution is forbidden.
+- Repeated comfort/coaching filler after beginner difficulty is discouraged; after one brief acknowledgement the coach must contribute actual conversational content.
+- COMMUTE adapter cache token and visible badge moved to `v4.8.6-r5`, and regression assertions were updated from stale r3 markers.
+
 ## Scope
 - Base release remains Flowz v4.8.6.
-- Hotfix r3 changes kedy COMMUTE prompt behavior only; the deployment badge change only affects release visibility.
+- Hotfix r5 changes kedy COMMUTE prompt behavior only; the deployment badge change only affects release visibility.
 - Duo Sync, XP, history, TOEIC, FREE, Leni modes, storage behavior, and Diary Sync Gate are unchanged.
