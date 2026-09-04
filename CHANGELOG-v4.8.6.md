@@ -27,7 +27,7 @@ Date: 2026-08-22
 - COMMUTE adapter cache token bumped to `v4.8.6-r3` and regression assertions extended.
 - The top-right badge now visually shows `v4.8.6 r3 · 09/02` and carries `data-release="4.8.6-r3"`, so the loaded hotfix can be checked immediately on iPhone.
 - The old bottom `Last updated` line is hidden from the UI, leaving one visible release indicator at the top-right. Its underlying DOM marker remains only for compatibility with the existing release-stability contract.
-- Root no-cache + timestamp cache busting remains unchanged; the COMMUTE adapter itself continues to use the explicit `v4.8.6-r5` cache token.
+- Root no-cache + timestamp cache busting remains unchanged; the COMMUTE adapter itself continues to use the explicit `v4.8.6-r3` cache token.
 
 ## Hotfix r4 — 2026-09-04
 - Added mandatory dead-air prevention for minimal replies such as `Yeah`, `Mm-hm`, `Right`, or a short agreement: the coach must carry the next beat with 1–3 short sentences of real content instead of mirroring a one-word acknowledgement.
