@@ -44,7 +44,17 @@ Date: 2026-08-22
 - Repeated comfort/coaching filler after beginner difficulty is discouraged; after one brief acknowledgement the coach must contribute actual conversational content.
 - COMMUTE adapter cache token and visible badge moved to `v4.8.6-r5`, and regression assertions were updated from stale r3 markers.
 
+## Hotfix r6 — 2026-09-09
+- Added a final-priority COMMUTE override after the ordinary prompt and Feedback Loop so continuation behavior is not diluted by earlier coaching text.
+- Explicit continuation cues such as `continue`, `Let's talk something`, `talk to me`, `I want to speak English`, and `I am still commuting` require the coach to keep talking and supply 2–4 short sentences of real content before any question.
+- Stopping or safety-management filler such as `That's enough`, `Then rest`, `Just arrive`, `we can talk later`, `focus on the road`, and `breathe` is forbidden as session management unless there is a concrete immediate hazard.
+- Topic-switch requests now require a genuinely different concrete domain instead of returning to weather, current tasks, production ToDos, mood, or commute conditions.
+- A1 fallback must simplify the same meaning without collapsing into one-word drills, color prompts, or repeated A/B choices.
+- Mentioning a task such as comping no longer gives the coach permission to manage kedy's day or tell him a task is enough for today.
+- `too slow` / `faster` now explicitly changes spoken pace while preserving useful 2–4 sentence content.
+- COMMUTE adapter cache token and visible badge moved to `v4.8.6-r6`.
+
 ## Scope
 - Base release remains Flowz v4.8.6.
-- Hotfix r5 changes kedy COMMUTE prompt behavior only; the deployment badge change only affects release visibility.
+- Hotfix r6 changes kedy COMMUTE prompt behavior only; the deployment badge change only affects release visibility.
 - Duo Sync, XP, history, TOEIC, FREE, Leni modes, storage behavior, and Diary Sync Gate are unchanged.
