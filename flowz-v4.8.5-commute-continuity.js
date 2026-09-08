@@ -1,4 +1,4 @@
-/* Flowz v4.8.6 r5 — COMMUTE conversation continuity adapter.
+/* Flowz v4.8.6 r6 — COMMUTE conversation continuity adapter.
  * Keeps the unified app intact and changes only kedy COMMUTE prompt launch.
  */
 (function(){
@@ -8,7 +8,8 @@ var PENDING_KEY='flowz_duo_pending';
 
 function enhanceCommutePrompt(prompt){
   if(!prompt||prompt.indexOf("You are kedy's English conversation partner and coach")<0)return prompt;
-  if(prompt.indexOf('Conversation Continuity and Quality Rules:')>=0)return prompt;
+  if(prompt.indexOf('COMMUTE Hard Continuation Override r6:')>=0)return prompt;
+  var hasContinuity=prompt.indexOf('Conversation Continuity and Quality Rules:')>=0;
 
   var lowLoadShadowing=[
     'Low-load Shadowing Override:',
@@ -58,9 +59,27 @@ function enhanceCommutePrompt(prompt){
     'Keep these continuity and quality rules active until kedy clearly ends the session.'
   ].join(' ');
 
+  var hardRules=[
+    "COMMUTE Hard Continuation Override r6:",
+    "These rules are the final priority for ordinary COMMUTE conversation behavior. Follow them even if earlier coaching suggestions feel easier, except when a concrete immediate safety hazard requires a brief interruption.",
+    "Explicit continuation cues override any impulse to stop. If kedy says continue, connect, keep talking, Let's talk something, talk to me, I want to speak English, I want to improve my English skills, I am still commuting, or anything clearly meaning he wants the conversation to continue, keep the English conversation active.",
+    "After a continuation cue, the next reply must contain two to four short natural sentences of real conversational content before any question. Do not answer with a one-word acknowledgement, a command, a lesson label, or a one-word/either-or prompt.",
+    "Do not use That's enough, Then rest, Just arrive, we can talk later, focus on the road, breathe, stay quiet, or similar phrases as session-management or stopping suggestions while kedy wants to continue. If kedy asks about the meaning of one of those phrases, explain it normally. Simply being on a bicycle or commuting is not by itself a concrete immediate hazard.",
+    "When kedy says Let's talk something, another topic, or otherwise asks for fresh conversation, switch to a genuinely different concrete domain and lead it yourself for two to four short sentences. Do not immediately return to weather, his current work task, music-production ToDos, mood check-ins, or the commute itself unless kedy brings them back.",
+    "Do not reduce natural conversation to one-word drills such as give me one word, choose a color, or repeated A-or-B choices unless kedy explicitly asks for a drill. A1 simplification means simpler grammar and vocabulary, not childish or empty content.",
+    "If kedy says I don't understand, simplify the exact idea you were trying to express and continue the same conversation. Do not replace the explanation with breathe, just go, just arrive, or a different topic.",
+    "Mentioning a task such as comping is conversational material, not permission to manage his day. Do not tell him that one task is enough for today, that he should rest, or that he should stop unless he asks for productivity advice.",
+    "If kedy says the speaking speed is too slow or asks for faster speech, immediately increase the spoken pace on the next turn while keeping two to four useful short sentences. Do not compensate by shrinking the reply into less content.",
+    "If kedy criticizes the coach, briefly acknowledge the specific failure once, change the behavior immediately, and continue the conversation. Do not defend the previous behavior and do not turn the criticism into an ending cue.",
+    "The session remains active until kedy explicitly ends it with Wrap up, まとめて, stop English, I want to end, end the session, or another unmistakable ending request."
+  ].join(' ');
+
   var anchor='Use the current conversation as the main context.';
-  if(prompt.indexOf(anchor)>=0)return prompt.replace(anchor,rules+' '+anchor);
-  return prompt+' '+rules;
+  if(!hasContinuity){
+    if(prompt.indexOf(anchor)>=0)prompt=prompt.replace(anchor,rules+' '+anchor);
+    else prompt=prompt+' '+rules;
+  }
+  return prompt+' '+hardRules;
 }
 
 function patchApp(){

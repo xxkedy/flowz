@@ -227,6 +227,11 @@ test('every visible kedy mode carries the current coaching and feedback rules', 
   expect(p.commute).toMatch(/Arrival Review/);
   expect(p.commute).toMatch(/30–45 seconds/);
   expect(p.commute).toMatch(/Flowz Feedback Loop/);
+  expect(p.commute).toMatch(/COMMUTE Hard Continuation Override r6:/);
+  expect(p.commute).toMatch(/Explicit continuation cues override any impulse to stop/);
+  expect(p.commute).toMatch(/Do not reduce natural conversation to one-word drills/);
+  expect(p.commute).toMatch(/speaking speed is too slow or asks for faster speech/);
+  expect(p.commute.lastIndexOf('COMMUTE Hard Continuation Override r6:')).toBeGreaterThan(p.commute.lastIndexOf('Flowz Feedback Loop'));
 
   expect(p.toeic).toMatch(/five-question TOEIC Listening & Reading mini-check in about five to eight minutes/);
   expect(p.toeic).toMatch(/exactly three listening-style questions and two reading-style questions/);
