@@ -148,3 +148,17 @@ Date: 2026-08-22
 - Phrase Bankは3分類45件をレビューし、LIFE TALK化による追加／削除／順序変更は不要と確認。
 - UI releaseを`v4.8.6 r15 · 09/09`へ更新。THEME／TOEIC／B1 MAIN GOAL／Duo Sync／XP／Leni側は変更しない。
 
+
+
+## r16 — 2026-09-10
+- 9/10のTHEME実走を反映。ホーム入口を整理し、上部`THEME PREP`はPhrase確認専用へ縮小。会話入口は`THEME`／`LIFE TALK`を横並び・同格にし、`TOEIC`はその下の全幅1ボタンとして独立。
+- 旧`START THEME`全幅ボタンを廃止し、「旧COMMUTEを押したつもりでTHEMEへ入る」誤認を減らした。内部互換のTHEME mode idは引き続き`commute`。
+- THEMEに最終優先のStructure Guard r11を追加。`WORD WARM-UP → QUESTION CARDS → MINI DIALOGUE → FREE TALK`を内部phaseとして保持し、5〜8語・3〜5問・4〜6行Dialogueを省略せず順に通過する。途中の実話は自然に拾いつつ、未完了phaseへ戻る。
+- target phraseはCoach側のmodel／recast／repeatもすべて回数に含め、セッション全体で最大2回。意味が通じた後の不要な言い直しループを抑制。
+- `No, no`／`I mean`／綴り直し等でkedyが意味を訂正した時は、拒否された推測を即破棄し、同じ誤解を再確認させないMeaning-repair guardを追加。
+- `Nice`／`Sweet`／`Exactly`等の短い相づちだけで止まらず、既存COMMUTE continuityと合わせて具体的内容または次phaseを必ず続ける。
+- Wrap up時のXPを厳格化。Flowz session contextに正確な値がない場合は数値を推測せず、アプリ復帰時に記録される旨だけ伝える。
+- Diary Sync r3：接続済みNotionがあるのに未試行で`Diary未記録`と断定することを禁止。既存当日Diaryを実際に検索→既存黄色`🗽 English Log`を更新→再取得検証してから保存済みと言う。Diary最終形は現行Coach Rulesに合わせて英語1〜2文＋Fix 1＋Phrase 1へ統一。
+- Phrase Bankレビュー：現行3分類・45件を再確認。今回の実害は入口UI／会話phase／意味修復／Wrap upの問題であり、Phrase不足ではないため追加・削除・順序変更なし。
+- release=`v4.8.6 r16 · 09/10`、core cache=`v4.8.6-r16`、THEME/COMMUTE adapter=`v4.8.6-r11`、Diary Sync=`v4.8.6-r3`。
+- Duo Sync／既存XP保存ロジック／Roadmap／Leni側は変更しない。
