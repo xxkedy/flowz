@@ -62,6 +62,11 @@ button{font:inherit}
 .level-core{position:relative;z-index:1;text-align:center}.level-core b{display:block;font-size:27px;line-height:1;font-weight:950}.level-core span{display:block;font-size:8px;color:var(--muted);font-weight:900;margin-top:3px}
 .hero-name{font-size:21px;font-weight:950}.hero-sub{font-size:10px;color:var(--muted);font-weight:800;margin-top:3px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:9px}
 .stat{background:var(--panel2);border:1px solid var(--line);border-radius:11px;padding:8px 5px;text-align:center}.stat b{display:block;font-size:17px;font-weight:950}.stat span{display:block;font-size:8px;color:var(--muted);margin-top:2px;font-weight:850}
+.assessment-link{cursor:pointer;transition:border-color .15s ease,transform .08s ease,filter .15s ease}
+.assessment-link:hover{border-color:#3a4048}
+.assessment-link:active{transform:scale(.995);filter:brightness(1.06)}
+.assessment-roadmap-btn{appearance:none;-webkit-appearance:none;border:1px solid rgba(255,158,44,.48);border-radius:999px;background:rgba(255,158,44,.08);color:#ffc36e;padding:6px 9px;font-size:9px;font-weight:950;letter-spacing:.06em;cursor:pointer;white-space:nowrap}
+.assessment-roadmap-btn:active{transform:translateY(1px);background:rgba(255,158,44,.15)}
 .progress-line{height:6px;border-radius:99px;background:var(--panel2);overflow:hidden;margin-top:10px;border:1px solid var(--line)}.progress-line i{display:block;height:100%;width:var(--progress);background:linear-gradient(90deg,var(--amber),var(--orange));border-radius:99px}.progress-line.leni i{background:linear-gradient(90deg,var(--cyan),var(--green))}
 .progress-meta{display:flex;justify-content:space-between;margin-top:5px;font-size:8px;color:var(--muted);font-weight:850}
 .week-strip{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}.day-dot{text-align:center}.day-dot span{display:grid;place-items:center;aspect-ratio:1;border-radius:11px;background:var(--panel2);border:1px solid var(--line);font-size:11px;font-weight:950}.day-dot.done span{background:var(--amber);color:#251400;border-color:transparent}.day-dot.leni.done span{background:var(--cyan);color:#002329}.day-dot em{display:block;font-style:normal;font-size:8px;color:var(--muted);margin-top:3px;font-weight:850}

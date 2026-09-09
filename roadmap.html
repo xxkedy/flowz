@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0c0d0f">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>Flowz · English Roadmap</title>
+<link rel="stylesheet" href="flowz-v3-duo.css?v=4.8.6-r12">
+<style>
+.roadmap-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:3px 2px 13px}
+.roadmap-back{border:1px solid var(--line);border-radius:999px;background:var(--panel);color:var(--text);padding:9px 12px;font-size:10px;font-weight:950;cursor:pointer}
+.roadmap-title{font-size:20px;font-weight:950;letter-spacing:-.35px}
+.roadmap-sub{margin:4px 2px 11px;color:var(--muted);font-size:10px;line-height:1.5}
+.roadmap-now{border-color:rgba(255,158,44,.5);background:linear-gradient(160deg,rgba(255,158,44,.12),#111317)}
+.now-row{display:flex;align-items:flex-end;justify-content:space-between;gap:10px}
+.now-label{font-size:9px;color:#ffc36e;font-weight:950;letter-spacing:.08em}
+.now-level{font-size:27px;font-weight:950;line-height:1;margin-top:5px}
+.now-date{text-align:right;color:var(--muted);font-size:10px;font-weight:900}
+.now-note{margin-top:8px;color:#d8d9d7;font-size:11px;line-height:1.45}
+.timeline{display:grid;gap:7px}
+.milestone{display:grid;grid-template-columns:72px 58px 1fr;gap:9px;align-items:center;padding:10px;border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:12px;background:var(--panel2)}
+.milestone .date{font-size:9px;color:var(--muted);font-weight:900}
+.milestone .level{font-size:16px;font-weight:950;color:var(--accent)}
+.milestone .desc{font-size:10px;line-height:1.4;color:#d2d4d7;font-weight:800}
+.m-now{--accent:#ff9e2c}.m-a2{--accent:#f7c86f}.m-b1{--accent:#27d3df}.m-b2{--accent:#55d982}
+.lane-title{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:9px}
+.lane-title b{font-size:12px;letter-spacing:.06em}.lane-title span{font-size:9px;color:var(--muted);font-weight:850}
+.toeic-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.toeic-box{padding:10px;border:1px solid var(--line);border-radius:12px;background:var(--panel2)}
+.toeic-box b{display:block;font-size:18px}.toeic-box span{display:block;margin-top:3px;color:var(--muted);font-size:9px;font-weight:850}
+.toeic-note{margin:9px 1px 0;color:#8b9198;font-size:9px;line-height:1.5}
+.dec-list{display:grid;gap:7px}
+.dec-item{display:grid;grid-template-columns:28px 1fr;gap:8px;align-items:start;padding:9px 10px;border:1px solid var(--line);border-radius:11px;background:var(--panel2)}
+.dec-item i{font-style:normal;font-size:16px}.dec-item b{display:block;font-size:11px}.dec-item span{display:block;margin-top:2px;color:var(--muted);font-size:9px;line-height:1.4}
+.source-note{margin:2px 3px 14px;color:#666d75;font-size:9px;line-height:1.45}
+</style>
+</head>
+<body data-profile="kedy">
+<div class="roadmap-top">
+  <button class="roadmap-back" id="roadmapBack" type="button">← CURRENT ENGLISH</button>
+  <span class="version">v4.8.6 r12 · 09/09</span>
+</div>
+
+<div class="roadmap-title">🗺 ENGLISH ROADMAP</div>
+<p class="roadmap-sub">会話力を主軸に、CEFRを段階で上げる。TOEICは別レーンで測定する。</p>
+
+<section class="panel roadmap-now">
+  <div class="now-row">
+    <div><div class="now-label">📍 CURRENT</div><div class="now-level">A1+ → A2</div></div>
+    <div class="now-date">2026.09</div>
+  </div>
+  <div class="now-note">短い文なら会話で使える。今は「考えてから話す」を減らして、日常会話を止まりすぎず続ける段階。</div>
+</section>
+
+<section class="panel">
+  <div class="lane-title"><b>🪜 CEFR MILESTONES</b><span>会話の目標</span></div>
+  <div class="timeline">
+    <div class="milestone m-now"><div class="date">2026.09</div><div class="level">A1+</div><div class="desc">現在地。通勤COMMUTEで短文をつなぐ。</div></div>
+    <div class="milestone m-a2"><div class="date">2026.12</div><div class="level">A2</div><div class="desc">身近な話題を短文でつなぎ、止まりすぎず会話を続ける。</div></div>
+    <div class="milestone m-b1"><div class="date">2027.09</div><div class="level">B1</div><div class="desc">経験・予定・理由・簡単な意見を自力で説明し、流れを維持する。</div></div>
+    <div class="milestone m-b2"><div class="date">2028.12</div><div class="level">B2</div><div class="desc">幅広い話題で自然にやり取りし、英語だけでも理解と会話をかなり進める。</div></div>
+  </div>
+</section>
+
+<section class="panel">
+  <div class="lane-title"><b>🎯 TOEIC LANE</b><span>主目的ではなく測定</span></div>
+  <div class="toeic-grid">
+    <div class="toeic-box"><b>900</b><span>LONG-TERM GOAL</span></div>
+    <div class="toeic-box"><b>NOT TESTED</b><span>CURRENT OFFICIAL</span></div>
+  </div>
+  <p class="toeic-note">来年に大分で初回測定して、実スコアを見てから900へのL&R対策を設計。Flowzの5問推定は目安で、公式スコアとは分ける。</p>
+</section>
+
+<section class="panel">
+  <div class="lane-title"><b>📅 NOW → DECEMBER</b><span>A2へ</span></div>
+  <div class="dec-list">
+    <div class="dec-item"><i>🚲</i><div><b>COMMUTE</b><span>毎日の実話を話す。頻出フレーズ・Bridge Phraseを実会話で使う。</span></div></div>
+    <div class="dec-item"><i>🍊</i><div><b>mikan / 金フレ</b><span>600点レベル①〜④を土台にして、意味を速く出せる語彙を増やす。</span></div></div>
+    <div class="dec-item"><i>🎤</i><div><b>VOICE REVIEW</b><span>毎回の会話ログでCEFRと次の弱点を見直し、必要な時だけ難度を上げる。</span></div></div>
+  </div>
+</section>
+
+<p class="source-note">Current roadmap source: English Hub / Flowz. 目標時期は実際の会話ログ・CEFR評価・初回TOEIC結果で見直す。</p>
+
+<script>
+document.getElementById('roadmapBack').addEventListener('click',function(){
+  if(document.referrer&&document.referrer.indexOf(location.host)>=0){history.back();return}
+  location.href='./flowz-v3-duo.html?profile=kedy';
+});
+</script>
+</body>
+</html>

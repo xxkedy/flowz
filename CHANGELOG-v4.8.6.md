@@ -98,3 +98,12 @@ Date: 2026-08-22
 - Native頻出枠に`Sounds good.`／`I see.`／`Kind of.`を追加。古い仕事個別表現や重複を整理し、総数は44→45件。
 - COMMUTE adapter r8で、kedyが「useful/common phrases」「phrases I use a lot」等を求めた時は、実生活に合う短い1〜3フレーズだけ即提示し、`another phrase`なら次の別フレーズへ進む。
 - Phrase Bank保守ルールも「原則3分類。新カテゴリは既存3つで本当に収まらない時だけ」に更新。
+
+
+## r12 — 2026-09-09
+- kedyの`CURRENT ENGLISH`カードをロードマップ入口化。右上に`ROADMAP ›`を追加し、カード全体タップでも`roadmap.html`へ移動する。
+- English Hubの現行目標をFlowz内で見える化：2026-09 A1+〜low A2 → 2026-12 A2 → 2027-09 B1 → 2028-12 B2。
+- TOEICは別レーンとして長期900目標／現在NOT TESTED／来年に大分で初回測定→実スコア後にL&R設計、と表示。Flowz推定値と公式スコアは分離する。
+- NOW→DECEMBERにCOMMUTE／mikan・金フレ／VOICE REVIEWの3本だけを表示し、ホーム画面の情報量は増やさない。
+- Phrase Bankレビュー実施：r11の3分類・45件・優先順は今回変更不要と確認。
+- COMMUTE adapter r8、Duo Sync、XP、TOEIC 5問、FREE、Leni側の挙動は変更なし。
