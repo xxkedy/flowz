@@ -1,4 +1,4 @@
-/* Flowz v4.8.6 r10 — THEME/COMMUTE conversation continuity adapter.
+/* Flowz v4.8.6 r11 — THEME/COMMUTE conversation continuity adapter.
  * Keeps the unified app intact and changes only kedy COMMUTE prompt launch.
  */
 (function(){
@@ -8,7 +8,7 @@ var PENDING_KEY='flowz_duo_pending';
 
 function enhanceCommutePrompt(prompt){
   if(!prompt||prompt.indexOf("You are kedy's English conversation partner and coach")<0)return prompt;
-  if(prompt.indexOf('COMMUTE Story Expansion Override r9:')>=0)return prompt;
+  if(prompt.indexOf('COMMUTE Theme Structure Guard r11:')>=0)return prompt;
   var hasContinuity=prompt.indexOf('Conversation Continuity and Quality Rules:')>=0;
 
   var lowLoadShadowing=[
@@ -90,13 +90,27 @@ function enhanceCommutePrompt(prompt){
     "The priority is meaning first, then one-step-longer English, then natural conversation. Do not turn a personal story into repeated confirmation questions or generic encouragement."
   ].join(' ');
 
+  var themeGuard=[
+    "COMMUTE Theme Structure Guard r11:",
+    "This is the final priority for the structured THEME route unless kedy explicitly asks for free talk, low-load shadowing, another theme, or to end.",
+    "Keep an internal phase pointer: WORD WARM-UP, then QUESTION CARDS, then MINI DIALOGUE, then FREE TALK. Do not silently skip a phase because a side conversation becomes interesting.",
+    "WORD WARM-UP must reach five to eight useful words or short phrases total. Give only one or two at a time, but return with the remaining items until the total is complete before QUESTION CARDS.",
+    "QUESTION CARDS must include three to five concrete questions, one at a time. Help short answers become two to four connected sentences with and, but, because, or so, without forcing a retry when the meaning is already clear.",
+    "MINI DIALOGUE is mandatory. Run one natural four-to-six-line A/B dialogue, one line per assistant turn, and never repeat the same line more than twice. After it finishes, move to FREE TALK.",
+    "During FREE TALK, stay on the theme but bring your own reactions, opinions, associations, and small stories so kedy does not have to create every topic.",
+    "Target phrase count includes every assistant model, recast, and repeat. Never say the target phrase more than twice in the session. If kedy communicates the meaning, move on instead of drilling it again.",
+    "If kedy says No, no, I mean, spells a word, or corrects your interpretation, discard the rejected guess immediately and use his corrected meaning. Do not make him repair the same misunderstanding twice.",
+    "Do not finish with Nice, Sweet, Exactly, Good rhythm, or another praise/backchannel alone. Add real content or the next phase beat.",
+    "At Wrap up, never invent XP. State a number only when Flowz session context explicitly provides the exact XP; otherwise say Flowz will record it when kedy returns to the app."
+  ].join(' ');
+
   var anchor='Use the current conversation as the main context.';
   if(!hasContinuity){
     if(prompt.indexOf(anchor)>=0)prompt=prompt.replace(anchor,rules+' '+anchor);
     else prompt=prompt+' '+rules;
   }
   if(prompt.indexOf('COMMUTE Hard Continuation Override r6:')<0)prompt=prompt+' '+hardRules;
-  return prompt+' '+storyRules;
+  return prompt+' '+storyRules+' '+themeGuard;
 }
 
 function patchApp(){
@@ -141,7 +155,7 @@ function launchCommute(){
 patchApp();
 
 document.addEventListener('click',function(e){
-  var target=e.target&&e.target.closest&&e.target.closest('#flowzTalkPrepBtn');
+  var target=e.target&&e.target.closest&&e.target.closest('#flowzTalkPrepBtn, .mode[data-mode-id="commute"]');
   if(!target||!window.FlowzApp||window.FlowzApp.getCurrentProfile()!=='kedy')return;
   e.preventDefault();
   e.stopPropagation();
