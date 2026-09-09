@@ -13,4 +13,4 @@ Leni prompts and Duo Sync are intentionally unchanged.
 - Prefer phrases found in recent Flowz/Diary English Logs and repeated correction points.
 - Remove stale, overly specific, or near-duplicate phrases; add new useful phrases when recent sessions justify them.
 - Every Flowz prompt/UI/code change must include a Phrase Bank review. If no phrase change is needed, explicitly verify that in the change notes.
-- Keep the five sections: EVERYDAY / WORK / STUCK / REPLY / KEEP GOING, with higher-priority phrases higher inside each section. KEEP GOING is reserved for short bridge phrases that help kedy extend a real conversation after a backchannel or pause.
+- Keep the Phrase Bank to three broad sections so it stays fast to scan: COMMUTE / NATIVE / REPLY + PRACTICAL. COMMUTE includes real commute phrases plus Flowz-control phrases kedy actually says often; NATIVE holds short high-frequency natural expressions; REPLY + PRACTICAL combines replies, conversation-extending bridges, clarification, repair, and stuck phrases. Do not add a new category unless one of these three genuinely cannot hold it.

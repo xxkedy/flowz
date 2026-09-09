@@ -89,3 +89,12 @@ Date: 2026-08-22
 - COMMUTE adapter r7で、kedyが`Yeah`／`Exactly`／`That makes sense`等の後に詰まった時、文脈に合うBridge Phraseを1個だけ提示して会話へ戻す。ドリル化はしない。
 - Coach自身も相づちだけでターンを閉じず、1〜2文の実内容または自然な次展開を続ける。
 - r9 UIはkedy実機で「いい感じ」と確認済み。Duo Sync／XP／TOEIC／FREE／Leni側は変更なし。
+
+
+## r11 — 2026-09-09
+- Phrase Bankの分類を5→3へ整理し、探す手間を減らした：`🚲 COMMUTE`／`🗣️ NATIVE`／`💬 REPLY + PRACTICAL`。
+- EVERYDAY＋WORK＋Flowz操作系をCOMMUTEへ統合、KEEP GOING＋STUCK＋旧REPLYを`REPLY + PRACTICAL`へ統合。カテゴリを増やさず広い3分類で維持する。
+- kedyが実際によく言う`I want to do some shadowing.`／`Give me some useful phrases.`／`I want to practice some common phrases.`／`Give me another phrase.`／`Let's keep going.`／`Let's just talk.`／`You lead the conversation.`／`Speak a little faster.`をCOMMUTE上位へ追加。
+- Native頻出枠に`Sounds good.`／`I see.`／`Kind of.`を追加。古い仕事個別表現や重複を整理し、総数は44→45件。
+- COMMUTE adapter r8で、kedyが「useful/common phrases」「phrases I use a lot」等を求めた時は、実生活に合う短い1〜3フレーズだけ即提示し、`another phrase`なら次の別フレーズへ進む。
+- Phrase Bank保守ルールも「原則3分類。新カテゴリは既存3つで本当に収まらない時だけ」に更新。
