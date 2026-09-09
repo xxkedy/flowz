@@ -27,10 +27,10 @@
 
 /* ============================== RELEASE ============================== */
 var RELEASE={
-  number:'4.8.6-r11',
-  label:'v4.8.6 r11 · 09/09',
+  number:'4.8.6-r12',
+  label:'v4.8.6 r12 · 09/09',
   title:'Flowz v4.8.6 · Duo Battle',
-  footer:'✅ Last updated 2026.09.09 · Flowz v4.8.6 r11'
+  footer:'✅ Last updated 2026.09.09 · Flowz v4.8.6 r12'
 };
 
 /* ============================== STORAGE KEYS ============================== */
@@ -574,8 +574,13 @@ function toeicEstimate(rows){
 }
 function renderAssessment(){
   var panel=$('flowzAssessment');if(!panel)return;
-  var a=cefrAssessment(current),html='<div class="section-head"><div class="section-title">'+a.title+'</div><span class="chip">ESTIMATE</span></div><div class="stats">';
+  var a=cefrAssessment(current),html='<div class="section-head"><div class="section-title">'+a.title+'</div>';
   if(current==='kedy'){
+    html+='<button class="assessment-roadmap-btn" data-roadmap-link type="button" aria-label="英語ロードマップを開く">ROADMAP ›</button></div><div class="stats">';
+    panel.classList.add('assessment-link');
+    panel.setAttribute('role','button');
+    panel.setAttribute('tabindex','0');
+    panel.setAttribute('aria-label','Current English。タップで英語ロードマップを開く');
     var est=toeicEstimate(loadToeicResults());
     html+='<div class="stat"><b>A1→A2</b><span>CURRENT CEFR</span></div>';
     html+='<div class="stat"><b>'+(est?escapeHtml(est.band):'NOT TESTED')+'</b><span>TOEIC EST.'+(est?(' · '+est.confidence):'')+'</span></div>';
@@ -583,6 +588,11 @@ function renderAssessment(){
     html+='</div><p class="note">mikan＝単語30問／Flowz TOEIC＝L3＋R2のVoice 5問。スコアは非公式の目安。</p>';
     html+='<button class="small-btn" id="flowzToeicResultBtn" type="button">TOEIC CHECK結果を入力（L/3・R/2）</button>';
   }else{
+    panel.classList.remove('assessment-link');
+    panel.removeAttribute('role');
+    panel.removeAttribute('tabindex');
+    panel.removeAttribute('aria-label');
+    html+='<span class="chip">ESTIMATE</span></div><div class="stats">';
     html+='<div class="stat"><b>'+escapeHtml(a.a)+'</b><span>'+escapeHtml(a.al)+'</span></div>';
     html+='<div class="stat"><b>'+escapeHtml(a.b)+'</b><span>'+escapeHtml(a.bl)+'</span></div>';
     html+='<div class="stat"><b>'+escapeHtml(a.c)+'</b><span>'+escapeHtml(a.cl)+'</span></div>';
@@ -1109,9 +1119,17 @@ function bindInteractions(){
     });
   }
   var assessment=$('flowzAssessment');
-  if(assessment)assessment.addEventListener('click',function(e){
-    if(e.target.closest&&e.target.closest('#flowzToeicResultBtn'))openToeicModal();
-  });
+  if(assessment){
+    assessment.addEventListener('click',function(e){
+      if(e.target.closest&&e.target.closest('#flowzToeicResultBtn')){openToeicModal();return}
+      if(current==='kedy')location.href='./roadmap.html?from=flowz';
+    });
+    assessment.addEventListener('keydown',function(e){
+      if(current!=='kedy'||(e.key!=='Enter'&&e.key!==' '))return;
+      if(e.target.closest&&e.target.closest('#flowzToeicResultBtn'))return;
+      e.preventDefault();location.href='./roadmap.html?from=flowz';
+    });
+  }
   /* Another tab changed our data. Re-read and redraw, but only write back
      when the merge actually produced something new -- an unconditional
      persist() here makes two open tabs ping-pong storage events forever. */
