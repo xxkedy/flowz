@@ -107,3 +107,13 @@ Date: 2026-08-22
 - NOW→DECEMBERにCOMMUTE／mikan・金フレ／VOICE REVIEWの3本だけを表示し、ホーム画面の情報量は増やさない。
 - Phrase Bankレビュー実施：r11の3分類・45件・優先順は今回変更不要と確認。
 - COMMUTE adapter r8、Duo Sync、XP、TOEIC 5問、FREE、Leni側の挙動は変更なし。
+
+
+## r13 — 2026-09-09
+- CURRENT ENGLISHの`ROADMAP`をamberの立体ボタンへ変更し、枠・グラデーション・shadow・押下沈み込みでボタン感を強化。
+- CURRENT ENGLISHの中央指標をTOEIC推定から`B1 · MAIN GOAL`へ変更。日常画面からTOEIC圧を下げ、`CONVERSATION FIRST`を明示。
+- English RoadmapはB1日常会話を主目標へ再設計。A2は次のcheckpoint、B1をMAIN、B2はその先として表示。
+- TOEIC 900の大きな目標表示をRoadmapから外し、試験全般を`EXAM READINESS · LATER`へ変更。期限で追わず、AIが準備OKの時だけ受験提案する。
+- AI受験判断は5問Flowz TOEICだけでは行わない。最近のVOICE REVIEWでB1相当が複数回安定し、試験を考える段階で十分な長さの模試／L&R確認を行い、会話＋模試の両方を根拠に提案する。
+- Phrase Bankレビュー実施：3分類・45件・順序は今回変更不要。
+- COMMUTE adapter r8、Duo Sync、XP、TOEIC 5問モード、FREE、Leni側は変更なし。
