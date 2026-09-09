@@ -80,3 +80,12 @@ Date: 2026-08-22
 - Frequent Phrasesは早見表の1列コンパクト構造を維持したまま、カテゴリごとの色アクセント、短い日本語カテゴリ名、各カテゴリ上位3件の⭐表示を追加。
 - Phrase Bankの37件・順序・追加削除をレビュー。今回の目的はUI視認性改善のため、フレーズ内容／優先順はr8から変更不要と確認。
 - COMMUTE adapter r6、Duo Sync、XP、TOEIC、FREE、Leni側の挙動は変更なし。
+
+
+## r10 — 2026-09-09
+- Phrase Bankに`🔗 KEEP GOING`を追加。短い相づちの後に会話を伸ばすBridge Phraseを集約。
+- 早見表上部へ`REACT → ADD → RETURN`の会話拡張パターンを追加。例：`Yeah, exactly. → For me, ... → What about you?`
+- `What about you?`をREPLYからKEEP GOINGへ移し、`Can you tell me more?`／`Why do you think so?`／`For me, ...`／`Actually, ...`／`That reminds me...`／`What happened next?`／`By the way, ...`を追加。Phrase Bankは37→44件、5分類へ。
+- COMMUTE adapter r7で、kedyが`Yeah`／`Exactly`／`That makes sense`等の後に詰まった時、文脈に合うBridge Phraseを1個だけ提示して会話へ戻す。ドリル化はしない。
+- Coach自身も相づちだけでターンを閉じず、1〜2文の実内容または自然な次展開を続ける。
+- r9 UIはkedy実機で「いい感じ」と確認済み。Duo Sync／XP／TOEIC／FREE／Leni側は変更なし。

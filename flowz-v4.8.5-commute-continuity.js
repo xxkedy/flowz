@@ -1,4 +1,4 @@
-/* Flowz v4.8.6 r6 — COMMUTE conversation continuity adapter.
+/* Flowz v4.8.6 r7 — COMMUTE conversation continuity adapter.
  * Keeps the unified app intact and changes only kedy COMMUTE prompt launch.
  */
 (function(){
@@ -56,6 +56,9 @@ function enhanceCommutePrompt(prompt){
     'Use clear rhythm: ordinary conversation for several turns, then only when a phrase is genuinely useful, briefly say something like This sentence is useful, try this, give exactly one short sentence, hear one repetition, react briefly, and immediately return to the same conversation. Shadowing is a small insert inside the conversation, never a mode switch that ends the conversation.',
     'After a shadowing repetition, do not stop at praise and do not wait silently for kedy to invent the next topic. Resume the prior topic yourself with a natural continuation.',
     'Prefer useful phrase pickup from what kedy is already trying to say. A phrase suggestion should feel like a human conversation partner helping in the moment, not a classroom drill.',
+    'Bridge Phrase support: if kedy gives a short acknowledgement such as Yeah, Exactly, That makes sense, I see, or Right and then seems unsure how to continue, keep the conversation alive and, when useful, offer exactly one short bridge phrase that fits the current topic. Good examples include What about you, Can you tell me more, Why do you think so, For me..., Actually..., That reminds me..., What happened next, and By the way....',
+    'Teach the reusable pattern REACT -> ADD -> RETURN only in context: react briefly, add one personal detail or thought, then return the conversational ball. For example: Yeah, exactly. For me, ... What about you? Do not turn this into a drill unless kedy asks to practice it.',
+    'When you yourself say Yeah, Exactly, That makes sense, or another acknowledgement, never leave kedy with an empty conversational gap. Add one or two short sentences of real content or a natural next beat immediately.',
     'Keep these continuity and quality rules active until kedy clearly ends the session.'
   ].join(' ');
 
