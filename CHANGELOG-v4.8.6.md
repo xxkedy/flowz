@@ -64,3 +64,12 @@ Date: 2026-08-22
 - TALK PREPのkedy用PHRASE操作を分離。左のPHRASEは頻出フレーズ集へ、右↻は従来どおり次フレーズへ進む。
 - `phrases.html`を追加し、EVERYDAY / WORK / STUCK / REPLYの4分類で英語＋自然な和訳を一覧表示。
 - 既存COMMUTE r6 prompt、Duo Sync、XP、TOEIC、FREE、Leni側の挙動は変更しない。
+
+
+## r8 — 2026-09-09
+- Frequent Phrasesを「上ほど優先」へ変更。最近の実使用／Diary Phrase・Fix／今後の会話価値で並べる。
+- 9/2〜9/8の実ログを反映し、`I'm on my way home.`／`I'm almost there.`／`When I get home, I'll ___.`／`I need to figure it out.`／`That's what I meant.`などを上位へ。
+- `What should I say?`／`Can you say it more simply?`／`Let's talk about something else.`等を追加。
+- 近い意味で重複していた`Could you say that again?`、`I'm done for today.`、`I'll be there soon.`等を整理。
+- 今後はFlowzのprompt／UI／code変更ごとにPhrase Bankも必ずレビューし、変更不要ならその旨を変更記録で明示する。
+- COMMUTE conversation adapterはr6のまま変更なし。
