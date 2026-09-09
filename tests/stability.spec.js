@@ -100,7 +100,7 @@ test('stays visually still for 30s, across profile switches and resume, with no 
   }));
 
   const initial = await snapshot();
-  expect(initial.version).toBe('v4.8.6 r12 · 09/09');
+  expect(initial.version).toBe('v4.8.6 r13 · 09/09');
   expect(initial.title).toBe('Flowz v4.8.6 · Duo Battle');
   // kedy's final tile order. COMMUTE is the Talk Prep card above the grid.
   expect(initial.modeIds).toEqual(['toeic', 'free']);
@@ -333,8 +333,11 @@ test('kedy Current English opens the English roadmap and keeps TOEIC input separ
   await seed(page, {});
   await page.goto(`${baseURL}/flowz-v3-duo.html`);
   await page.waitForSelector('#flowzAssessment .assessment-roadmap-btn');
-  await expect(page.locator('#flowzAssessment .assessment-roadmap-btn')).toHaveText('ROADMAP ›');
+  await expect(page.locator('#flowzAssessment .assessment-roadmap-btn')).toContainText('ROADMAP');
   await expect(page.locator('#flowzAssessment')).toContainText('A1→A2');
+  await expect(page.locator('#flowzAssessment')).toContainText('B1');
+  await expect(page.locator('#flowzAssessment')).toContainText('MAIN GOAL');
+  await expect(page.locator('#flowzAssessment')).not.toContainText('TOEIC EST.');
 
   await page.click('#flowzAssessment .assessment-roadmap-btn');
   await expect(page).toHaveURL(/\/roadmap\.html\?from=flowz$/);
@@ -345,8 +348,12 @@ test('kedy Current English opens the English roadmap and keeps TOEIC input separ
   await expect(page.locator('.m-b1')).toContainText('2027.09');
   await expect(page.locator('.m-b2')).toContainText('2028.12');
   await expect(page.locator('.m-b2')).toContainText('B2');
-  await expect(page.locator('.toeic-box').first()).toContainText('900');
-  await expect(page.locator('body')).toContainText('来年に大分で初回測定');
+  await expect(page.locator('.m-b1')).toContainText('MAIN');
+  await expect(page.locator('body')).toContainText('CONVERSATION FIRST');
+  await expect(page.locator('body')).toContainText('AI RECOMMENDS WHEN READY');
+  await expect(page.locator('body')).toContainText('NO DEADLINE');
+  await expect(page.locator('body')).toContainText('5問チェックではなく十分な長さの模試');
+  await expect(page.locator('body')).not.toContainText('LONG-TERM GOAL');
   await expect(page.locator('body')).toContainText('NOW → DECEMBER');
 });
 
