@@ -137,3 +137,14 @@ Date: 2026-08-22
 - UI releaseを`v4.8.6 r14 · 09/09`、COMMUTE/THEME adapter cacheを`v4.8.6-r10`へ更新。
 - Temporary GitHub Actionsで`node --check`（core＋adapter）とPlaywright WebKit全19件を実行しPASS後、temporary workflowを削除。
 
+## r15 — 2026-09-09
+- kedy側の旧`FREE`入口をユーザー向けに`LIFE TALK`へ変更。内部互換のmode idは`free`を維持する。
+- LIFE TALKはランダムフリートークではなく、Personal Context Preflightで`HQ → 実ToDo → Flowz → 直近Diary/English Log → 関連Active Project`を最小限に読み、**最近の実生活・出来事・考え・予定・判断**から1本だけ話題を選んで始める。
+- 起点の優先順位は`最近のDiaryの出来事/考え → 現在の判断/予定 → 関連Project/unfinished item`。複数ToDoやProject情報をまとめて読み上げず、productivity dashboard化・催促・勝手な優先順位付けを禁止。
+- kedyが断片英語で実体験を話す時は意味を優先し、本人の語を残して`and / but / because / so`で1段長くrecast。長文化要求時は2〜4文へ広げる。
+- LIFE TALK内に旧Review機能を維持し、最近のPhrase/Fixは必要時だけ自然に再利用する。
+- UIは`LIFE TALK · Diary · recent life · plans`へ変更し、ランダムを連想する🎲を💬へ変更。
+- Diary Sync adapterのFREE表示も`LIFE TALK`へ変更し、cache tokenを`v4.8.6-r2`へ更新。
+- Phrase Bankは3分類45件をレビューし、LIFE TALK化による追加／削除／順序変更は不要と確認。
+- UI releaseを`v4.8.6 r15 · 09/09`へ更新。THEME／TOEIC／B1 MAIN GOAL／Duo Sync／XP／Leni側は変更しない。
+
