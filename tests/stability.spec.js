@@ -100,10 +100,10 @@ test('stays visually still for 30s, across profile switches and resume, with no 
   }));
 
   const initial = await snapshot();
-  expect(initial.version).toBe('v4.8.6 r15 · 09/09');
+  expect(initial.version).toBe('v4.8.6 r16 · 09/10');
   expect(initial.title).toBe('Flowz v4.8.6 · Duo Battle');
-  // kedy's final tile order. THEME is the Talk Prep card above the grid.
-  expect(initial.modeIds).toEqual(['free', 'toeic']);
+  // THEME and LIFE TALK are equal conversation entries; TOEIC is the separate wide lane.
+  expect(initial.modeIds).toEqual(['commute', 'free', 'toeic']);
   expect(initial.labels).toEqual([]);
   expect(initial.cloudIndex).toBeGreaterThan(0);
 
@@ -118,7 +118,7 @@ test('stays visually still for 30s, across profile switches and resume, with no 
     await page.click('.profile-btn[data-profile="leni"]');
     await expect(page.locator('#modes .mode')).toHaveCount(4);
     await page.click('.profile-btn[data-profile="kedy"]');
-    await expect(page.locator('#modes .mode')).toHaveCount(2);
+    await expect(page.locator('#modes .mode')).toHaveCount(3);
   }
   expect(await snapshot()).toEqual(initial);
 
@@ -236,7 +236,13 @@ test('every visible kedy mode carries the current coaching and feedback rules', 
   expect(p.commute).toMatch(/Explicit continuation cues override any impulse to stop/);
   expect(p.commute).toMatch(/Do not reduce natural conversation to one-word drills/);
   expect(p.commute).toMatch(/speaking speed is too slow or asks for faster speech/);
-  expect(p.commute.lastIndexOf('COMMUTE Hard Continuation Override r6:')).toBeGreaterThan(p.commute.lastIndexOf('Flowz Feedback Loop'));
+  expect(p.commute).toMatch(/COMMUTE Theme Structure Guard r11:/);
+  expect(p.commute).toMatch(/WORD WARM-UP must reach five to eight useful words/);
+  expect(p.commute).toMatch(/MINI DIALOGUE is mandatory/);
+  expect(p.commute).toMatch(/Target phrase count includes every assistant model/);
+  expect(p.commute).toMatch(/discard the rejected guess immediately/);
+  expect(p.commute).toMatch(/never invent XP/i);
+  expect(p.commute.lastIndexOf('COMMUTE Theme Structure Guard r11:')).toBeGreaterThan(p.commute.lastIndexOf('COMMUTE Story Expansion Override r9:'));
 
   expect(p.toeic).toMatch(/five-question TOEIC Listening & Reading mini-check in about five to eight minutes/);
   expect(p.toeic).toMatch(/exactly three listening-style questions and two reading-style questions/);
@@ -278,20 +284,32 @@ test('every visible kedy mode carries the current coaching and feedback rules', 
   expect(p.leni).not.toMatch(/Flowz Coach Rules/);
 });
 
-test('kedy home exposes THEME, LIFE TALK, and TOEIC with no duplicate legacy FREE entry', async ({ page }) => {
+test('kedy home exposes THEME and LIFE TALK side by side with TOEIC independent below', async ({ page }) => {
   await seed(page, {});
   await page.goto(`${baseURL}/flowz-v3-duo.html`);
   await page.waitForSelector('#modes .mode');
-  expect(await page.evaluate(() => [...document.querySelectorAll('#modes .mode')].map((b) => b.dataset.modeId))).toEqual(['free','toeic']);
+  expect(await page.evaluate(() => [...document.querySelectorAll('#modes .mode')].map((b) => b.dataset.modeId))).toEqual(['commute','free','toeic']);
+  await expect(page.locator('#modes .mode[data-mode-id="commute"] b')).toHaveText('THEME');
+  await expect(page.locator('#modes .mode[data-mode-id="commute"] small')).toHaveText('Guided topic · words → talk');
   await expect(page.locator('#modes .mode[data-mode-id="free"] b')).toHaveText('LIFE TALK');
   await expect(page.locator('#modes .mode[data-mode-id="free"] small')).toHaveText('Diary · recent life · plans');
-  await expect(page.locator('#flowzTalkPrep .prep-chip')).toHaveText('THEME');
-  await expect(page.locator('#flowzTalkPrepBtn')).toHaveText(/START THEME/);
+  await expect(page.locator('#modes .mode[data-mode-id="toeic"]')).toHaveClass(/wide/);
+  await expect(page.locator('#flowzTalkPrep .prep-chip')).toHaveText('PHRASE');
+  await expect(page.locator('#flowzTalkPrepBtn')).toHaveCount(0);
   await expect(page.locator('#modes .mode[data-mode-id="bath"]')).toHaveCount(0);
   await expect(page.locator('#weekStrip')).toHaveCount(1);
   await expect(page.locator('#mission')).not.toHaveClass(/show/);
-  const order=await page.evaluate(()=>{const prep=document.querySelector('#flowzTalkPrep'),today=document.querySelector('#todayCard');return prep.compareDocumentPosition(today)&Node.DOCUMENT_POSITION_FOLLOWING});
-  expect(order).toBeTruthy();
+  const geometry=await page.evaluate(()=>{
+    const theme=document.querySelector('#modes .mode[data-mode-id="commute"]').getBoundingClientRect();
+    const life=document.querySelector('#modes .mode[data-mode-id="free"]').getBoundingClientRect();
+    const toeic=document.querySelector('#modes .mode[data-mode-id="toeic"]').getBoundingClientRect();
+    return {
+      sameRow: Math.abs(theme.top-life.top)<2,
+      toeicBelow: toeic.top>theme.bottom,
+      toeicWider: toeic.width>theme.width*1.8
+    };
+  });
+  expect(geometry).toEqual({sameRow:true,toeicBelow:true,toeicWider:true});
   await page.click('.profile-btn[data-profile="leni"]');
   expect(await page.evaluate(() => [...document.querySelectorAll('#modes .mode')].map((b) => b.dataset.modeId))).toEqual(['free','work','n2','kanji']);
 });
