@@ -100,7 +100,7 @@ test('stays visually still for 30s, across profile switches and resume, with no 
   }));
 
   const initial = await snapshot();
-  expect(initial.version).toBe('v4.8.6 (2026.8.22)');
+  expect(initial.version).toBe('v4.8.6 r7 · 09/09');
   expect(initial.title).toBe('Flowz v4.8.6 · Duo Battle');
   // kedy's final tile order. COMMUTE is the Talk Prep card above the grid.
   expect(initial.modeIds).toEqual(['toeic', 'free']);
@@ -307,7 +307,7 @@ test('Talk Prep rotates fresh phrases, removes stale fallback, and advances afte
   expect(first.today.phrase).not.toBe('I feel good.');
   expect(first.reuse).not.toBe("I haven't decided yet.");
   expect(first.reuse).not.toBe('I feel good.');
-  await expect(page.locator('[data-prep-action="today"] small')).toContainText('タップで次へ');
+  await expect(page.locator('#flowzTalkPrep .prep-phrase-row small')).toContainText('右↻で次へ');
   await expect(page.locator('#flowzTalkPrep .prep-row')).toHaveCount(1);
 
   await page.click('[data-prep-action="today"]');
@@ -329,18 +329,29 @@ test('Talk Prep rotates fresh phrases, removes stale fallback, and advances afte
   expect(afterCompletedCommute.today.phrase).not.toBe(missionBeforeSession.phrase);
 });
 
-test('kedy Talk Prep is one tappable rotating phrase with no OPEN or REUSE rows', async ({ page }) => {
+test('kedy Talk Prep separates PHRASE book navigation from the right-side shuffle', async ({ page }) => {
   await seed(page, {});
   await page.goto(`${baseURL}/flowz-v3-duo.html`);
-  await page.waitForSelector('#flowzTalkPrep [data-prep-action="today"]');
+  await page.waitForSelector('#flowzTalkPrep .prep-shuffle');
   await expect(page.locator('#flowzTalkPrep .prep-row')).toHaveCount(1);
-  await expect(page.locator('#flowzTalkPrep .prep-row')).toContainText('PHRASE');
+  await expect(page.locator('#flowzTalkPrep .prep-label-link')).toHaveText('PHRASE');
   await expect(page.locator('#flowzTalkPrep')).not.toContainText('OPEN');
   await expect(page.locator('#flowzTalkPrep')).not.toContainText('REUSE');
-  const before=await page.locator('#flowzTalkPrep [data-prep-action="today"] b').textContent();
-  await page.click('#flowzTalkPrep [data-prep-action="today"]');
-  const after=await page.locator('#flowzTalkPrep [data-prep-action="today"] b').textContent();
+
+  const before=await page.locator('#flowzTalkPrep .prep-phrase-copy b').textContent();
+  await page.click('#flowzTalkPrep .prep-phrase-copy b');
+  expect(await page.locator('#flowzTalkPrep .prep-phrase-copy b').textContent()).toBe(before);
+
+  await page.click('#flowzTalkPrep .prep-shuffle');
+  const after=await page.locator('#flowzTalkPrep .prep-phrase-copy b').textContent();
   expect(after).not.toBe(before);
+
+  await page.click('#flowzTalkPrep .prep-label-link');
+  await expect(page).toHaveURL(/\/phrases\.html\?from=flowz$/);
+  await expect(page.locator('.phrase-section')).toHaveCount(4);
+  await expect(page.locator('#everyday')).toContainText("I'm on my way home.");
+  await expect(page.locator('#stuck')).toContainText('What do you mean?');
+  await expect(page.locator('#reply')).toContainText('That makes sense.');
 });
 
 test('Leni gets a Talk Prep quick start that rotates Japanese phrases and stays visually distinct', async ({ page }) => {
