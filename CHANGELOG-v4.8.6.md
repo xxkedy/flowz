@@ -58,3 +58,9 @@ Date: 2026-08-22
 - Base release remains Flowz v4.8.6.
 - Hotfix r6 changes kedy COMMUTE prompt behavior only; the deployment badge change only affects release visibility.
 - Duo Sync, XP, history, TOEIC, FREE, Leni modes, storage behavior, and Diary Sync Gate are unchanged.
+
+
+## r7 — 2026-09-09
+- TALK PREPのkedy用PHRASE操作を分離。左のPHRASEは頻出フレーズ集へ、右↻は従来どおり次フレーズへ進む。
+- `phrases.html`を追加し、EVERYDAY / WORK / STUCK / REPLYの4分類で英語＋自然な和訳を一覧表示。
+- 既存COMMUTE r6 prompt、Duo Sync、XP、TOEIC、FREE、Leni側の挙動は変更しない。
