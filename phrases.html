@@ -6,25 +6,30 @@
 <meta name="theme-color" content="#0c0d0f">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <title>Flowz · Frequent Phrases</title>
-<link rel="stylesheet" href="flowz-v3-duo.css?v=4.8.6-r8">
+<link rel="stylesheet" href="flowz-v3-duo.css?v=4.8.6-r9">
 <style>
 .phrase-book-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:3px 2px 13px}
 .phrase-back{border:1px solid var(--line);border-radius:999px;background:var(--panel);color:var(--text);padding:9px 12px;font-size:10px;font-weight:950;cursor:pointer}
 .phrase-book-title{font-size:18px;font-weight:950;letter-spacing:-.25px}
-.phrase-book-sub{margin:4px 2px 12px;color:var(--muted);font-size:10px;line-height:1.5}
+.phrase-book-sub{margin:4px 2px 9px;color:var(--muted);font-size:10px;line-height:1.5}
+.phrase-legend{display:flex;align-items:center;gap:6px;margin:0 2px 10px;color:#8f969f;font-size:9px;font-weight:850}
+.phrase-legend b{color:#f7c86f}
 .phrase-nav{display:flex;gap:6px;overflow-x:auto;padding:0 0 10px;scrollbar-width:none}
 .phrase-nav::-webkit-scrollbar{display:none}
 .phrase-nav a{flex:0 0 auto;text-decoration:none;border:1px solid var(--line);background:var(--panel);color:var(--muted);border-radius:999px;padding:7px 10px;font-size:9px;font-weight:900}
 .phrase-section{scroll-margin-top:10px}
-.phrase-section h2{margin:0 0 9px;font-size:12px;letter-spacing:.08em}
-.phrase-list{display:grid;gap:7px}
-.phrase-item{padding:10px 11px;border:1px solid var(--line);border-radius:13px;background:var(--panel2)}
-.phrase-item b{display:block;font-size:14px;line-height:1.3}
-.phrase-item span{display:block;margin-top:3px;color:var(--muted);font-size:10px;line-height:1.4}
-.phrase-section.everyday{border-color:rgba(255,158,44,.48)}
-.phrase-section.work{border-color:rgba(39,211,223,.42)}
-.phrase-section.stuck{border-color:rgba(255,95,109,.40)}
-.phrase-section.reply{border-color:rgba(85,217,130,.40)}
+.phrase-section h2{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 0 8px;font-size:12px;letter-spacing:.08em}
+.phrase-section-note{font-size:9px;font-weight:850;letter-spacing:0;color:var(--phrase-accent)}
+.phrase-list{display:grid;gap:6px}
+.phrase-item{position:relative;padding:8px 10px 8px 12px;border:1px solid var(--line);border-left:3px solid var(--phrase-accent);border-radius:11px;background:var(--panel2)}
+.phrase-item.priority{padding-left:34px}
+.phrase-item.priority::before{content:"⭐";position:absolute;left:9px;top:50%;transform:translateY(-50%);font-size:12px}
+.phrase-item b{display:block;font-size:14px;line-height:1.25}
+.phrase-item span{display:block;margin-top:2px;color:var(--muted);font-size:10px;line-height:1.35}
+.phrase-section.everyday{--phrase-accent:#ff9e2c;border-color:rgba(255,158,44,.48)}
+.phrase-section.work{--phrase-accent:#27d3df;border-color:rgba(39,211,223,.42)}
+.phrase-section.stuck{--phrase-accent:#ff6b6b;border-color:rgba(255,95,109,.40)}
+.phrase-section.reply{--phrase-accent:#55d982;border-color:rgba(85,217,130,.40)}
 .book-note{margin:2px 3px 14px;color:#747b84;font-size:9px;line-height:1.5}
 </style>
 </head>
@@ -32,10 +37,11 @@
 <!-- Phrase Bank maintenance: higher = higher priority. Review add/remove/order on every Flowz change. -->
 <div class="phrase-book-top">
   <button class="phrase-back" id="phraseBack" type="button">← TALK PREP</button>
-  <span class="version">v4.8.6 r8 · 09/09</span>
+  <span class="version">v4.8.6 r9 · 09/09</span>
 </div>
 <div class="phrase-book-title">🧠 FREQUENT PHRASES</div>
 <p class="phrase-book-sub">上ほど優先。kedyが実際によく使う＋今後よく使ってほしい短い英語を残す。</p>
+<div class="phrase-legend"><b>⭐ まず覚える</b><span>／ 上 → 下で優先順</span></div>
 <nav class="phrase-nav" aria-label="Phrase categories">
   <a href="#everyday">🏠 EVERYDAY</a>
   <a href="#work">💼 WORK</a>
@@ -44,11 +50,11 @@
 </nav>
 
 <section class="panel phrase-section everyday" id="everyday">
-  <h2>🏠 EVERYDAY</h2>
+  <h2><span>🏠 EVERYDAY</span><span class="phrase-section-note">移動・日常</span></h2>
   <div class="phrase-list">
-    <div class="phrase-item"><b>I'm on my way home.</b><span>家に帰ってる途中</span></div>
-    <div class="phrase-item"><b>I'm almost home.</b><span>もうすぐ家に着く</span></div>
-    <div class="phrase-item"><b>I'm almost there.</b><span>もうすぐ着く</span></div>
+    <div class="phrase-item priority"><b>I'm on my way home.</b><span>家に帰ってる途中</span></div>
+    <div class="phrase-item priority"><b>I'm almost home.</b><span>もうすぐ家に着く</span></div>
+    <div class="phrase-item priority"><b>I'm almost there.</b><span>もうすぐ着く</span></div>
     <div class="phrase-item"><b>When I get home, I'll ___.</b><span>家に着いたら___する</span></div>
     <div class="phrase-item"><b>I need to figure it out.</b><span>それ考えて解決せんと</span></div>
     <div class="phrase-item"><b>I just got home.</b><span>今、家に着いた</span></div>
@@ -58,11 +64,11 @@
 </section>
 
 <section class="panel phrase-section work" id="work">
-  <h2>💼 WORK</h2>
+  <h2><span>💼 WORK</span><span class="phrase-section-note">仕事</span></h2>
   <div class="phrase-list">
-    <div class="phrase-item"><b>I'm heading to work.</b><span>仕事に向かってる</span></div>
-    <div class="phrase-item"><b>I just finished work.</b><span>仕事が終わったばかり</span></div>
-    <div class="phrase-item"><b>I'm almost at work.</b><span>もうすぐ職場に着く</span></div>
+    <div class="phrase-item priority"><b>I'm heading to work.</b><span>仕事に向かってる</span></div>
+    <div class="phrase-item priority"><b>I just finished work.</b><span>仕事が終わったばかり</span></div>
+    <div class="phrase-item priority"><b>I'm almost at work.</b><span>もうすぐ職場に着く</span></div>
     <div class="phrase-item"><b>I work at a bank in Oita.</b><span>大分の銀行で働いてる</span></div>
     <div class="phrase-item"><b>I'm on my break.</b><span>今休憩中</span></div>
     <div class="phrase-item"><b>I need to get back to work.</b><span>仕事に戻らんと</span></div>
@@ -72,11 +78,11 @@
 </section>
 
 <section class="panel phrase-section stuck" id="stuck">
-  <h2>🆘 STUCK</h2>
+  <h2><span>🆘 STUCK</span><span class="phrase-section-note">詰まった時</span></h2>
   <div class="phrase-list">
-    <div class="phrase-item"><b>What do you mean?</b><span>どういう意味？</span></div>
-    <div class="phrase-item"><b>Say that again?</b><span>もう一回言って</span></div>
-    <div class="phrase-item"><b>I don't know how to say it.</b><span>どう言えばいいかわからん</span></div>
+    <div class="phrase-item priority"><b>What do you mean?</b><span>どういう意味？</span></div>
+    <div class="phrase-item priority"><b>Say that again?</b><span>もう一回言って</span></div>
+    <div class="phrase-item priority"><b>I don't know how to say it.</b><span>どう言えばいいかわからん</span></div>
     <div class="phrase-item"><b>How do you say ___ in English?</b><span>___って英語で何て言う？</span></div>
     <div class="phrase-item"><b>What should I say?</b><span>何て言えばいい？</span></div>
     <div class="phrase-item"><b>Give me a second.</b><span>ちょっと待って</span></div>
@@ -89,11 +95,11 @@
 </section>
 
 <section class="panel phrase-section reply" id="reply">
-  <h2>💬 REPLY</h2>
+  <h2><span>💬 REPLY</span><span class="phrase-section-note">返答</span></h2>
   <div class="phrase-list">
-    <div class="phrase-item"><b>That makes sense.</b><span>なるほど／それなら納得</span></div>
-    <div class="phrase-item"><b>That's what I meant.</b><span>そういう意味だった</span></div>
-    <div class="phrase-item"><b>I mean...</b><span>つまり／言いたいのは…</span></div>
+    <div class="phrase-item priority"><b>That makes sense.</b><span>なるほど／それなら納得</span></div>
+    <div class="phrase-item priority"><b>That's what I meant.</b><span>そういう意味だった</span></div>
+    <div class="phrase-item priority"><b>I mean...</b><span>つまり／言いたいのは…</span></div>
     <div class="phrase-item"><b>I get it.</b><span>わかった</span></div>
     <div class="phrase-item"><b>I think so.</b><span>そう思う</span></div>
     <div class="phrase-item"><b>Not really.</b><span>そうでもない</span></div>

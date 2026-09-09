@@ -100,7 +100,7 @@ test('stays visually still for 30s, across profile switches and resume, with no 
   }));
 
   const initial = await snapshot();
-  expect(initial.version).toBe('v4.8.6 r8 · 09/09');
+  expect(initial.version).toBe('v4.8.6 r9 · 09/09');
   expect(initial.title).toBe('Flowz v4.8.6 · Duo Battle');
   // kedy's final tile order. COMMUTE is the Talk Prep card above the grid.
   expect(initial.modeIds).toEqual(['toeic', 'free']);
@@ -334,7 +334,11 @@ test('kedy Talk Prep separates PHRASE book navigation from the right-side shuffl
   await page.goto(`${baseURL}/flowz-v3-duo.html`);
   await page.waitForSelector('#flowzTalkPrep .prep-shuffle');
   await expect(page.locator('#flowzTalkPrep .prep-row')).toHaveCount(1);
-  await expect(page.locator('#flowzTalkPrep .prep-label-link')).toHaveText('PHRASE');
+  await expect(page.locator('#flowzTalkPrep .prep-label-link')).toHaveText('📚 PHRASE');
+  const phraseButtonStyle=await page.locator('#flowzTalkPrep .prep-label-link').evaluate((el)=>{const cs=getComputedStyle(el);return {border:cs.borderTopWidth,bg:cs.backgroundImage,radius:cs.borderRadius}});
+  expect(phraseButtonStyle.border).toBe('1px');
+  expect(phraseButtonStyle.bg).toContain('linear-gradient');
+  expect(parseFloat(phraseButtonStyle.radius)).toBeGreaterThanOrEqual(10);
   await expect(page.locator('#flowzTalkPrep')).not.toContainText('OPEN');
   await expect(page.locator('#flowzTalkPrep')).not.toContainText('REUSE');
 
@@ -350,6 +354,11 @@ test('kedy Talk Prep separates PHRASE book navigation from the right-side shuffl
   await expect(page).toHaveURL(/\/phrases\.html\?from=flowz$/);
   await expect(page.locator('.phrase-section')).toHaveCount(4);
   await expect(page.locator('.phrase-book-sub')).toContainText('上ほど優先');
+  await expect(page.locator('.phrase-legend')).toContainText('⭐ まず覚える');
+  await expect(page.locator('.phrase-item')).toHaveCount(37);
+  await expect(page.locator('.phrase-item.priority')).toHaveCount(12);
+  await expect(page.locator('#everyday .phrase-section-note')).toHaveText('移動・日常');
+  await expect(page.locator('#stuck .phrase-section-note')).toHaveText('詰まった時');
   await expect(page.locator('#everyday .phrase-item').first()).toContainText("I'm on my way home.");
   await expect(page.locator('#work .phrase-item').first()).toContainText("I'm heading to work.");
   await expect(page.locator('#stuck .phrase-item').first()).toContainText('What do you mean?');

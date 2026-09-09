@@ -73,3 +73,10 @@ Date: 2026-08-22
 - 近い意味で重複していた`Could you say that again?`、`I'm done for today.`、`I'll be there soon.`等を整理。
 - 今後はFlowzのprompt／UI／code変更ごとにPhrase Bankも必ずレビューし、変更不要ならその旨を変更記録で明示する。
 - COMMUTE conversation adapterはr6のまま変更なし。
+
+
+## r9 — 2026-09-09
+- TALK PREP左の`PHRASE`を`📚 PHRASE ›`の独立ボタンとして視認しやすくし、枠・背景・押下反応を追加。右`↻`は従来どおり独立操作。
+- Frequent Phrasesは早見表の1列コンパクト構造を維持したまま、カテゴリごとの色アクセント、短い日本語カテゴリ名、各カテゴリ上位3件の⭐表示を追加。
+- Phrase Bankの37件・順序・追加削除をレビュー。今回の目的はUI視認性改善のため、フレーズ内容／優先順はr8から変更不要と確認。
+- COMMUTE adapter r6、Duo Sync、XP、TOEIC、FREE、Leni側の挙動は変更なし。

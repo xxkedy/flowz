@@ -27,10 +27,10 @@
 
 /* ============================== RELEASE ============================== */
 var RELEASE={
-  number:'4.8.6-r8',
-  label:'v4.8.6 r8 · 09/09',
+  number:'4.8.6-r9',
+  label:'v4.8.6 r9 · 09/09',
   title:'Flowz v4.8.6 · Duo Battle',
-  footer:'✅ Last updated 2026.09.09 · Flowz v4.8.6 r8'
+  footer:'✅ Last updated 2026.09.09 · Flowz v4.8.6 r9'
 };
 
 /* ============================== STORAGE KEYS ============================== */
@@ -621,7 +621,7 @@ function renderTalkPrep(){
     var m=currentCommuteMission(),reuse=currentReusePhrase(m.phrase);
     card.innerHTML='<div class="prep-head"><div class="prep-title">🗣️ TALK PREP</div><span class="prep-chip">COMMUTE</span></div>'+
       '<div class="prep-grid">'+
-        '<div class="prep-row prep-phrase-row"><button class="prep-label-link" data-phrase-book type="button" aria-label="頻出フレーズ集を開く">PHRASE</button><div class="prep-phrase-copy"><b>'+escapeHtml(m.phrase)+'</b><small>'+escapeHtml(m.meaning)+' · 右↻で次へ</small></div><button class="prep-shuffle" data-prep-action="today" type="button" aria-label="次のフレーズ">↻</button></div>'+
+        '<div class="prep-row prep-phrase-row"><button class="prep-label-link" data-phrase-book type="button" aria-label="頻出フレーズ集を開く">📚 PHRASE</button><div class="prep-phrase-copy"><b>'+escapeHtml(m.phrase)+'</b><small>'+escapeHtml(m.meaning)+' · 右↻で次へ</small></div><button class="prep-shuffle" data-prep-action="today" type="button" aria-label="次のフレーズ">↻</button></div>'+
       '</div><button id="flowzTalkPrepBtn" type="button">⚡ START COMMUTE</button>';
     return;
   }
