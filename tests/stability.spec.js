@@ -214,7 +214,7 @@ test('every visible kedy mode carries the current coaching and feedback rules', 
   expect(p.commute).toMatch(/two to four connected sentences/);
   expect(p.commute).toMatch(/enter conversation-only mode for the rest of that session/);
   expect(p.commute).toMatch(/enter conversation-only mode for the rest of that session/);
-  expect(p.commute).toMatch(/respond as a real conversation partner/);
+  expect(p.commute).toMatch(/Respond as a real conversation partner/);
   expect(p.commute).toMatch(/Do not turn the whole conversation into an interview/);
   expect(p.commute).toMatch(/do not silently replace a key noun or idea/);
   expect(p.commute).toMatch(/Commute is background context/);
