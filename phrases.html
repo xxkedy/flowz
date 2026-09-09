@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#0c0d0f">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <title>Flowz · Frequent Phrases</title>
-<link rel="stylesheet" href="flowz-v3-duo.css?v=4.8.6-r7">
+<link rel="stylesheet" href="flowz-v3-duo.css?v=4.8.6-r8">
 <style>
 .phrase-book-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:3px 2px 13px}
 .phrase-back{border:1px solid var(--line);border-radius:999px;background:var(--panel);color:var(--text);padding:9px 12px;font-size:10px;font-weight:950;cursor:pointer}
@@ -29,12 +29,13 @@
 </style>
 </head>
 <body data-profile="kedy">
+<!-- Phrase Bank maintenance: higher = higher priority. Review add/remove/order on every Flowz change. -->
 <div class="phrase-book-top">
   <button class="phrase-back" id="phraseBack" type="button">← TALK PREP</button>
-  <span class="version">v4.8.6 r7 · 09/09</span>
+  <span class="version">v4.8.6 r8 · 09/09</span>
 </div>
 <div class="phrase-book-title">🧠 FREQUENT PHRASES</div>
-<p class="phrase-book-sub">kedyが日常とFlowzで繰り返し使う短い英語。英語→和訳だけをすぐ確認する。</p>
+<p class="phrase-book-sub">上ほど優先。kedyが実際によく使う＋今後よく使ってほしい短い英語を残す。</p>
 <nav class="phrase-nav" aria-label="Phrase categories">
   <a href="#everyday">🏠 EVERYDAY</a>
   <a href="#work">💼 WORK</a>
@@ -47,12 +48,12 @@
   <div class="phrase-list">
     <div class="phrase-item"><b>I'm on my way home.</b><span>家に帰ってる途中</span></div>
     <div class="phrase-item"><b>I'm almost home.</b><span>もうすぐ家に着く</span></div>
-    <div class="phrase-item"><b>I just got home.</b><span>今、家に着いた</span></div>
-    <div class="phrase-item"><b>I'm heading out.</b><span>今から出かける</span></div>
-    <div class="phrase-item"><b>I'm on my way.</b><span>今向かってる</span></div>
-    <div class="phrase-item"><b>I'll be there soon.</b><span>もうすぐ着く</span></div>
-    <div class="phrase-item"><b>I'm running late.</b><span>遅れそう／遅れてる</span></div>
+    <div class="phrase-item"><b>I'm almost there.</b><span>もうすぐ着く</span></div>
+    <div class="phrase-item"><b>When I get home, I'll ___.</b><span>家に着いたら___する</span></div>
     <div class="phrase-item"><b>I need to figure it out.</b><span>それ考えて解決せんと</span></div>
+    <div class="phrase-item"><b>I just got home.</b><span>今、家に着いた</span></div>
+    <div class="phrase-item"><b>I'm on my way.</b><span>今向かってる</span></div>
+    <div class="phrase-item"><b>I'm running late.</b><span>遅れそう／遅れてる</span></div>
   </div>
 </section>
 
@@ -60,12 +61,12 @@
   <h2>💼 WORK</h2>
   <div class="phrase-list">
     <div class="phrase-item"><b>I'm heading to work.</b><span>仕事に向かってる</span></div>
-    <div class="phrase-item"><b>I'm almost at work.</b><span>もうすぐ職場に着く</span></div>
-    <div class="phrase-item"><b>I'm at work.</b><span>今仕事中／職場にいる</span></div>
-    <div class="phrase-item"><b>I'm on my break.</b><span>今休憩中</span></div>
     <div class="phrase-item"><b>I just finished work.</b><span>仕事が終わったばかり</span></div>
-    <div class="phrase-item"><b>I'm done for today.</b><span>今日は仕事終わり</span></div>
+    <div class="phrase-item"><b>I'm almost at work.</b><span>もうすぐ職場に着く</span></div>
+    <div class="phrase-item"><b>I work at a bank in Oita.</b><span>大分の銀行で働いてる</span></div>
+    <div class="phrase-item"><b>I'm on my break.</b><span>今休憩中</span></div>
     <div class="phrase-item"><b>I need to get back to work.</b><span>仕事に戻らんと</span></div>
+    <div class="phrase-item"><b>I'm at work.</b><span>今仕事中／職場にいる</span></div>
     <div class="phrase-item"><b>I'll check and get back to you.</b><span>確認してまた返事する</span></div>
   </div>
 </section>
@@ -73,14 +74,17 @@
 <section class="panel phrase-section stuck" id="stuck">
   <h2>🆘 STUCK</h2>
   <div class="phrase-list">
-    <div class="phrase-item"><b>Give me a second.</b><span>ちょっと待って</span></div>
     <div class="phrase-item"><b>What do you mean?</b><span>どういう意味？</span></div>
-    <div class="phrase-item"><b>What does that mean?</b><span>それどういう意味？</span></div>
     <div class="phrase-item"><b>Say that again?</b><span>もう一回言って</span></div>
-    <div class="phrase-item"><b>Could you say that again?</b><span>もう一回言ってもらえる？</span></div>
-    <div class="phrase-item"><b>Can you say it more slowly?</b><span>もう少しゆっくり言って</span></div>
     <div class="phrase-item"><b>I don't know how to say it.</b><span>どう言えばいいかわからん</span></div>
     <div class="phrase-item"><b>How do you say ___ in English?</b><span>___って英語で何て言う？</span></div>
+    <div class="phrase-item"><b>What should I say?</b><span>何て言えばいい？</span></div>
+    <div class="phrase-item"><b>Give me a second.</b><span>ちょっと待って</span></div>
+    <div class="phrase-item"><b>I don't understand.</b><span>わからない</span></div>
+    <div class="phrase-item"><b>Can you say it more slowly?</b><span>もう少しゆっくり言って</span></div>
+    <div class="phrase-item"><b>Can you say it more simply?</b><span>もっと簡単に言って</span></div>
+    <div class="phrase-item"><b>Let's talk about something else.</b><span>別の話しよう</span></div>
+    <div class="phrase-item"><b>What does that mean?</b><span>それどういう意味？</span></div>
   </div>
 </section>
 
@@ -88,16 +92,18 @@
   <h2>💬 REPLY</h2>
   <div class="phrase-list">
     <div class="phrase-item"><b>That makes sense.</b><span>なるほど／それなら納得</span></div>
+    <div class="phrase-item"><b>That's what I meant.</b><span>そういう意味だった</span></div>
+    <div class="phrase-item"><b>I mean...</b><span>つまり／言いたいのは…</span></div>
     <div class="phrase-item"><b>I get it.</b><span>わかった</span></div>
     <div class="phrase-item"><b>I think so.</b><span>そう思う</span></div>
-    <div class="phrase-item"><b>I don't think so.</b><span>そうは思わん</span></div>
     <div class="phrase-item"><b>Not really.</b><span>そうでもない</span></div>
+    <div class="phrase-item"><b>What about you?</b><span>そっちは？</span></div>
     <div class="phrase-item"><b>It depends.</b><span>場合による</span></div>
     <div class="phrase-item"><b>For real?</b><span>マジで？</span></div>
-    <div class="phrase-item"><b>What about you?</b><span>そっちは？</span></div>
+    <div class="phrase-item"><b>I don't think so.</b><span>そうは思わん</span></div>
   </div>
 </section>
-<p class="book-note">Flowzの実会話やDiaryで繰り返し出る表現を優先して更新する。</p>
+<p class="book-note">優先順＝最近の実使用／DiaryのPhrase・Fix／毎日使う価値。重複・古い表現は削除し、Flowz変更時に毎回見直す。</p>
 <script>
 document.getElementById('phraseBack').addEventListener('click',function(){
   if(document.referrer&&document.referrer.indexOf(location.host)>=0){history.back();return}
