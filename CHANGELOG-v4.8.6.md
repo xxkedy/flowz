@@ -117,3 +117,12 @@ Date: 2026-08-22
 - AI受験判断は5問Flowz TOEICだけでは行わない。最近のVOICE REVIEWでB1相当が複数回安定し、試験を考える段階で十分な長さの模試／L&R確認を行い、会話＋模試の両方を根拠に提案する。
 - Phrase Bankレビュー実施：3分類・45件・順序は今回変更不要。
 - COMMUTE adapter r8、Duo Sync、XP、TOEIC 5問モード、FREE、Leni側は変更なし。
+
+
+## COMMUTE adapter r9 — 2026-09-09
+- Fixed the real-experience conversation failure seen in COMMUTE: when kedy tells a recent event in fragmented English, the coach now prioritizes understanding and continuing that actual story instead of repeatedly asking whether to recreate it or turning it into a new lesson.
+- Once the meaning is clear, the coach recasts only one level up, keeping kedy's words and joining 2–3 ideas with `and` / `but` / `because` / `so`.
+- If kedy explicitly asks for longer or more correct English, the coach must not fall back to `one short line is enough`; it should help build a longer accurate sentence while keeping the conversation natural.
+- Corrections stay as brief natural recasts unless kedy asks to repeat or drill them.
+- Phrase Bank reviewed: existing 3 categories / 45 phrases remain appropriate; no phrase additions, removals, or reordering were needed for this behavior-only fix.
+- COMMUTE adapter cache token moved from `v4.8.6-r8` to `v4.8.6-r9`. UI release stays `v4.8.6 r13 · 09/09`; Duo Sync, XP, TOEIC, FREE, Leni, Roadmap, and Diary Sync are unchanged.
