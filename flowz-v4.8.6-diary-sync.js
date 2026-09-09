@@ -1,4 +1,4 @@
-/* Flowz v4.8.6 — verified Diary sync gate.
+/* Flowz v4.8.6 r3 — verified Diary sync gate.
  * Strengthens kedy session prompts so Wrap up is not considered complete
  * until the existing Diary page has been updated and re-fetched.
  * Also routes all three kedy entry points (THEME / TOEIC / LIFE TALK) through
@@ -38,12 +38,13 @@ function enhanceDiaryPrompt(prompt,pending){
     "When kedy says 'Wrap up' or 'まとめて', the Diary write is a mandatory part of ending the session, not an optional follow-up.",
     "Before claiming the session is fully wrapped up, use connected Notion tools to find the existing Diary page whose 日付 matches the Flowz session date. Never create a new Diary page.",
     "Update the existing yellow 🗽 English Log block in place. Do not append a second English Log block when one already exists.",
-    'Write a compact log containing: English diary 2–3 sentences about the actual conversation, one Phrase line, up to three Fix lines, and one Coach Assessment line with current CEFR/next focus when available.',
+    'Keep the saved English Log compact and consistent with current Flowz Coach Rules: one to two English diary sentences about the actual conversation, one 🔧 Fix line, and one 💬 Phrase line. Do not save a long correction list or Coach Assessment in Diary.',
     'If the same Flowz session was already written, merge or replace that session log instead of duplicating it.',
     'After the write, fetch the same Diary page again and verify that the English Log contains the new session content.',
     "Only after that successful re-fetch may you say or imply that the Diary was recorded or that Wrap up is fully complete.",
-    "If Notion tools are unavailable, permission is missing, the Diary page cannot be found, or verification fails, explicitly say 'Diary未記録' and provide the compact copy-ready English Log. Never claim it was saved.",
-    'Do not skip the Diary write because the spoken recap, XP result, TOEIC result, or coaching feedback has already finished.'
+    "Never infer that Notion is unavailable without attempting the connected Notion tools when they are present. Before saying Diary未記録, actually attempt the Diary lookup and, when found, the update and verification fetch. If tools are truly unavailable, permission is missing, the Diary page cannot be found, the update fails, or verification fails, explicitly say 'Diary未記録' and provide the compact copy-ready English Log. Never claim it was saved.",
+    'Do not skip the Diary write because the spoken recap, XP result, TOEIC result, or coaching feedback has already finished.',
+    'Never invent a Flowz XP number at wrap-up. State a number only when the exact XP is explicitly present in session context; otherwise say Flowz will record XP when kedy returns to the app.'
   ].join(' ');
 
   return prompt+' '+rule;
