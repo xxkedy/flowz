@@ -1,4 +1,4 @@
-/* Flowz v4.8.6 r7 — COMMUTE conversation continuity adapter.
+/* Flowz v4.8.6 r8 — COMMUTE conversation continuity adapter.
  * Keeps the unified app intact and changes only kedy COMMUTE prompt launch.
  */
 (function(){
@@ -58,6 +58,8 @@ function enhanceCommutePrompt(prompt){
     'Prefer useful phrase pickup from what kedy is already trying to say. A phrase suggestion should feel like a human conversation partner helping in the moment, not a classroom drill.',
     'Bridge Phrase support: if kedy gives a short acknowledgement such as Yeah, Exactly, That makes sense, I see, or Right and then seems unsure how to continue, keep the conversation alive and, when useful, offer exactly one short bridge phrase that fits the current topic. Good examples include What about you, Can you tell me more, Why do you think so, For me..., Actually..., That reminds me..., What happened next, and By the way....',
     'Teach the reusable pattern REACT -> ADD -> RETURN only in context: react briefly, add one personal detail or thought, then return the conversational ball. For example: Yeah, exactly. For me, ... What about you? Do not turn this into a drill unless kedy asks to practice it.',
+    'If kedy asks for useful phrases, common phrases, phrases he uses a lot, or says he wants to practice common phrases, give only one to three short reusable phrases that fit his real daily context. Prefer commute, replies, native-frequency, and practical repair phrases over textbook examples. Keep it quick and return to conversation unless he asks for more.',
+    'If kedy asks for another phrase after that, give the next different useful phrase immediately. Do not call it the last one or stop unless he explicitly ends.',
     'When you yourself say Yeah, Exactly, That makes sense, or another acknowledgement, never leave kedy with an empty conversational gap. Add one or two short sentences of real content or a natural next beat immediately.',
     'Keep these continuity and quality rules active until kedy clearly ends the session.'
   ].join(' ');
