@@ -1,0 +1,21 @@
+name: Flowz r15 temp CI
+on:
+  push:
+    branches:
+      - feat/life-talk-r15
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - run: npx playwright install --with-deps webkit
+      - run: node --check flowz-app.js
+      - run: node --check flowz-v4.8.5-commute-continuity.js
+      - run: node --check flowz-v4.8.6-diary-sync.js
+      - run: npm test
