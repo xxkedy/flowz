@@ -100,7 +100,7 @@ test('stays visually still for 30s, across profile switches and resume, with no 
   }));
 
   const initial = await snapshot();
-  expect(initial.version).toBe('v4.8.6 r9 · 09/09');
+  expect(initial.version).toBe('v4.8.6 r10 · 09/09');
   expect(initial.title).toBe('Flowz v4.8.6 · Duo Battle');
   // kedy's final tile order. COMMUTE is the Talk Prep card above the grid.
   expect(initial.modeIds).toEqual(['toeic', 'free']);
@@ -352,17 +352,27 @@ test('kedy Talk Prep separates PHRASE book navigation from the right-side shuffl
 
   await page.click('#flowzTalkPrep .prep-label-link');
   await expect(page).toHaveURL(/\/phrases\.html\?from=flowz$/);
-  await expect(page.locator('.phrase-section')).toHaveCount(4);
+  await expect(page.locator('.phrase-section')).toHaveCount(5);
   await expect(page.locator('.phrase-book-sub')).toContainText('上ほど優先');
   await expect(page.locator('.phrase-legend')).toContainText('⭐ まず覚える');
-  await expect(page.locator('.phrase-item')).toHaveCount(37);
-  await expect(page.locator('.phrase-item.priority')).toHaveCount(12);
+  await expect(page.locator('.phrase-item')).toHaveCount(44);
+  await expect(page.locator('.phrase-item.priority')).toHaveCount(15);
   await expect(page.locator('#everyday .phrase-section-note')).toHaveText('移動・日常');
   await expect(page.locator('#stuck .phrase-section-note')).toHaveText('詰まった時');
+  await expect(page.locator('#keep .phrase-section-note')).toHaveText('会話を広げる');
+  await expect(page.locator('.bridge-title')).toHaveText('🔗 会話を広げる型');
+  await expect(page.locator('.bridge-example')).toContainText('Yeah, exactly.');
+  await expect(page.locator('.bridge-example')).toContainText('For me, ...');
+  await expect(page.locator('.bridge-example')).toContainText('What about you?');
   await expect(page.locator('#everyday .phrase-item').first()).toContainText("I'm on my way home.");
   await expect(page.locator('#work .phrase-item').first()).toContainText("I'm heading to work.");
   await expect(page.locator('#stuck .phrase-item').first()).toContainText('What do you mean?');
   await expect(page.locator('#reply .phrase-item').first()).toContainText('That makes sense.');
+  await expect(page.locator('#keep .phrase-item').first()).toContainText('What about you?');
+  await expect(page.locator('#keep')).toContainText('Can you tell me more?');
+  await expect(page.locator('#keep')).toContainText('Why do you think so?');
+  await expect(page.locator('#keep')).toContainText('That reminds me...');
+  await expect(page.locator('#keep')).toContainText('What happened next?');
   await expect(page.locator('#everyday')).toContainText("When I get home, I'll ___.");
   await expect(page.locator('#reply')).toContainText("That's what I meant.");
   await expect(page.locator('#stuck')).toContainText('What should I say?');
