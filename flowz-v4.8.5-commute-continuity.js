@@ -1,4 +1,4 @@
-/* Flowz v4.8.6 r9 — COMMUTE conversation continuity adapter.
+/* Flowz v4.8.6 r10 — THEME/COMMUTE conversation continuity adapter.
  * Keeps the unified app intact and changes only kedy COMMUTE prompt launch.
  */
 (function(){
@@ -122,7 +122,7 @@ function launchCommute(){
   var pending={
     profile:'kedy',
     mode:'commute',
-    title:'COMMUTE',
+    title:'THEME',
     selectedAt:now,
     startedAt:now,
     autoRecord:true,

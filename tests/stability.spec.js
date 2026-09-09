@@ -100,10 +100,10 @@ test('stays visually still for 30s, across profile switches and resume, with no 
   }));
 
   const initial = await snapshot();
-  expect(initial.version).toBe('v4.8.6 r13 · 09/09');
+  expect(initial.version).toBe('v4.8.6 r14 · 09/09');
   expect(initial.title).toBe('Flowz v4.8.6 · Duo Battle');
-  // kedy's final tile order. COMMUTE is the Talk Prep card above the grid.
-  expect(initial.modeIds).toEqual(['toeic', 'free']);
+  // kedy's final tile order. THEME is the Talk Prep card above the grid.
+  expect(initial.modeIds).toEqual(['free', 'toeic']);
   expect(initial.labels).toEqual([]);
   expect(initial.cloudIndex).toBeGreaterThan(0);
 
@@ -207,8 +207,13 @@ test('every visible kedy mode carries the current coaching and feedback rules', 
   expect(p.commute).toMatch(/Flowz Coach Rules/);
   expect(p.commute).toMatch(/about 90 percent and shadowing at most 10 percent/);
   expect(p.commute).toMatch(/conversation partner and coach/);
+  expect(p.commute).toMatch(/WORD WARM-UP -> QUESTION CARDS -> MINI DIALOGUE -> FREE TALK/);
+  expect(p.commute).toMatch(/teach five to eight high-frequency words or short phrases/);
+  expect(p.commute).toMatch(/ask three to five concrete questions/);
+  expect(p.commute).toMatch(/around four to six lines total/);
+  expect(p.commute).toMatch(/two to four connected sentences/);
   expect(p.commute).toMatch(/enter conversation-only mode for the rest of that session/);
-  expect(p.commute).toMatch(/respond as a real conversation partner/);
+  expect(p.commute).toMatch(/Respond as a real conversation partner/);
   expect(p.commute).toMatch(/Do not turn the whole conversation into an interview/);
   expect(p.commute).toMatch(/do not silently replace a key noun or idea/);
   expect(p.commute).toMatch(/Commute is background context/);
@@ -221,7 +226,7 @@ test('every visible kedy mode carries the current coaching and feedback rules', 
   expect(p.commute).toMatch(/generic backchannels/);
   expect(p.commute).toMatch(/at most twice in the whole session/);
   expect(p.commute).toMatch(/Complaints, frustration/);
-  expect(p.commute).toMatch(/switch immediately to a genuinely different content domain/);
+  expect(p.commute).toMatch(/switch immediately to a genuinely different theme/);
   expect(p.commute).toMatch(/recently rejected defaults such as mood, weather, music, food, plans, or commute conditions/);
   expect(p.commute).toMatch(/prefer a concrete subject with something to react to/);
   expect(p.commute).toMatch(/Arrival Review/);
@@ -264,12 +269,13 @@ test('every visible kedy mode carries the current coaching and feedback rules', 
   expect(p.leni).not.toMatch(/Flowz Coach Rules/);
 });
 
-test('kedy home exposes only COMMUTE, TOEIC, and FREE entry points with one-tap TOEIC/FREE', async ({ page }) => {
+test('kedy home exposes THEME, FREE, and TOEIC with no duplicate FREE entry', async ({ page }) => {
   await seed(page, {});
   await page.goto(`${baseURL}/flowz-v3-duo.html`);
   await page.waitForSelector('#modes .mode');
-  expect(await page.evaluate(() => [...document.querySelectorAll('#modes .mode')].map((b) => b.dataset.modeId))).toEqual(['toeic','free']);
-  await expect(page.locator('#flowzTalkPrepBtn')).toHaveText(/START COMMUTE/);
+  expect(await page.evaluate(() => [...document.querySelectorAll('#modes .mode')].map((b) => b.dataset.modeId))).toEqual(['free','toeic']);
+  await expect(page.locator('#flowzTalkPrep .prep-chip')).toHaveText('THEME');
+  await expect(page.locator('#flowzTalkPrepBtn')).toHaveText(/START THEME/);
   await expect(page.locator('#modes .mode[data-mode-id="bath"]')).toHaveCount(0);
   await expect(page.locator('#weekStrip')).toHaveCount(1);
   await expect(page.locator('#mission')).not.toHaveClass(/show/);

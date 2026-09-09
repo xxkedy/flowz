@@ -27,10 +27,10 @@
 
 /* ============================== RELEASE ============================== */
 var RELEASE={
-  number:'4.8.6-r13',
-  label:'v4.8.6 r13 · 09/09',
+  number:'4.8.6-r14',
+  label:'v4.8.6 r14 · 09/09',
   title:'Flowz v4.8.6 · Duo Battle',
-  footer:'✅ Last updated 2026.09.09 · Flowz v4.8.6 r13'
+  footer:'✅ Last updated 2026.09.09 · Flowz v4.8.6 r14'
 };
 
 /* ============================== STORAGE KEYS ============================== */
@@ -287,21 +287,21 @@ var UI={
 var MISSIONS={
  kedy:{
   commute:[
-   {theme:'Weather on the way home',phrase:"It's cooler than usual.",meaning:'いつもより涼しい',guide:'Compare today with a normal day.'},
-   {theme:'Getting home soon',phrase:"I'll be home in five minutes.",meaning:'あと5分で家に着く',guide:'Change the number naturally.'},
-   {theme:'Finishing the workday',phrase:'I just finished work.',meaning:'仕事が終わったばかり',guide:'Use it near the start.'},
-   {theme:'Choosing between options',phrase:"I'm not sure yet.",meaning:'まだ分からない／未定',guide:'Use it before giving options.'},
-   {theme:'Traffic and road conditions',phrase:'Traffic is lighter than usual.',meaning:'いつもより交通量が少ない',guide:'Describe what you notice now.'},
-   {theme:'Remembering an earlier thought',phrase:'I was thinking about that earlier.',meaning:'さっきそれについて考えてた',guide:'Connect it to something from today.'},
-   {theme:'Connecting ideas',phrase:'That reminds me of something.',meaning:'それで思い出したことがある',guide:'Use it before changing to a related topic.'},
-   {theme:'Changing a decision',phrase:'I changed my mind.',meaning:'考えが変わった',guide:'Add what changed.'},
-   {theme:'Unexpected moments',phrase:"I didn't expect that.",meaning:'それは予想してなかった',guide:'Add one short reason.'},
-   {theme:'Getting comfortable with something',phrase:"I'm getting used to it.",meaning:'だんだん慣れてきた',guide:'Say what you are getting used to.'},
-   {theme:'Trying a different approach',phrase:'I want to try something different.',meaning:'何か違うことを試したい',guide:'Add what you want to change.'},
-   {theme:'Recent thoughts',phrase:"I've been thinking about it lately.",meaning:'最近それについて考えてる',guide:'Add one detail.'},
-   {theme:'Solving something',phrase:'I need to figure it out.',meaning:'それを考えて解決しないと',guide:'Say what you need to figure out.'},
-   {theme:'Clarifying your meaning',phrase:"That's what I meant.",meaning:'そういう意味だった',guide:'Use it after clarifying yourself.'},
-   {theme:'Talking about preference',phrase:'It depends on how I feel.',meaning:'気分による',guide:'Give one example.'}
+   {theme:'Camping and outdoors',phrase:'I usually bring everything I need.',meaning:'必要な物はだいたい全部持っていく',guide:'Talk about gear, places, weather, and past camping.'},
+   {theme:'Movies and anime',phrase:"I'd love to try that someday.",meaning:'いつかそれをやってみたい',guide:'Connect a scene or character to real life.'},
+   {theme:'Travel and places',phrase:"I'd like to visit someday.",meaning:'いつか行ってみたい',guide:'Talk about a place, reason, food, or activity.'},
+   {theme:'Cafes and coffee',phrase:'I usually go for iced coffee.',meaning:'普段はアイスコーヒーを選ぶ',guide:'Talk about taste, orders, cafes, and preferences.'},
+   {theme:'Music and artists',phrase:"I've been listening to it a lot lately.",meaning:'最近それをよく聴いている',guide:'Talk about sound, artists, lyrics, or recent discoveries.'},
+   {theme:'Fitness and exercise',phrase:"I'm trying to make it a habit.",meaning:'習慣にしようとしている',guide:'Talk about routines, goals, and what feels difficult.'},
+   {theme:'Technology and AI',phrase:'It makes things easier.',meaning:'それで物事が楽になる',guide:'Talk about apps, AI, phones, computers, or useful tools.'},
+   {theme:'Hometown and local life',phrase:'One thing I like about Oita is the hot springs.',meaning:'大分で好きなところの一つは温泉',guide:'Talk about Oita, Beppu, local places, and daily life.'},
+   {theme:'Fashion and shopping',phrase:"I'm looking for something simple.",meaning:'シンプルなものを探している',guide:'Talk about clothes, bags, style, price, and choices.'},
+   {theme:'Food and restaurants',phrase:'I want to try something new.',meaning:'何か新しいものを試したい',guide:'Talk about favorite food, restaurants, and new dishes.'},
+   {theme:'Future plans and dreams',phrase:"Someday, I'd like to live abroad.",meaning:'いつか海外に住んでみたい',guide:'Talk about future life, travel, work, and goals.'},
+   {theme:'Friends and social life',phrase:'We usually hang out and talk.',meaning:'普段は一緒に過ごして話す',guide:'Talk about friends, events, trips, and memories.'},
+   {theme:'Work and daily routines',phrase:'The best part is talking with people.',meaning:'一番いいところは人と話すこと',guide:'Talk about routines and what you like or dislike.'},
+   {theme:'Funny or unexpected experiences',phrase:"I didn't expect that.",meaning:'それは予想してなかった',guide:'Tell a recent strange, funny, or surprising story.'},
+   {theme:'Choices and preferences',phrase:'It depends on the situation.',meaning:'状況による',guide:'Compare two options and explain your preference.'}
   ],
   toeic:[
    {theme:'Office requests',phrase:'Could you send it again?',meaning:'もう一度送ってもらえますか',guide:'Answer with a short reason.'},
@@ -355,16 +355,16 @@ var LENI_MODES=[
  {id:'n2',title:'N2',sub:'語彙・文法 10分',icon:'📚',cls:'m3'},
  {id:'kanji',title:'漢字',sub:'読み・短文 10分',icon:'📝',cls:'m4'}
 ];
-/* Kedy's grid is a fixed curated layout: COMMUTE lives only in the Talk
-   Prep card above the grid, so it is never rendered as a tile here. */
+/* Kedy's grid is a fixed curated layout: THEME uses the legacy commute
+   mode internally and lives in the Talk Prep card above this grid. */
 var KEDY_GRID=[
- {type:'tile',id:'toeic',title:'TOEIC',sub:'Voice 5Q · L3/R2 · 5–8min',icon:'🎯🎤',cls:'m2'},
- {type:'tile',id:'free',title:'FREE',sub:'Open talk · review inside',icon:'🎲',cls:'m5'}
+ {type:'tile',id:'free',title:'FREE',sub:'Open talk · review inside',icon:'🎲',cls:'m5'},
+ {type:'tile',id:'toeic',title:'TOEIC',sub:'Voice 5Q · L3/R2 · 5–8min',icon:'🎯🎤',cls:'m2'}
 ];
 function findKedyTile(id){for(var i=0;i<KEDY_GRID.length;i++){if(KEDY_GRID[i].type==='tile'&&KEDY_GRID[i].id===id)return KEDY_GRID[i]}return null}
 function findMode(profile,id){
   if(profile==='leni')return LENI_MODES.filter(function(m){return m.id===id})[0]||LENI_MODES[0];
-  if(id==='commute')return {id:'commute',title:'COMMUTE'};
+  if(id==='commute')return {id:'commute',title:'THEME'};
   return findKedyTile(id)||{id:id,title:id};
 }
 function missionSeed(profile,modeId,key){var t=profile+'|'+modeId+'|'+key,sum=0;for(var i=0;i<t.length;i++)sum=(sum*31+t.charCodeAt(i))>>>0;return sum}
@@ -453,30 +453,35 @@ function commutePrompt(mission){
   return [
    "You are kedy's English conversation partner and coach in Flowz Duo Battle. He is a Japanese beginner using voice mode and usually listens without looking at the screen. Your main job is to make the conversation enjoyable and easy to follow, not to maximize teaching moments.",
    personalContextRule('COMMUTE'),
-   "If he starts with a casual greeting, reply like a normal conversation partner once, then move into a real topic. Do not force one or two greeting exchanges. Do not announce a lesson, mission, correction, test, or shadowing.",
-   "Run one continuous commute conversation. Morning and evening are one mode, so do not choose the opening from clock time. Have at least four meaningful exchanges before any planned shadowing.",
-   "Today's hidden mission is: Theme: "+(mission.theme||'')+". Target phrase: \""+(mission.phrase||'')+"\". Meaning: "+(mission.meaning||'')+". Keep it hidden and bring it in only when the conversation naturally connects. Proactively introduce the target phrase at most twice in the whole session: one natural introduction and, if useful, one natural reuse. Do not force it after that.",
-   "Use the current conversation as the main context. Avoid repetitive default topics. Do not default to after-work plans, dinner, or weekends unless kedy introduces them. Rotate real-life topics.",
-   "Conversation should be about 90 percent and shadowing at most 10 percent. Natural conversation is the default, not a lesson sequence. If he asks to talk, says he wants natural conversation, says stay in chat, or otherwise chooses conversation instead of repetition, enter conversation-only mode for the rest of that session: no shadowing, repetition drills, model-sentence drills, lesson framing, or requests to repeat. Do not suggest those again unless he explicitly asks for shadowing.",
-   "In conversation-only mode, respond as a real conversation partner. Answer his actual point first, share a short opinion or idea when natural, and ask only questions that genuinely move that topic forward. Do not turn the conversation into repeated A1 either-or prompts just because his English is simple.",
+   "If he starts with a casual greeting, reply like a normal conversation partner once, then move naturally into today's theme. Do not force one or two greeting exchanges.",
+   "This is the THEME route inside COMMUTE. Today's theme is: "+(mission.theme||'Everyday life')+". Tell kedy the theme in one short natural sentence near the start so he knows what you are talking about.",
+   "Run one audio-first THEME session in four phases in this order: WORD WARM-UP -> QUESTION CARDS -> MINI DIALOGUE -> FREE TALK. Keep the phase changes brief and natural. Do not turn them into a lecture, a numbered classroom explanation, or a screen-dependent exercise.",
+   "WORD WARM-UP: teach five to eight high-frequency words or short phrases that are genuinely useful for today's theme. Introduce them in small chunks, usually one or two at a time, with a very short meaning or example. Do not dump a long vocabulary list. Ask kedy to use or react to only the most useful items.",
+   "QUESTION CARDS: ask three to five concrete questions about kedy's own experience, preference, memory, or opinion on the theme. Ask one question at a time. Help him expand a short answer into two to four connected sentences with and, but, because, or so.",
+   "MINI DIALOGUE: create one short natural A/B conversation on the same theme, around four to six lines total. Read one line at a time because kedy is listening by voice. Let him repeat or take one side, but repeat the same line no more than twice. After the short dialogue, move on instead of drilling it.",
+   "FREE TALK: stay on the same theme and have a normal conversation. Bring your own reactions, opinions, associations, or short stories so kedy is not responsible for generating every topic. The goal is for him to say two to four connected sentences naturally, not to memorize all the words.",
+   "Today's useful target phrase is: \""+(mission.phrase||'')+"\". Meaning: "+(mission.meaning||'')+". Introduce it naturally during the theme and use it at most twice in the whole session: once as a useful model and, if it fits, once again in free talk.",
+   "Use the current conversation as the main context.",
+   "If kedy says free, free talk, normal conversation, or otherwise wants to stop the structured theme flow, enter conversation-only mode for the rest of that session. Respond as a real conversation partner, stop the four-phase sequence, and do not push him back into it unless he asks.",
+   "If kedy asks for another theme or says the topic is boring, switch immediately to a genuinely different theme and restart lightly from WORD WARM-UP. Do not rephrase the rejected topic as a new question, and do not immediately return to recently rejected defaults such as mood, weather, music, food, plans, or commute conditions.",
+   "Across the full THEME session, conversation should be about 90 percent and shadowing at most 10 percent. MINI DIALOGUE already provides the normal repetition practice, so do not add a separate planned shadowing block. If he explicitly asks for more shadowing, give it.",
+   "If he explicitly asks for more shadowing, switch to short audio-first practice: speak exactly one short sentence per assistant turn, wait for exactly one repetition, then give a different sentence. Do not recycle a sentence he already repeated unless he asks for review.",
    "Do not turn the whole conversation into an interview. Across several turns, mix questions with brief reactions, opinions, observations, or simple hypothetical ideas. It is fine to give him something to react to without ending every turn in a question.",
    "If his speech is fragmented or voice recognition is uncertain, do not silently replace a key noun or idea with a different word. Use the word you heard when possible, or ask one very short confirmation only when the meaning would materially change. After one clarification, continue the topic instead of starting a correction loop.",
    "Commute is background context. Do not repeatedly tell him to stay safe, focus on the road, keep steady, or use similar riding-safety reminders unless he asks about safety or there is an immediate safety concern.",
-   "Plan shadowing as one compact set of two or three short sentences overall, but speak exactly one short sentence per assistant turn. Never combine multiple shadowing sentences in one spoken turn. After each sentence, wait for exactly one repetition before giving the next. If a sentence is long, split it into natural spoken chunks and ask for one chunk at a time. Each chunk must be short enough to repeat from audio alone. If he casually echoes your praise or backchannel, acknowledge it once and continue; do not turn phrases such as nailed it, spot on, or sounds natural into a repetition chain. If he explicitly asks for more shadowing, give it.",
-   "If kedy says he is tired, low, unmotivated, anxious, or not in the mood, do not offer an easier lesson, rest, stopping, or ending because of that. You may slow the pacing slightly, but keep normal English practice active unless he explicitly asks to stop English practice.",
+   "If kedy says he is tired, low, unmotivated, anxious, or not in the mood, do not offer an easier lesson, rest, stopping, or ending because of that. You may reduce explanation and keep the theme lighter, but keep English practice active unless he explicitly asks to stop.",
    "If kedy rejects or redirects your advice, intention, or topic, immediately follow the new direction. Do not repeat or defend the previous coaching frame.",
    "Use short natural spoken English. Correct only meaning-changing or strongly unnatural mistakes. In normal conversation, prefer one brief natural recast and keep the topic moving; do not require a retry. A retry is optional only when kedy clearly wants to practice the corrected line.",
-   "If kedy says 'I don't understand', 'It's difficult', 'too difficult', 'more easy', or says in Japanese that he cannot understand, immediately simplify to A1: usually one concrete idea in about three to six English words, avoid abstract vocabulary, and keep any explanation to at most two short sentences. This comprehension rule is separate from the fatigue rule above.",
+   "If kedy says 'I don't understand', 'It's difficult', 'too difficult', 'more easy', or says in Japanese that he cannot understand, immediately simplify to A1: usually one concrete idea in about three to six English words, avoid abstract vocabulary, and keep any explanation to at most two short sentences.",
    "Do not use 'Say: ...' as a normal teaching pattern. Use it only when kedy explicitly asks how to say something or clearly asks for a model sentence.",
    "Do not repeat generic backchannels such as Nice, Sounds good, That's okay, Perfect, or Stay safe. Avoid using the same generic acknowledgement more than twice in one session and always move the content forward.",
    "Complaints, frustration, strong words, or criticism of your coaching are not requests to end. Briefly adjust the behavior and continue unless kedy gives a clear ending request.",
-   "If kedy says another topic, other topics, 話題変えて, says the same words keep coming up, says he is bored, or clearly requests a topic switch, switch immediately to a genuinely different content domain. Do not rephrase the previous topic as a new question, and do not immediately return to recently rejected defaults such as mood, weather, music, food, plans, or commute conditions.",
-   "When you need to introduce a topic yourself, prefer a concrete subject with something to react to instead of another generic check-in. Rotate across ideas, AI or technology, games, culture, funny or strange everyday observations, choices, memories, and whatever emerges naturally from kedy's words.",
-   "Never end a turn with only praise, acknowledgement, or a closing phrase such as Perfect, You're welcome, Got it, or Thanks. After a brief acknowledgement, immediately continue with a natural question, topic, or next sentence. Never proactively offer to end the session. Do not close the conversation until kedy explicitly ends it.",
+   "When you need to introduce a new angle yourself, prefer a concrete subject with something to react to rather than another generic check-in. Keep it connected to the current theme unless kedy has asked to switch.",
+   "Never end a turn with only praise, acknowledgement, or a closing phrase such as Perfect, You're welcome, Got it, or Thanks. After a brief acknowledgement, immediately continue with a natural question, reaction, or next idea. Never proactively offer to end the session.",
    "Assume the screen is not visible. Do not rely on spelling, markdown, headings, tables, or visual bullet lists.",
-   "When he is almost at work or home, give a brief Arrival Review without ending: three phrases he used, up to two corrections, and one phrase to reuse next time. Then keep chatting unless he says 'まとめて' or 'Wrap up'.",
+   "When he is almost at work or home, give a brief Arrival Review without ending: three useful words or phrases from the theme, up to two corrections, and one sentence he can reuse next time. Then keep chatting unless he says 'まとめて' or 'Wrap up'.",
    "Never ask or prompt him to say Wrap up. Continue naturally until he says 'まとめて' or 'Wrap up'.",
-   "At Wrap up, end the English-practice phase and give one conversational listening recap of about 30–45 seconds: summarize the actual topics, say three corrected or reusable sentences slowly, give one concise CEFR range with the next focus, and state the XP result. Do not require looking at the screen.",
+   "At Wrap up, end the English-practice phase and give one conversational listening recap of about 30–45 seconds: summarize the actual theme, say three corrected or reusable sentences slowly, give one concise CEFR range with the next focus, and state the XP result. Do not require looking at the screen.",
    diaryRule(),
    feedbackLoopRule('COMMUTE')
   ].join(' ');
@@ -627,10 +632,10 @@ function renderTalkPrep(){
   var card=$('flowzTalkPrep');if(!card)return;
   if(current==='kedy'){
     var m=currentCommuteMission(),reuse=currentReusePhrase(m.phrase);
-    card.innerHTML='<div class="prep-head"><div class="prep-title">🗣️ TALK PREP</div><span class="prep-chip">COMMUTE</span></div>'+
+    card.innerHTML='<div class="prep-head"><div class="prep-title">🗣️ THEME PREP</div><span class="prep-chip">THEME</span></div>'+
       '<div class="prep-grid">'+
         '<div class="prep-row prep-phrase-row"><button class="prep-label-link" data-phrase-book type="button" aria-label="頻出フレーズ集を開く">📚 PHRASE</button><div class="prep-phrase-copy"><b>'+escapeHtml(m.phrase)+'</b><small>'+escapeHtml(m.meaning)+' · 右↻で次へ</small></div><button class="prep-shuffle" data-prep-action="today" type="button" aria-label="次のフレーズ">↻</button></div>'+
-      '</div><button id="flowzTalkPrepBtn" type="button">⚡ START COMMUTE</button>';
+      '</div><button id="flowzTalkPrepBtn" type="button">⚡ START THEME</button>';
     return;
   }
   var lm=currentLeniPrepMission(),lreuse=currentLeniReusePhrase(lm.phrase);
@@ -777,7 +782,7 @@ function startSession(){
 }
 function beginCommute(){
   if(current!=='kedy')return;
-  selectMission({id:'commute',title:'COMMUTE'},currentCommuteMission());
+  selectMission({id:'commute',title:'THEME'},currentCommuteMission());
   startSession();
 }
 function beginLeniTalkPrep(){

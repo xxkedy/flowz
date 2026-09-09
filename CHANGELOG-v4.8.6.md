@@ -126,3 +126,14 @@ Date: 2026-08-22
 - Corrections stay as brief natural recasts unless kedy asks to repeat or drill them.
 - Phrase Bank reviewed: existing 3 categories / 45 phrases remain appropriate; no phrase additions, removals, or reordering were needed for this behavior-only fix.
 - COMMUTE adapter cache token moved from `v4.8.6-r8` to `v4.8.6-r9`. UI release stays `v4.8.6 r13 · 09/09`; Duo Sync, XP, TOEIC, FREE, Leni, Roadmap, and Diary Sync are unchanged.
+
+## r14 — 2026-09-09
+- kedyの主入口を`THEME / FREE / TOEIC`の3本へ整理。旧`START COMMUTE`は`START THEME`へ変更し、内部互換のためmode idは`commute`を維持する。
+- THEMEは職場英会話サークルで良かった流れを音声向けに移植：`WORD WARM-UP（5〜8語）→ QUESTION CARDS（3〜5問）→ MINI DIALOGUE（4〜6行・同一行は最大2回）→ FREE TALK`。
+- THEMEの話題候補をキャンプ、映画／アニメ、旅行、カフェ／コーヒー、音楽、運動、AI、地元、服／買い物、食、将来、友人、仕事、面白い体験、好み比較へ広げた。
+- FREEは既存のopen talkとして独立維持。THEME中に`free`指定があれば、そのセッション中は即conversation-onlyへ切替できる。
+- ホーム下段は`FREE → TOEIC`の2タイルとし、隠れていたTOEIC STUDY/B2系の新入口は追加しない。現在のRoadmapが`B1 MAIN GOAL / CONVERSATION FIRST`のため、B2専用入口は時期尚早と判断。
+- Phrase Bankは3分類45件をレビューし、THEME導入のための追加／削除／並べ替えは不要と確認。
+- UI releaseを`v4.8.6 r14 · 09/09`、COMMUTE/THEME adapter cacheを`v4.8.6-r10`へ更新。
+- Temporary GitHub Actionsで`node --check`（core＋adapter）とPlaywright WebKit全19件を実行しPASS後、temporary workflowを削除。
+
