@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0c0d0f">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>Flowz · Frequent Phrases</title>
+<link rel="stylesheet" href="flowz-v3-duo.css?v=4.8.6-r7">
+<style>
+.phrase-book-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:3px 2px 13px}
+.phrase-back{border:1px solid var(--line);border-radius:999px;background:var(--panel);color:var(--text);padding:9px 12px;font-size:10px;font-weight:950;cursor:pointer}
+.phrase-book-title{font-size:18px;font-weight:950;letter-spacing:-.25px}
+.phrase-book-sub{margin:4px 2px 12px;color:var(--muted);font-size:10px;line-height:1.5}
+.phrase-nav{display:flex;gap:6px;overflow-x:auto;padding:0 0 10px;scrollbar-width:none}
+.phrase-nav::-webkit-scrollbar{display:none}
+.phrase-nav a{flex:0 0 auto;text-decoration:none;border:1px solid var(--line);background:var(--panel);color:var(--muted);border-radius:999px;padding:7px 10px;font-size:9px;font-weight:900}
+.phrase-section{scroll-margin-top:10px}
+.phrase-section h2{margin:0 0 9px;font-size:12px;letter-spacing:.08em}
+.phrase-list{display:grid;gap:7px}
+.phrase-item{padding:10px 11px;border:1px solid var(--line);border-radius:13px;background:var(--panel2)}
+.phrase-item b{display:block;font-size:14px;line-height:1.3}
+.phrase-item span{display:block;margin-top:3px;color:var(--muted);font-size:10px;line-height:1.4}
+.phrase-section.everyday{border-color:rgba(255,158,44,.48)}
+.phrase-section.work{border-color:rgba(39,211,223,.42)}
+.phrase-section.stuck{border-color:rgba(255,95,109,.40)}
+.phrase-section.reply{border-color:rgba(85,217,130,.40)}
+.book-note{margin:2px 3px 14px;color:#747b84;font-size:9px;line-height:1.5}
+</style>
+</head>
+<body data-profile="kedy">
+<div class="phrase-book-top">
+  <button class="phrase-back" id="phraseBack" type="button">← TALK PREP</button>
+  <span class="version">v4.8.6 r7 · 09/09</span>
+</div>
+<div class="phrase-book-title">🧠 FREQUENT PHRASES</div>
+<p class="phrase-book-sub">kedyが日常とFlowzで繰り返し使う短い英語。英語→和訳だけをすぐ確認する。</p>
+<nav class="phrase-nav" aria-label="Phrase categories">
+  <a href="#everyday">🏠 EVERYDAY</a>
+  <a href="#work">💼 WORK</a>
+  <a href="#stuck">🆘 STUCK</a>
+  <a href="#reply">💬 REPLY</a>
+</nav>
+
+<section class="panel phrase-section everyday" id="everyday">
+  <h2>🏠 EVERYDAY</h2>
+  <div class="phrase-list">
+    <div class="phrase-item"><b>I'm on my way home.</b><span>家に帰ってる途中</span></div>
+    <div class="phrase-item"><b>I'm almost home.</b><span>もうすぐ家に着く</span></div>
+    <div class="phrase-item"><b>I just got home.</b><span>今、家に着いた</span></div>
+    <div class="phrase-item"><b>I'm heading out.</b><span>今から出かける</span></div>
+    <div class="phrase-item"><b>I'm on my way.</b><span>今向かってる</span></div>
+    <div class="phrase-item"><b>I'll be there soon.</b><span>もうすぐ着く</span></div>
+    <div class="phrase-item"><b>I'm running late.</b><span>遅れそう／遅れてる</span></div>
+    <div class="phrase-item"><b>I need to figure it out.</b><span>それ考えて解決せんと</span></div>
+  </div>
+</section>
+
+<section class="panel phrase-section work" id="work">
+  <h2>💼 WORK</h2>
+  <div class="phrase-list">
+    <div class="phrase-item"><b>I'm heading to work.</b><span>仕事に向かってる</span></div>
+    <div class="phrase-item"><b>I'm almost at work.</b><span>もうすぐ職場に着く</span></div>
+    <div class="phrase-item"><b>I'm at work.</b><span>今仕事中／職場にいる</span></div>
+    <div class="phrase-item"><b>I'm on my break.</b><span>今休憩中</span></div>
+    <div class="phrase-item"><b>I just finished work.</b><span>仕事が終わったばかり</span></div>
+    <div class="phrase-item"><b>I'm done for today.</b><span>今日は仕事終わり</span></div>
+    <div class="phrase-item"><b>I need to get back to work.</b><span>仕事に戻らんと</span></div>
+    <div class="phrase-item"><b>I'll check and get back to you.</b><span>確認してまた返事する</span></div>
+  </div>
+</section>
+
+<section class="panel phrase-section stuck" id="stuck">
+  <h2>🆘 STUCK</h2>
+  <div class="phrase-list">
+    <div class="phrase-item"><b>Give me a second.</b><span>ちょっと待って</span></div>
+    <div class="phrase-item"><b>What do you mean?</b><span>どういう意味？</span></div>
+    <div class="phrase-item"><b>What does that mean?</b><span>それどういう意味？</span></div>
+    <div class="phrase-item"><b>Say that again?</b><span>もう一回言って</span></div>
+    <div class="phrase-item"><b>Could you say that again?</b><span>もう一回言ってもらえる？</span></div>
+    <div class="phrase-item"><b>Can you say it more slowly?</b><span>もう少しゆっくり言って</span></div>
+    <div class="phrase-item"><b>I don't know how to say it.</b><span>どう言えばいいかわからん</span></div>
+    <div class="phrase-item"><b>How do you say ___ in English?</b><span>___って英語で何て言う？</span></div>
+  </div>
+</section>
+
+<section class="panel phrase-section reply" id="reply">
+  <h2>💬 REPLY</h2>
+  <div class="phrase-list">
+    <div class="phrase-item"><b>That makes sense.</b><span>なるほど／それなら納得</span></div>
+    <div class="phrase-item"><b>I get it.</b><span>わかった</span></div>
+    <div class="phrase-item"><b>I think so.</b><span>そう思う</span></div>
+    <div class="phrase-item"><b>I don't think so.</b><span>そうは思わん</span></div>
+    <div class="phrase-item"><b>Not really.</b><span>そうでもない</span></div>
+    <div class="phrase-item"><b>It depends.</b><span>場合による</span></div>
+    <div class="phrase-item"><b>For real?</b><span>マジで？</span></div>
+    <div class="phrase-item"><b>What about you?</b><span>そっちは？</span></div>
+  </div>
+</section>
+<p class="book-note">Flowzの実会話やDiaryで繰り返し出る表現を優先して更新する。</p>
+<script>
+document.getElementById('phraseBack').addEventListener('click',function(){
+  if(document.referrer&&document.referrer.indexOf(location.host)>=0){history.back();return}
+  location.href='./flowz-v3-duo.html?profile=kedy';
+});
+</script>
+</body>
+</html>
