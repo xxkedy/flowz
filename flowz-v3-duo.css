@@ -85,6 +85,13 @@ body[data-profile="leni"] .prep-chip{border-color:rgba(39,211,223,.46);color:#7f
 .prep-row span{font-size:9px;font-weight:950;letter-spacing:.1em;color:var(--muted)}
 .prep-row b{font-size:14px;line-height:1.3;color:var(--text)}
 .prep-row small{display:block;margin-top:2px;color:var(--muted);font-size:10px}
+.prep-phrase-row{grid-template-columns:62px 1fr 34px;background:linear-gradient(135deg,rgba(255,158,44,.17),rgba(255,107,53,.07));border-color:rgba(255,158,44,.50);padding-right:9px}
+.prep-label-link,.prep-shuffle{appearance:none;-webkit-appearance:none;border:0;background:transparent;font:inherit;cursor:pointer}
+.prep-label-link{padding:7px 0;text-align:left;color:#ffc36e;font-size:9px;font-weight:950;letter-spacing:.1em}
+.prep-label-link:active{filter:brightness(1.25)}
+.prep-shuffle{width:34px;height:34px;border-radius:10px;color:var(--amber);font-size:18px;font-weight:950;line-height:1}
+.prep-shuffle:active{background:rgba(255,158,44,.14);transform:scale(.94)}
+.prep-phrase-copy{min-width:0}
 .prep-row[data-prep-action]{position:relative;cursor:pointer;padding-right:38px;transition:background .15s ease,border-color .15s ease,transform .08s ease,filter .15s ease}
 .prep-row[data-prep-action]::after{content:"↻";position:absolute;right:13px;top:50%;transform:translateY(-50%);font-size:16px;font-weight:950;opacity:.82}
 .prep-row[data-prep-action="today"]{background:linear-gradient(135deg,rgba(255,158,44,.17),rgba(255,107,53,.07));border-color:rgba(255,158,44,.50)}
