@@ -100,7 +100,7 @@ test('stays visually still for 30s, across profile switches and resume, with no 
   }));
 
   const initial = await snapshot();
-  expect(initial.version).toBe('v4.8.6 r14 · 09/09');
+  expect(initial.version).toBe('v4.8.6 r15 · 09/09');
   expect(initial.title).toBe('Flowz v4.8.6 · Duo Battle');
   // kedy's final tile order. THEME is the Talk Prep card above the grid.
   expect(initial.modeIds).toEqual(['free', 'toeic']);
@@ -256,8 +256,17 @@ test('every visible kedy mode carries the current coaching and feedback rules', 
   expect(p.free).toMatch(/Kedy Personal Context Preflight/);
   expect(p.free).toMatch(/current HQ page/);
   expect(p.free).toMatch(/recent Diary entries with Flowz English logs/);
-  expect(p.free).toMatch(/normal open English conversation/);
-  expect(p.free).toMatch(/old standalone REVIEW mode is absorbed into FREE/);
+  expect(p.free).toMatch(/user-facing route is LIFE TALK/);
+  expect(p.free).toMatch(/real recent life in English/);
+  expect(p.free).toMatch(/recent Diary event or thought/);
+  expect(p.free).toMatch(/current decision or plan/);
+  expect(p.free).toMatch(/relevant active project or unfinished item/);
+  expect(p.free).toMatch(/Start from one thread only/);
+  expect(p.free).toMatch(/not as a productivity dashboard/);
+  expect(p.free).toMatch(/Help him organize those thoughts in English/);
+  expect(p.free).toMatch(/do not nag, prioritize his tasks/);
+  expect(p.free).toMatch(/two to four connected sentences/);
+  expect(p.free).toMatch(/old standalone REVIEW mode is absorbed into LIFE TALK/);
   expect(p.free).toMatch(/explicitly asks to review or revise recent English/);
   expect(p.free).toMatch(/short listening-friendly recap/);
   expect(p.free).toMatch(/Flowz Feedback Loop/);
@@ -269,11 +278,13 @@ test('every visible kedy mode carries the current coaching and feedback rules', 
   expect(p.leni).not.toMatch(/Flowz Coach Rules/);
 });
 
-test('kedy home exposes THEME, FREE, and TOEIC with no duplicate FREE entry', async ({ page }) => {
+test('kedy home exposes THEME, LIFE TALK, and TOEIC with no duplicate legacy FREE entry', async ({ page }) => {
   await seed(page, {});
   await page.goto(`${baseURL}/flowz-v3-duo.html`);
   await page.waitForSelector('#modes .mode');
   expect(await page.evaluate(() => [...document.querySelectorAll('#modes .mode')].map((b) => b.dataset.modeId))).toEqual(['free','toeic']);
+  await expect(page.locator('#modes .mode[data-mode-id="free"] b')).toHaveText('LIFE TALK');
+  await expect(page.locator('#modes .mode[data-mode-id="free"] small')).toHaveText('Diary · recent life · plans');
   await expect(page.locator('#flowzTalkPrep .prep-chip')).toHaveText('THEME');
   await expect(page.locator('#flowzTalkPrepBtn')).toHaveText(/START THEME/);
   await expect(page.locator('#modes .mode[data-mode-id="bath"]')).toHaveCount(0);

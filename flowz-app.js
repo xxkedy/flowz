@@ -27,10 +27,10 @@
 
 /* ============================== RELEASE ============================== */
 var RELEASE={
-  number:'4.8.6-r14',
-  label:'v4.8.6 r14 · 09/09',
+  number:'4.8.6-r15',
+  label:'v4.8.6 r15 · 09/09',
   title:'Flowz v4.8.6 · Duo Battle',
-  footer:'✅ Last updated 2026.09.09 · Flowz v4.8.6 r14'
+  footer:'✅ Last updated 2026.09.09 · Flowz v4.8.6 r15'
 };
 
 /* ============================== STORAGE KEYS ============================== */
@@ -316,10 +316,7 @@ var MISSIONS={
    {theme:'Useful clarification',phrase:'What do you mean by that?',meaning:'それはどういう意味？',guide:'Repeat with natural rhythm.'}
   ],
   free:[
-   {theme:'Music and current projects',phrase:"I'm working on a new track.",meaning:'新しい曲を制作中',guide:'Add one small detail.'},
-   {theme:'Travel and future plans',phrase:"I'd like to visit someday.",meaning:'いつか行ってみたい',guide:'Replace the place naturally.'},
-   {theme:'Health and routines',phrase:"I'm trying to sleep earlier.",meaning:'早く寝るようにしている',guide:'Say one habit you are changing.'},
-   {theme:'Everyday decisions',phrase:'It depends on the situation.',meaning:'状況による',guide:'Use it before an explanation.'}
+   {theme:'Recent life and thoughts',phrase:"Recently, I've been thinking about it.",meaning:'最近それについて考えている',guide:'Talk from today’s real life, Diary, plans, or current decisions.'}
   ],
   review:[
    {theme:'Recent phrase review',phrase:'Use your recent English again.',meaning:'直近の訂正フレーズを3つ復習',guide:'3–5 minutes. One Japanese situation at a time.'},
@@ -358,7 +355,7 @@ var LENI_MODES=[
 /* Kedy's grid is a fixed curated layout: THEME uses the legacy commute
    mode internally and lives in the Talk Prep card above this grid. */
 var KEDY_GRID=[
- {type:'tile',id:'free',title:'FREE',sub:'Open talk · review inside',icon:'🎲',cls:'m5'},
+ {type:'tile',id:'free',title:'LIFE TALK',sub:'Diary · recent life · plans',icon:'💬',cls:'m5'},
  {type:'tile',id:'toeic',title:'TOEIC',sub:'Voice 5Q · L3/R2 · 5–8min',icon:'🎯🎤',cls:'m2'}
 ];
 function findKedyTile(id){for(var i=0;i<KEDY_GRID.length;i++){if(KEDY_GRID[i].type==='tile'&&KEDY_GRID[i].id===id)return KEDY_GRID[i]}return null}
@@ -490,17 +487,23 @@ function freePrompt(){
   return [
    "You are kedy's practical English conversation partner in Flowz Duo Battle.",
    personalContextRule('FREE'),
-   "Default to a normal open English conversation, not a fixed lesson or quiz.",
-   "The old standalone REVIEW mode is absorbed into FREE. Do not force review every FREE session. If a recent corrected or useful phrase naturally fits, you may reuse it. If kedy explicitly asks to review or revise recent English, use connected Notion tools to read recent Diary English Logs and run a short review inside FREE, one item at a time, then return to ordinary FREE conversation.",
-   "Use short spoken English. Correct only meaning-changing or strongly unnatural mistakes and allow one retry before returning to conversation.",
-   "Never end a turn with only praise or acknowledgement. Continue with a natural question or topic, and do not end unless kedy clearly ends the conversation.",
+   "This user-facing route is LIFE TALK. The internal legacy mode id is free, but never call the session FREE to kedy unless you are explaining compatibility.",
+   "LIFE TALK is for talking through kedy's real recent life in English. Do not default to a random topic, a fixed lesson, a quiz, or a generic How was your day check-in when concrete personal context is available.",
+   "At startup, silently use the Personal Context preflight to choose one concrete recent thread. Prefer, in order: a recent Diary event or thought; a current decision or plan; a relevant active project or unfinished item that is already naturally part of his life. Start from one thread only. Never dump multiple Diary entries, tasks, or project facts at him.",
+   "Use recent context as a conversation seed, not as a productivity dashboard. Let kedy talk about what happened, what he thinks, what he wants to do, what changed, or what he is deciding. Help him organize those thoughts in English when useful, but do not nag, prioritize his tasks, or turn the session into productivity coaching unless he asks for that.",
+   "When kedy starts explaining a real event or thought in fragmented English, prioritize understanding the meaning and keeping that real story moving. Recast one level up using his own words and simple connectors such as and, but, because, or so. If he wants longer or more correct English, help him build two to four connected sentences instead of collapsing back to one tiny line.",
+   "After the opening thread, follow the conversation naturally. It is fine to move away from the original Diary, plan, or project if kedy takes the conversation somewhere else. Do not keep dragging him back to the source context.",
+   "The old standalone REVIEW mode is absorbed into LIFE TALK. Do not force review every session. If a recent corrected or useful phrase naturally fits, you may reuse it. If kedy explicitly asks to review or revise recent English, use connected Notion tools to read recent Diary English Logs and run a short review inside LIFE TALK, one item at a time, then return to the real-life conversation.",
+   "Use short natural spoken English, but keep enough content to sustain a real conversation. Correct only meaning-changing or strongly unnatural mistakes. Prefer one brief natural recast and continue; require repetition only when kedy asks to practice it.",
+   "If kedy gives a short reply, do not leave him with dead air or another generic question. Add one or two concrete sentences of reaction, opinion, association, or a natural next beat from the current real-life topic.",
+   "Never end a turn with only praise or acknowledgement. Continue with real conversational content, and do not end unless kedy clearly ends the conversation.",
    "When kedy says 'まとめて' or 'Wrap up', end the English-practice phase with a short listening-friendly recap of the actual conversation, useful or corrected sentences, one next focus, and the XP result. Do not require looking at the screen.",
    diaryRule(),
    feedbackLoopRule('FREE')
   ].join(' ');
 }
 function reviewPrompt(){
-  return freePrompt()+" This session came from a legacy REVIEW pending state. Keep it inside FREE: after the first reply, read recent Diary English Logs and run a short one-item-at-a-time review, then return to normal FREE behavior. Do not create or expose a separate REVIEW mode.";
+  return freePrompt()+" This session came from a legacy REVIEW pending state. Keep it inside LIFE TALK: after the first reply, read recent Diary English Logs and run a short one-item-at-a-time review, then return to normal LIFE TALK behavior. Do not create or expose a separate REVIEW mode.";
 }
 function toeicCheckPrompt(mission){
   return [
@@ -675,10 +678,10 @@ function renderModes(){
 var MISSION_GUIDE_OVERRIDE={
   toeic:'Voice 5問チェック。Listening 3問＋Reading 2問を約5〜8分で採点。',
   bath:'Voice Talk専用。画面を見ながら話さず、耳だけで答える5問・約5〜8分。',
-  review:'FREE内の旧互換Review。直近Diaryの表現を短く復習。',
-  free:'自由英会話。必要な時だけ最近の表現も自然に復習。'
+  review:'LIFE TALK内の旧互換Review。直近Diaryの表現を短く復習。',
+  free:'最近のDiary・日常・予定・考えを英語で話しながら整理。'
 };
-var MISSION_START_OVERRIDE={toeic:'START TOEIC CHECK · 5Q',bath:'START TOEIC STUDY · 5Q',review:'START REVIEW',free:'START FREE TALK'};
+var MISSION_START_OVERRIDE={toeic:'START TOEIC CHECK · 5Q',bath:'START TOEIC STUDY · 5Q',review:'START REVIEW',free:'START LIFE TALK'};
 function renderMission(){
   var panel=$('mission'),u=UI[current];
   if(current==='kedy'){panel.classList.remove('show');return}

@@ -1,7 +1,7 @@
 /* Flowz v4.8.6 — verified Diary sync gate.
  * Strengthens kedy session prompts so Wrap up is not considered complete
  * until the existing Diary page has been updated and re-fetched.
- * Also routes all three kedy entry points (COMMUTE / TOEIC / FREE) through
+ * Also routes all three kedy entry points (THEME / TOEIC / LIFE TALK) through
  * FlowzApp.buildPromptFor so the gate cannot be bypassed by the legacy core launcher.
  */
 (function(){
@@ -17,10 +17,7 @@ var KEDY_MISSIONS={
     {theme:'Customer messages',phrase:"I'll check and get back to you.",meaning:'確認して折り返します',guide:'Use it as a practical reply.'}
   ],
   free:[
-    {theme:'Music and current projects',phrase:"I'm working on a new track.",meaning:'新しい曲を制作中',guide:'Add one small detail.'},
-    {theme:'Travel and future plans',phrase:"I'd like to visit someday.",meaning:'いつか行ってみたい',guide:'Replace the place naturally.'},
-    {theme:'Health and routines',phrase:"I'm trying to sleep earlier.",meaning:'早く寝るようにしている',guide:'Say one habit you are changing.'},
-    {theme:'Everyday decisions',phrase:'It depends on the situation.',meaning:'状況による',guide:'Use it before an explanation.'}
+    {theme:'Recent life and thoughts',phrase:"Recently, I've been thinking about it.",meaning:'最近それについて考えている',guide:'Talk from today’s real life, Diary, plans, or current decisions.'}
   ]
 };
 
@@ -72,7 +69,7 @@ function launchKedyMode(modeId){
   var pending={
     profile:'kedy',
     mode:modeId,
-    title:modeId==='toeic'?'TOEIC':'FREE',
+    title:modeId==='toeic'?'TOEIC':'LIFE TALK',
     selectedAt:now,
     startedAt:now,
     autoRecord:true,
@@ -90,7 +87,7 @@ function launchKedyMode(modeId){
 
 patchApp();
 
-/* The unified core launches kedy TOEIC/FREE through its private lexical
+/* The unified core launches kedy TOEIC/LIFE TALK through its private lexical
  * buildPromptFor(), which cannot see adapters. Capture those two clicks before
  * the core bubble listener and relaunch through the public wrapped builder.
  * COMMUTE is already routed through FlowzApp.buildPromptFor by the v4.8.5
