@@ -27,10 +27,10 @@
 
 /* ============================== RELEASE ============================== */
 var RELEASE={
-  number:'4.8.6',
-  label:'v4.8.6 (2026.8.22)',
+  number:'4.8.6-r7',
+  label:'v4.8.6 r7 · 09/09',
   title:'Flowz v4.8.6 · Duo Battle',
-  footer:'✅ Last updated 2026.08.22 · Flowz v4.8.6 Unified Build'
+  footer:'✅ Last updated 2026.09.09 · Flowz v4.8.6 r7'
 };
 
 /* ============================== STORAGE KEYS ============================== */
@@ -621,7 +621,7 @@ function renderTalkPrep(){
     var m=currentCommuteMission(),reuse=currentReusePhrase(m.phrase);
     card.innerHTML='<div class="prep-head"><div class="prep-title">🗣️ TALK PREP</div><span class="prep-chip">COMMUTE</span></div>'+
       '<div class="prep-grid">'+
-        '<div class="prep-row" data-prep-action="today" role="button" tabindex="0"><span>PHRASE</span><div><b>'+escapeHtml(m.phrase)+'</b><small>'+escapeHtml(m.meaning)+' · タップで次へ</small></div></div>'+
+        '<div class="prep-row prep-phrase-row"><button class="prep-label-link" data-phrase-book type="button" aria-label="頻出フレーズ集を開く">PHRASE</button><div class="prep-phrase-copy"><b>'+escapeHtml(m.phrase)+'</b><small>'+escapeHtml(m.meaning)+' · 右↻で次へ</small></div><button class="prep-shuffle" data-prep-action="today" type="button" aria-label="次のフレーズ">↻</button></div>'+
       '</div><button id="flowzTalkPrepBtn" type="button">⚡ START COMMUTE</button>';
     return;
   }
@@ -1091,6 +1091,7 @@ function bindInteractions(){
   if(talkPrep){
     talkPrep.addEventListener('click',function(e){
       if(e.target.closest&&e.target.closest('#flowzTalkPrepBtn')){beginTalkPrep();return}
+      if(current==='kedy'&&e.target.closest&&e.target.closest('[data-phrase-book]')){location.href='./phrases.html?from=flowz';return}
       var row=e.target.closest&&e.target.closest('[data-prep-action]');if(!row)return;
       if(current==='kedy'){
         if(row.dataset.prepAction==='today')commuteMissionOffset++;
