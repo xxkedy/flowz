@@ -65,8 +65,11 @@ button{font:inherit}
 .assessment-link{cursor:pointer;transition:border-color .15s ease,transform .08s ease,filter .15s ease}
 .assessment-link:hover{border-color:#3a4048}
 .assessment-link:active{transform:scale(.995);filter:brightness(1.06)}
-.assessment-roadmap-btn{appearance:none;-webkit-appearance:none;border:1px solid rgba(255,158,44,.48);border-radius:999px;background:rgba(255,158,44,.08);color:#ffc36e;padding:6px 9px;font-size:9px;font-weight:950;letter-spacing:.06em;cursor:pointer;white-space:nowrap}
-.assessment-roadmap-btn:active{transform:translateY(1px);background:rgba(255,158,44,.15)}
+.assessment-roadmap-btn{appearance:none;-webkit-appearance:none;display:inline-flex;align-items:center;gap:5px;min-height:34px;border:1px solid #ffb34f;border-radius:11px;background:linear-gradient(180deg,#ffac3e,#f48618);color:#211100;padding:8px 11px;font-size:9px;font-weight:950;letter-spacing:.055em;cursor:pointer;white-space:nowrap;box-shadow:0 4px 0 #9d4d08,0 7px 15px rgba(255,158,44,.20),inset 0 1px 0 rgba(255,255,255,.35);transition:transform .08s ease,box-shadow .08s ease,filter .12s ease}
+.assessment-roadmap-btn span{font-size:14px;line-height:1}
+.assessment-roadmap-btn:active{transform:translateY(3px);box-shadow:0 1px 0 #9d4d08,0 3px 8px rgba(255,158,44,.18);filter:brightness(1.05)}
+#flowzAssessment .stat.main-goal{border-color:rgba(39,211,223,.48);background:linear-gradient(160deg,rgba(39,211,223,.12),var(--panel2))}
+#flowzAssessment .stat.main-goal b{color:#7fe8ef}
 .progress-line{height:6px;border-radius:99px;background:var(--panel2);overflow:hidden;margin-top:10px;border:1px solid var(--line)}.progress-line i{display:block;height:100%;width:var(--progress);background:linear-gradient(90deg,var(--amber),var(--orange));border-radius:99px}.progress-line.leni i{background:linear-gradient(90deg,var(--cyan),var(--green))}
 .progress-meta{display:flex;justify-content:space-between;margin-top:5px;font-size:8px;color:var(--muted);font-weight:850}
 .week-strip{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}.day-dot{text-align:center}.day-dot span{display:grid;place-items:center;aspect-ratio:1;border-radius:11px;background:var(--panel2);border:1px solid var(--line);font-size:11px;font-weight:950}.day-dot.done span{background:var(--amber);color:#251400;border-color:transparent}.day-dot.leni.done span{background:var(--cyan);color:#002329}.day-dot em{display:block;font-style:normal;font-size:8px;color:var(--muted);margin-top:3px;font-weight:850}
