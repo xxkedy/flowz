@@ -352,15 +352,14 @@ test('kedy Talk Prep separates PHRASE book navigation from the right-side shuffl
 
   await page.click('#flowzTalkPrep .prep-label-link');
   await expect(page).toHaveURL(/\/phrases\.html\?from=flowz$/);
-  await expect(page.locator('.phrase-section')).toHaveCount(4);
+  await expect(page.locator('.phrase-section')).toHaveCount(3);
   await expect(page.locator('.phrase-book-sub')).toContainText('上ほど優先');
   await expect(page.locator('.phrase-legend')).toContainText('⭐ まず覚える');
   await expect(page.locator('.phrase-item')).toHaveCount(45);
-  await expect(page.locator('.phrase-item.priority')).toHaveCount(12);
+  await expect(page.locator('.phrase-item.priority')).toHaveCount(9);
   await expect(page.locator('#commute .phrase-section-note')).toHaveText('通勤・Flowz');
-  await expect(page.locator('#reply .phrase-section-note')).toHaveText('返答・会話を広げる');
   await expect(page.locator('#native .phrase-section-note')).toHaveText('ネイティブ頻出');
-  await expect(page.locator('#practical .phrase-section-note')).toHaveText('実用・詰まった時');
+  await expect(page.locator('#talk .phrase-section-note')).toHaveText('返答・実用');
   await expect(page.locator('.bridge-title')).toHaveText('🔗 会話を広げる型');
   await expect(page.locator('.bridge-example')).toContainText('Yeah, exactly.');
   await expect(page.locator('.bridge-example')).toContainText('For me, ...');
@@ -371,13 +370,13 @@ test('kedy Talk Prep separates PHRASE book navigation from the right-side shuffl
   await expect(page.locator('#commute')).toContainText('Give me some useful phrases.');
   await expect(page.locator('#commute')).toContainText('I want to practice some common phrases.');
   await expect(page.locator('#commute')).toContainText('Give me another phrase.');
-  await expect(page.locator('#reply .phrase-item').first()).toContainText('That makes sense.');
-  await expect(page.locator('#reply')).toContainText('What about you?');
   await expect(page.locator('#native .phrase-item').first()).toContainText('Actually, ...');
   await expect(page.locator('#native')).toContainText('By the way, ...');
-  await expect(page.locator('#practical .phrase-item').first()).toContainText('What do you mean?');
-  await expect(page.locator('#practical')).toContainText('What should I say?');
-  await expect(page.locator('#practical')).toContainText("Let's talk about something else.");
+  await expect(page.locator('#talk .phrase-item').first()).toContainText('That makes sense.');
+  await expect(page.locator('#talk')).toContainText('What about you?');
+  await expect(page.locator('#talk')).toContainText('What do you mean?');
+  await expect(page.locator('#talk')).toContainText('What should I say?');
+  await expect(page.locator('#talk')).toContainText("Let's talk about something else.");
   await expect(page.locator('body')).not.toContainText("Could you say that again?");
   await expect(page.locator('body')).not.toContainText("I'm done for today.");
   await expect(page.locator('body')).not.toContainText("I'll be there soon.");
