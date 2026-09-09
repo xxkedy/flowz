@@ -100,7 +100,7 @@ test('stays visually still for 30s, across profile switches and resume, with no 
   }));
 
   const initial = await snapshot();
-  expect(initial.version).toBe('v4.8.6 r11 · 09/09');
+  expect(initial.version).toBe('v4.8.6 r12 · 09/09');
   expect(initial.title).toBe('Flowz v4.8.6 · Duo Battle');
   // kedy's final tile order. COMMUTE is the Talk Prep card above the grid.
   expect(initial.modeIds).toEqual(['toeic', 'free']);
@@ -327,6 +327,27 @@ test('Talk Prep rotates fresh phrases, removes stale fallback, and advances afte
   await page.waitForFunction(() => window.FlowzApp.getPending() === null);
   const afterCompletedCommute = await page.evaluate(() => window.FlowzApp.getTalkPrep());
   expect(afterCompletedCommute.today.phrase).not.toBe(missionBeforeSession.phrase);
+});
+
+test('kedy Current English opens the English roadmap and keeps TOEIC input separate', async ({ page }) => {
+  await seed(page, {});
+  await page.goto(`${baseURL}/flowz-v3-duo.html`);
+  await page.waitForSelector('#flowzAssessment .assessment-roadmap-btn');
+  await expect(page.locator('#flowzAssessment .assessment-roadmap-btn')).toHaveText('ROADMAP ›');
+  await expect(page.locator('#flowzAssessment')).toContainText('A1→A2');
+
+  await page.click('#flowzAssessment .assessment-roadmap-btn');
+  await expect(page).toHaveURL(/\/roadmap\.html\?from=flowz$/);
+  await expect(page.locator('.roadmap-title')).toHaveText('🗺 ENGLISH ROADMAP');
+  await expect(page.locator('.milestone')).toHaveCount(4);
+  await expect(page.locator('.m-a2')).toContainText('2026.12');
+  await expect(page.locator('.m-a2')).toContainText('A2');
+  await expect(page.locator('.m-b1')).toContainText('2027.09');
+  await expect(page.locator('.m-b2')).toContainText('2028.12');
+  await expect(page.locator('.m-b2')).toContainText('B2');
+  await expect(page.locator('.toeic-box').first()).toContainText('900');
+  await expect(page.locator('body')).toContainText('来年に大分で初回測定');
+  await expect(page.locator('body')).toContainText('NOW → DECEMBER');
 });
 
 test('kedy Talk Prep separates PHRASE book navigation from the right-side shuffle', async ({ page }) => {
