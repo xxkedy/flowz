@@ -56,11 +56,17 @@ test('v4.8.6 build retains commute continuity, conversation quality, and low-loa
   expect(adapter).toContain('asks for useful phrases, common phrases, phrases he uses a lot');
   expect(adapter).toContain('give only one to three short reusable phrases');
   expect(adapter).toContain('If kedy asks for another phrase after that');
+  expect(adapter).toContain('COMMUTE Story Expansion Override r9:');
+  expect(adapter).toContain('telling a recent real experience in fragmented English');
+  expect(adapter).toContain('do not keep asking whether he wants to recreate the event');
+  expect(adapter).toContain('connect two or three ideas with and, but, because, or so');
+  expect(adapter).toContain('do not fall back to one short line is enough');
+  expect(adapter).toContain('The priority is meaning first, then one-step-longer English');
   expect(adapter).toContain("if(prompt.indexOf('Low-load Shadowing Override:')<0)");
   expect(adapter).not.toContain("if(prompt.indexOf('Low-load Shadowing Override:')>=0)return prompt;");
   expect(adapter).not.toContain("if(prompt.indexOf('Conversation Continuity Rules:')>=0)return prompt;");
   expect(adapter).toContain("mode==='commute'");
-  expect(html).toContain('flowz-v4.8.5-commute-continuity.js?v=4.8.6-r8');
+  expect(html).toContain('flowz-v4.8.5-commute-continuity.js?v=4.8.6-r9');
   expect(html).toContain('class="version"');
   expect(html).toContain('data-release="4.8.6-r13"');
   expect(html).toContain('data-release-label="v4.8.6 r13 · 09/09"');
