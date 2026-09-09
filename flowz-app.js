@@ -503,7 +503,7 @@ function freePrompt(){
   ].join(' ');
 }
 function reviewPrompt(){
-  return freePrompt()+" This session came from a legacy REVIEW pending state. Keep it inside FREE: after the first reply, read recent Diary English Logs and run a short one-item-at-a-time review, then return to normal FREE behavior. Do not create or expose a separate REVIEW mode.";
+  return freePrompt()+" This session came from a legacy REVIEW pending state. Keep it inside LIFE TALK: after the first reply, read recent Diary English Logs and run a short one-item-at-a-time review, then return to normal LIFE TALK behavior. Do not create or expose a separate REVIEW mode.";
 }
 function toeicCheckPrompt(mission){
   return [
