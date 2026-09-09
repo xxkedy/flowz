@@ -27,10 +27,10 @@
 
 /* ============================== RELEASE ============================== */
 var RELEASE={
-  number:'4.8.6-r15',
-  label:'v4.8.6 r15 · 09/09',
+  number:'4.8.6-r16',
+  label:'v4.8.6 r16 · 09/10',
   title:'Flowz v4.8.6 · Duo Battle',
-  footer:'✅ Last updated 2026.09.09 · Flowz v4.8.6 r15'
+  footer:'✅ Last updated 2026.09.10 · Flowz v4.8.6 r16'
 };
 
 /* ============================== STORAGE KEYS ============================== */
@@ -352,11 +352,12 @@ var LENI_MODES=[
  {id:'n2',title:'N2',sub:'語彙・文法 10分',icon:'📚',cls:'m3'},
  {id:'kanji',title:'漢字',sub:'読み・短文 10分',icon:'📝',cls:'m4'}
 ];
-/* Kedy's grid is a fixed curated layout: THEME uses the legacy commute
-   mode internally and lives in the Talk Prep card above this grid. */
+/* Kedy's three entry points stay explicit: THEME + LIFE TALK are equal
+   conversation choices, while TOEIC is a separate full-width lane. */
 var KEDY_GRID=[
+ {type:'tile',id:'commute',title:'THEME',sub:'Guided topic · words → talk',icon:'🗣️',cls:'m4'},
  {type:'tile',id:'free',title:'LIFE TALK',sub:'Diary · recent life · plans',icon:'💬',cls:'m5'},
- {type:'tile',id:'toeic',title:'TOEIC',sub:'Voice 5Q · L3/R2 · 5–8min',icon:'🎯🎤',cls:'m2'}
+ {type:'tile',id:'toeic',title:'TOEIC',sub:'Voice 5Q · L3/R2 · 5–8min',icon:'🎯🎤',cls:'m2 wide'}
 ];
 function findKedyTile(id){for(var i=0;i<KEDY_GRID.length;i++){if(KEDY_GRID[i].type==='tile'&&KEDY_GRID[i].id===id)return KEDY_GRID[i]}return null}
 function findMode(profile,id){
@@ -435,7 +436,7 @@ function currentLeniReusePhrase(currentPhrase){
 
 /* ============================== PROMPT BUILDERS ============================== */
 function diaryRule(){
-  return "At wrap-up, silently use connected Notion tools to find today's existing Diary page by date. Append a Flowz English log without creating a new Diary page, then fetch it again to verify. If Notion is unavailable, clearly say it was not recorded and output copy-ready text. The written log should contain 2–3 diary sentences, one Phrase line, up to three Fix lines, and one Coach Assessment line. Do not update GitHub for an ordinary learning session.";
+  return "At wrap-up, silently use connected Notion tools to find today's existing Diary page by date. Update the existing yellow 🗽 English Log in place without creating a new Diary page or a duplicate English Log, then fetch the same Diary page again to verify. Never assume Notion is unavailable without actually attempting the connected Notion tools when they are present. If the write, lookup, permission, or verification really fails, clearly say Diary未記録 and output copy-ready text. Keep the saved English Log compact: one to two English diary sentences, one 🔧 Fix line, and one 💬 Phrase line. Do not save a long correction list or Coach Assessment in Diary. Do not update GitHub for an ordinary learning session.";
 }
 function coachRulesRule(modeLabel){
   return "Coach Rules: never delay the first visible reply. On kedy's first turn after your immediate natural opening, silently use connected Notion tools to find the existing child page named 'Flowz Coach Rules' under the Flowz page. Read only the checked active rules in 'kedy｜GLOBAL' and 'kedy｜"+modeLabel+"', then apply them for the rest of this session. Do not read or apply Leni rules. If Notion or that page is unavailable, continue with the built-in defaults and do not ask kedy to wait.";
@@ -457,7 +458,7 @@ function commutePrompt(mission){
    "QUESTION CARDS: ask three to five concrete questions about kedy's own experience, preference, memory, or opinion on the theme. Ask one question at a time. Help him expand a short answer into two to four connected sentences with and, but, because, or so.",
    "MINI DIALOGUE: create one short natural A/B conversation on the same theme, around four to six lines total. Read one line at a time because kedy is listening by voice. Let him repeat or take one side, but repeat the same line no more than twice. After the short dialogue, move on instead of drilling it.",
    "FREE TALK: stay on the same theme and have a normal conversation. Bring your own reactions, opinions, associations, or short stories so kedy is not responsible for generating every topic. The goal is for him to say two to four connected sentences naturally, not to memorize all the words.",
-   "Today's useful target phrase is: \""+(mission.phrase||'')+"\". Meaning: "+(mission.meaning||'')+". Introduce it naturally during the theme and use it at most twice in the whole session: once as a useful model and, if it fits, once again in free talk.",
+   "Today's useful target phrase is: \""+(mission.phrase||'')+"\". Meaning: "+(mission.meaning||'')+". Introduce it naturally during the theme and use it at most twice in the whole session. Count every assistant model, recast, and repeat toward that limit. If kedy's attempt is understandable, do not start a correction loop just to make him repeat the target phrase.",
    "Use the current conversation as the main context.",
    "If kedy says free, free talk, normal conversation, or otherwise wants to stop the structured theme flow, enter conversation-only mode for the rest of that session. Respond as a real conversation partner, stop the four-phase sequence, and do not push him back into it unless he asks.",
    "If kedy asks for another theme or says the topic is boring, switch immediately to a genuinely different theme and restart lightly from WORD WARM-UP. Do not rephrase the rejected topic as a new question, and do not immediately return to recently rejected defaults such as mood, weather, music, food, plans, or commute conditions.",
@@ -478,7 +479,9 @@ function commutePrompt(mission){
    "Assume the screen is not visible. Do not rely on spelling, markdown, headings, tables, or visual bullet lists.",
    "When he is almost at work or home, give a brief Arrival Review without ending: three useful words or phrases from the theme, up to two corrections, and one sentence he can reuse next time. Then keep chatting unless he says 'まとめて' or 'Wrap up'.",
    "Never ask or prompt him to say Wrap up. Continue naturally until he says 'まとめて' or 'Wrap up'.",
-   "At Wrap up, end the English-practice phase and give one conversational listening recap of about 30–45 seconds: summarize the actual theme, say three corrected or reusable sentences slowly, give one concise CEFR range with the next focus, and state the XP result. Do not require looking at the screen.",
+   "THEME phase guard: unless kedy explicitly switches to free talk, low-load shadowing, another theme, or ends the session, keep an internal phase pointer and do not silently skip a phase. Complete five to eight WORD WARM-UP items total in one-or-two-item chunks before moving to QUESTION CARDS. Complete three to five QUESTION CARDS one at a time before MINI DIALOGUE. MINI DIALOGUE is mandatory and must run about four to six total A/B lines, one line per turn, before FREE TALK. A side story may be followed naturally, but return to the unfinished phase afterward instead of abandoning the structure.",
+   "Meaning-repair guard: if kedy says No, no, I mean, corrects a word, spells a word, or otherwise rejects your interpretation, drop the rejected interpretation immediately. Use his corrected meaning and continue. Do not reassert the old guess or make him correct the same misunderstanding repeatedly.",
+   "At Wrap up, end the English-practice phase and give one conversational listening recap of about 30–45 seconds: summarize the actual theme, say three corrected or reusable sentences slowly, give one concise CEFR range with the next focus, and state an XP number only if the exact value is explicitly provided by Flowz session context. Otherwise say Flowz will record XP when he returns to the app and do not guess a number. Do not require looking at the screen.",
    diaryRule(),
    feedbackLoopRule('COMMUTE')
   ].join(' ');
@@ -497,7 +500,7 @@ function freePrompt(){
    "Use short natural spoken English, but keep enough content to sustain a real conversation. Correct only meaning-changing or strongly unnatural mistakes. Prefer one brief natural recast and continue; require repetition only when kedy asks to practice it.",
    "If kedy gives a short reply, do not leave him with dead air or another generic question. Add one or two concrete sentences of reaction, opinion, association, or a natural next beat from the current real-life topic.",
    "Never end a turn with only praise or acknowledgement. Continue with real conversational content, and do not end unless kedy clearly ends the conversation.",
-   "When kedy says 'まとめて' or 'Wrap up', end the English-practice phase with a short listening-friendly recap of the actual conversation, useful or corrected sentences, one next focus, and the XP result. Do not require looking at the screen.",
+   "When kedy says 'まとめて' or 'Wrap up', end the English-practice phase with a short listening-friendly recap of the actual conversation, useful or corrected sentences, and one next focus. State an XP number only if the exact value is explicitly provided by Flowz session context; otherwise say Flowz will record XP when he returns to the app and do not guess a number. Do not require looking at the screen.",
    diaryRule(),
    feedbackLoopRule('FREE')
   ].join(' ');
@@ -634,11 +637,11 @@ function renderRelease(){
 function renderTalkPrep(){
   var card=$('flowzTalkPrep');if(!card)return;
   if(current==='kedy'){
-    var m=currentCommuteMission(),reuse=currentReusePhrase(m.phrase);
-    card.innerHTML='<div class="prep-head"><div class="prep-title">🗣️ THEME PREP</div><span class="prep-chip">THEME</span></div>'+
+    var m=currentCommuteMission();
+    card.innerHTML='<div class="prep-head"><div class="prep-title">🗣️ THEME PREP</div><span class="prep-chip">PHRASE</span></div>'+
       '<div class="prep-grid">'+
         '<div class="prep-row prep-phrase-row"><button class="prep-label-link" data-phrase-book type="button" aria-label="頻出フレーズ集を開く">📚 PHRASE</button><div class="prep-phrase-copy"><b>'+escapeHtml(m.phrase)+'</b><small>'+escapeHtml(m.meaning)+' · 右↻で次へ</small></div><button class="prep-shuffle" data-prep-action="today" type="button" aria-label="次のフレーズ">↻</button></div>'+
-      '</div><button id="flowzTalkPrepBtn" type="button">⚡ START THEME</button>';
+      '</div>';
     return;
   }
   var lm=currentLeniPrepMission(),lreuse=currentLeniReusePhrase(lm.phrase);
