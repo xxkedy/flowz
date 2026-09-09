@@ -100,7 +100,7 @@ test('stays visually still for 30s, across profile switches and resume, with no 
   }));
 
   const initial = await snapshot();
-  expect(initial.version).toBe('v4.8.6 r7 · 09/09');
+  expect(initial.version).toBe('v4.8.6 r8 · 09/09');
   expect(initial.title).toBe('Flowz v4.8.6 · Duo Battle');
   // kedy's final tile order. COMMUTE is the Talk Prep card above the grid.
   expect(initial.modeIds).toEqual(['toeic', 'free']);
@@ -349,9 +349,18 @@ test('kedy Talk Prep separates PHRASE book navigation from the right-side shuffl
   await page.click('#flowzTalkPrep .prep-label-link');
   await expect(page).toHaveURL(/\/phrases\.html\?from=flowz$/);
   await expect(page.locator('.phrase-section')).toHaveCount(4);
-  await expect(page.locator('#everyday')).toContainText("I'm on my way home.");
-  await expect(page.locator('#stuck')).toContainText('What do you mean?');
-  await expect(page.locator('#reply')).toContainText('That makes sense.');
+  await expect(page.locator('.phrase-book-sub')).toContainText('上ほど優先');
+  await expect(page.locator('#everyday .phrase-item').first()).toContainText("I'm on my way home.");
+  await expect(page.locator('#work .phrase-item').first()).toContainText("I'm heading to work.");
+  await expect(page.locator('#stuck .phrase-item').first()).toContainText('What do you mean?');
+  await expect(page.locator('#reply .phrase-item').first()).toContainText('That makes sense.');
+  await expect(page.locator('#everyday')).toContainText("When I get home, I'll ___.");
+  await expect(page.locator('#reply')).toContainText("That's what I meant.");
+  await expect(page.locator('#stuck')).toContainText('What should I say?');
+  await expect(page.locator('#stuck')).toContainText("Let's talk about something else.");
+  await expect(page.locator('body')).not.toContainText("Could you say that again?");
+  await expect(page.locator('body')).not.toContainText("I'm done for today.");
+  await expect(page.locator('body')).not.toContainText("I'll be there soon.");
 });
 
 test('Leni gets a Talk Prep quick start that rotates Japanese phrases and stays visually distinct', async ({ page }) => {
