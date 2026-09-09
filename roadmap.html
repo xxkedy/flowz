@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#0c0d0f">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <title>Flowz · English Roadmap</title>
-<link rel="stylesheet" href="flowz-v3-duo.css?v=4.8.6-r12">
+<link rel="stylesheet" href="flowz-v3-duo.css?v=4.8.6-r13">
 <style>
 .roadmap-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:3px 2px 13px}
 .roadmap-back{border:1px solid var(--line);border-radius:999px;background:var(--panel);color:var(--text);padding:9px 12px;font-size:10px;font-weight:950;cursor:pointer}
@@ -24,12 +24,17 @@
 .milestone .level{font-size:16px;font-weight:950;color:var(--accent)}
 .milestone .desc{font-size:10px;line-height:1.4;color:#d2d4d7;font-weight:800}
 .m-now{--accent:#ff9e2c}.m-a2{--accent:#f7c86f}.m-b1{--accent:#27d3df}.m-b2{--accent:#55d982}
+.m-b1{box-shadow:0 0 0 1px rgba(39,211,223,.10),0 8px 18px rgba(39,211,223,.06)}
+.milestone .level small{font-size:8px;color:#9ff4f8;vertical-align:middle}
 .lane-title{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:9px}
 .lane-title b{font-size:12px;letter-spacing:.06em}.lane-title span{font-size:9px;color:var(--muted);font-weight:850}
-.toeic-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
-.toeic-box{padding:10px;border:1px solid var(--line);border-radius:12px;background:var(--panel2)}
-.toeic-box b{display:block;font-size:18px}.toeic-box span{display:block;margin-top:3px;color:var(--muted);font-size:9px;font-weight:850}
-.toeic-note{margin:9px 1px 0;color:#8b9198;font-size:9px;line-height:1.5}
+.exam-gate{padding:11px;border:1px solid rgba(85,217,130,.30);border-radius:12px;background:linear-gradient(150deg,rgba(85,217,130,.07),var(--panel2))}
+.exam-gate-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.exam-gate-head b{font-size:13px}.exam-gate-head span{padding:5px 8px;border:1px solid rgba(85,217,130,.35);border-radius:999px;color:#91edaf;font-size:8px;font-weight:950}
+.exam-gate p{margin:8px 0 0;color:#a2a8af;font-size:9px;line-height:1.55}
+.exam-steps{display:grid;gap:5px;margin-top:9px}
+.exam-step{display:grid;grid-template-columns:19px 1fr;gap:7px;align-items:start;color:#d4d7da;font-size:9px;line-height:1.45}
+.exam-step i{font-style:normal;color:#91edaf;font-weight:950}
 .dec-list{display:grid;gap:7px}
 .dec-item{display:grid;grid-template-columns:28px 1fr;gap:8px;align-items:start;padding:9px 10px;border:1px solid var(--line);border-radius:11px;background:var(--panel2)}
 .dec-item i{font-style:normal;font-size:16px}.dec-item b{display:block;font-size:11px}.dec-item span{display:block;margin-top:2px;color:var(--muted);font-size:9px;line-height:1.4}
@@ -39,49 +44,53 @@
 <body data-profile="kedy">
 <div class="roadmap-top">
   <button class="roadmap-back" id="roadmapBack" type="button">← CURRENT ENGLISH</button>
-  <span class="version">v4.8.6 r12 · 09/09</span>
+  <span class="version">v4.8.6 r13 · 09/09</span>
 </div>
 
 <div class="roadmap-title">🗺 ENGLISH ROADMAP</div>
-<p class="roadmap-sub">会話力を主軸に、CEFRを段階で上げる。TOEICは別レーンで測定する。</p>
+<p class="roadmap-sub">CONVERSATION FIRST。まず日常会話をB1へ。試験は急がず、準備が整った時だけ受ける。</p>
 
 <section class="panel roadmap-now">
   <div class="now-row">
-    <div><div class="now-label">📍 CURRENT</div><div class="now-level">A1+ → A2</div></div>
-    <div class="now-date">2026.09</div>
+    <div><div class="now-label">🗣 CONVERSATION FIRST</div><div class="now-level">A1+ → A2</div></div>
+    <div class="now-date">MAIN GOAL<br>B1</div>
   </div>
-  <div class="now-note">短い文なら会話で使える。今は「考えてから話す」を減らして、日常会話を止まりすぎず続ける段階。</div>
+  <div class="now-note">最優先は日常会話。まずA2を通過して、経験・予定・理由・自分の意見を英語でつなげられるB1を目指す。</div>
 </section>
 
 <section class="panel">
-  <div class="lane-title"><b>🪜 CEFR MILESTONES</b><span>会話の目標</span></div>
+  <div class="lane-title"><b>🪜 CONVERSATION ROADMAP</b><span>B1が先</span></div>
   <div class="timeline">
     <div class="milestone m-now"><div class="date">2026.09</div><div class="level">A1+</div><div class="desc">現在地。通勤COMMUTEで短文をつなぐ。</div></div>
     <div class="milestone m-a2"><div class="date">2026.12</div><div class="level">A2</div><div class="desc">身近な話題を短文でつなぎ、止まりすぎず会話を続ける。</div></div>
-    <div class="milestone m-b1"><div class="date">2027.09</div><div class="level">B1</div><div class="desc">経験・予定・理由・簡単な意見を自力で説明し、流れを維持する。</div></div>
+    <div class="milestone m-b1"><div class="date">2027.09</div><div class="level">B1 <small>MAIN</small></div><div class="desc">経験・予定・理由・簡単な意見を自力で説明し、流れを維持する。</div></div>
     <div class="milestone m-b2"><div class="date">2028.12</div><div class="level">B2</div><div class="desc">幅広い話題で自然にやり取りし、英語だけでも理解と会話をかなり進める。</div></div>
   </div>
 </section>
 
 <section class="panel">
-  <div class="lane-title"><b>🎯 TOEIC LANE</b><span>主目的ではなく測定</span></div>
-  <div class="toeic-grid">
-    <div class="toeic-box"><b>900</b><span>LONG-TERM GOAL</span></div>
-    <div class="toeic-box"><b>NOT TESTED</b><span>CURRENT OFFICIAL</span></div>
+  <div class="lane-title"><b>📝 EXAM READINESS</b><span>試験はLATER</span></div>
+  <div class="exam-gate">
+    <div class="exam-gate-head"><b>AI RECOMMENDS WHEN READY</b><span>NO DEADLINE</span></div>
+    <p>TOEICを含む試験は今の主目的にしない。会話力を先に伸ばし、十分な根拠がそろった時にAI側から「そろそろ受けていい」と提案する。</p>
+    <div class="exam-steps">
+      <div class="exam-step"><i>1</i><span>最近のVOICE REVIEWでB1相当の会話力が複数回安定している。</span></div>
+      <div class="exam-step"><i>2</i><span>試験を考える段階で、5問チェックではなく十分な長さの模試・L&R確認をする。</span></div>
+      <div class="exam-step"><i>3</i><span>会話＋模試の両方を見て、AIが受験タイミングを提案する。</span></div>
+    </div>
   </div>
-  <p class="toeic-note">来年に大分で初回測定して、実スコアを見てから900へのL&R対策を設計。Flowzの5問推定は目安で、公式スコアとは分ける。</p>
 </section>
 
 <section class="panel">
-  <div class="lane-title"><b>📅 NOW → DECEMBER</b><span>A2へ</span></div>
+  <div class="lane-title"><b>📅 NOW → DECEMBER</b><span>まずA2、次にB1</span></div>
   <div class="dec-list">
     <div class="dec-item"><i>🚲</i><div><b>COMMUTE</b><span>毎日の実話を話す。頻出フレーズ・Bridge Phraseを実会話で使う。</span></div></div>
     <div class="dec-item"><i>🍊</i><div><b>mikan / 金フレ</b><span>600点レベル①〜④を土台にして、意味を速く出せる語彙を増やす。</span></div></div>
-    <div class="dec-item"><i>🎤</i><div><b>VOICE REVIEW</b><span>毎回の会話ログでCEFRと次の弱点を見直し、必要な時だけ難度を上げる。</span></div></div>
+    <div class="dec-item"><i>🎤</i><div><b>VOICE REVIEW</b><span>毎回の会話ログでCEFRと弱点を見直す。B1相当が安定したら試験ReadinessもAIが判断する。</span></div></div>
   </div>
 </section>
 
-<p class="source-note">Current roadmap source: English Hub / Flowz. 目標時期は実際の会話ログ・CEFR評価・初回TOEIC結果で見直す。</p>
+<p class="source-note">Current roadmap source: English Hub / Flowz. 日常会話が主目的。CEFR時期と試験提案は実際のVOICE REVIEW・会話ログ・必要時の模試結果で見直す。</p>
 
 <script>
 document.getElementById('roadmapBack').addEventListener('click',function(){

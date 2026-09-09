@@ -27,10 +27,10 @@
 
 /* ============================== RELEASE ============================== */
 var RELEASE={
-  number:'4.8.6-r12',
-  label:'v4.8.6 r12 · 09/09',
+  number:'4.8.6-r13',
+  label:'v4.8.6 r13 · 09/09',
   title:'Flowz v4.8.6 · Duo Battle',
-  footer:'✅ Last updated 2026.09.09 · Flowz v4.8.6 r12'
+  footer:'✅ Last updated 2026.09.09 · Flowz v4.8.6 r13'
 };
 
 /* ============================== STORAGE KEYS ============================== */
@@ -576,17 +576,15 @@ function renderAssessment(){
   var panel=$('flowzAssessment');if(!panel)return;
   var a=cefrAssessment(current),html='<div class="section-head"><div class="section-title">'+a.title+'</div>';
   if(current==='kedy'){
-    html+='<button class="assessment-roadmap-btn" data-roadmap-link type="button" aria-label="英語ロードマップを開く">ROADMAP ›</button></div><div class="stats">';
+    html+='<button class="assessment-roadmap-btn" data-roadmap-link type="button" aria-label="英語ロードマップを開く">🗺 ROADMAP <span>›</span></button></div><div class="stats">';
     panel.classList.add('assessment-link');
     panel.setAttribute('role','button');
     panel.setAttribute('tabindex','0');
     panel.setAttribute('aria-label','Current English。タップで英語ロードマップを開く');
-    var est=toeicEstimate(loadToeicResults());
     html+='<div class="stat"><b>A1→A2</b><span>CURRENT CEFR</span></div>';
-    html+='<div class="stat"><b>'+(est?escapeHtml(est.band):'NOT TESTED')+'</b><span>TOEIC EST.'+(est?(' · '+est.confidence):'')+'</span></div>';
+    html+='<div class="stat main-goal"><b>B1</b><span>MAIN GOAL</span></div>';
     html+='<div class="stat"><b>毎回更新</b><span>VOICE REVIEW</span></div>';
-    html+='</div><p class="note">mikan＝単語30問／Flowz TOEIC＝L3＋R2のVoice 5問。スコアは非公式の目安。</p>';
-    html+='<button class="small-btn" id="flowzToeicResultBtn" type="button">TOEIC CHECK結果を入力（L/3・R/2）</button>';
+    html+='</div><p class="note">CONVERSATION FIRST · 日常会話を最優先。試験は準備が整った時にAIから提案。</p>';
   }else{
     panel.classList.remove('assessment-link');
     panel.removeAttribute('role');
@@ -1120,13 +1118,11 @@ function bindInteractions(){
   }
   var assessment=$('flowzAssessment');
   if(assessment){
-    assessment.addEventListener('click',function(e){
-      if(e.target.closest&&e.target.closest('#flowzToeicResultBtn')){openToeicModal();return}
+    assessment.addEventListener('click',function(){
       if(current==='kedy')location.href='./roadmap.html?from=flowz';
     });
     assessment.addEventListener('keydown',function(e){
       if(current!=='kedy'||(e.key!=='Enter'&&e.key!==' '))return;
-      if(e.target.closest&&e.target.closest('#flowzToeicResultBtn'))return;
       e.preventDefault();location.href='./roadmap.html?from=flowz';
     });
   }
