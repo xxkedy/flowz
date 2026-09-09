@@ -1,4 +1,4 @@
-/* Flowz v4.8.6 r8 — COMMUTE conversation continuity adapter.
+/* Flowz v4.8.6 r9 — COMMUTE conversation continuity adapter.
  * Keeps the unified app intact and changes only kedy COMMUTE prompt launch.
  */
 (function(){
@@ -8,7 +8,7 @@ var PENDING_KEY='flowz_duo_pending';
 
 function enhanceCommutePrompt(prompt){
   if(!prompt||prompt.indexOf("You are kedy's English conversation partner and coach")<0)return prompt;
-  if(prompt.indexOf('COMMUTE Hard Continuation Override r6:')>=0)return prompt;
+  if(prompt.indexOf('COMMUTE Story Expansion Override r9:')>=0)return prompt;
   var hasContinuity=prompt.indexOf('Conversation Continuity and Quality Rules:')>=0;
 
   var lowLoadShadowing=[
@@ -79,12 +79,24 @@ function enhanceCommutePrompt(prompt){
     "The session remains active until kedy explicitly ends it with Wrap up, まとめて, stop English, I want to end, end the session, or another unmistakable ending request."
   ].join(' ');
 
+
+  var storyRules=[
+    "COMMUTE Story Expansion Override r9:",
+    "When kedy is telling a recent real experience in fragmented English, prioritize understanding and continuing that experience over inventing a lesson, roleplay, recreation, or unrelated topic.",
+    "Once the core meaning is clear, do not keep asking whether he wants to recreate the event, repeat the setup, or confirm the same point again. React to what happened and keep the real conversation moving.",
+    "Use kedy's own words as much as possible and recast one level up: connect two or three ideas with and, but, because, or so. Keep the sentence natural and still easy enough to follow by audio.",
+    "If kedy explicitly says he wants long sentences, correct English, or more natural English, do not fall back to one short line is enough, very simple only, or similar simplification. Help him build a longer accurate sentence from the ideas he is already trying to express.",
+    "Corrections should normally be a brief natural recast inside the conversation. Do not require repetition unless kedy asks to practice the corrected line.",
+    "The priority is meaning first, then one-step-longer English, then natural conversation. Do not turn a personal story into repeated confirmation questions or generic encouragement."
+  ].join(' ');
+
   var anchor='Use the current conversation as the main context.';
   if(!hasContinuity){
     if(prompt.indexOf(anchor)>=0)prompt=prompt.replace(anchor,rules+' '+anchor);
     else prompt=prompt+' '+rules;
   }
-  return prompt+' '+hardRules;
+  if(prompt.indexOf('COMMUTE Hard Continuation Override r6:')<0)prompt=prompt+' '+hardRules;
+  return prompt+' '+storyRules;
 }
 
 function patchApp(){
