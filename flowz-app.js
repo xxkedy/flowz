@@ -27,10 +27,10 @@
 
 /* ============================== RELEASE ============================== */
 var RELEASE={
-  number:'4.8.6-r7',
-  label:'v4.8.6 r7 · 09/09',
+  number:'4.8.6-r8',
+  label:'v4.8.6 r8 · 09/09',
   title:'Flowz v4.8.6 · Duo Battle',
-  footer:'✅ Last updated 2026.09.09 · Flowz v4.8.6 r7'
+  footer:'✅ Last updated 2026.09.09 · Flowz v4.8.6 r8'
 };
 
 /* ============================== STORAGE KEYS ============================== */
