@@ -32,9 +32,8 @@
 .phrase-item b{display:block;font-size:14px;line-height:1.25}
 .phrase-item span{display:block;margin-top:2px;color:var(--muted);font-size:10px;line-height:1.35}
 .phrase-section.commute{--phrase-accent:#ff9e2c;border-color:rgba(255,158,44,.48)}
-.phrase-section.reply{--phrase-accent:#55d982;border-color:rgba(85,217,130,.40)}
 .phrase-section.native{--phrase-accent:#27d3df;border-color:rgba(39,211,223,.42)}
-.phrase-section.practical{--phrase-accent:#ff6b6b;border-color:rgba(255,95,109,.40)}
+.phrase-section.talk{--phrase-accent:#55d982;border-color:rgba(85,217,130,.40)}
 .book-note{margin:2px 3px 14px;color:#747b84;font-size:9px;line-height:1.5}
 </style>
 </head>
@@ -45,7 +44,7 @@
   <span class="version">v4.8.6 r11 · 09/09</span>
 </div>
 <div class="phrase-book-title">🧠 FREQUENT PHRASES</div>
-<p class="phrase-book-sub">上ほど優先。探しやすさ優先で4分類だけにまとめる。</p>
+<p class="phrase-book-sub">上ほど優先。探しやすさ優先で3分類だけにまとめる。</p>
 <div class="phrase-legend"><b>⭐ まず覚える</b><span>／ 上 → 下で優先順</span></div>
 <div class="bridge-card">
   <div class="bridge-title">🔗 会話を広げる型</div>
@@ -54,9 +53,8 @@
 </div>
 <nav class="phrase-nav" aria-label="Phrase categories">
   <a href="#commute">🚲 COMMUTE</a>
-  <a href="#reply">💬 REPLY</a>
   <a href="#native">🗣️ NATIVE</a>
-  <a href="#practical">🛠 PRACTICAL</a>
+  <a href="#talk">💬 REPLY + PRACTICAL</a>
 </nav>
 
 <section class="panel phrase-section commute" id="commute">
@@ -80,12 +78,15 @@
   </div>
 </section>
 
-<section class="panel phrase-section reply" id="reply">
-  <h2><span>💬 REPLY</span><span class="phrase-section-note">返答・会話を広げる</span></h2>
+<section class="panel phrase-section talk" id="talk">
+  <h2><span>💬 REPLY + PRACTICAL</span><span class="phrase-section-note">返答・実用</span></h2>
   <div class="phrase-list">
     <div class="phrase-item priority"><b>That makes sense.</b><span>なるほど／それなら納得</span></div>
     <div class="phrase-item priority"><b>Exactly.</b><span>その通り</span></div>
     <div class="phrase-item priority"><b>What about you?</b><span>そっちは？</span></div>
+    <div class="phrase-item"><b>What do you mean?</b><span>どういう意味？</span></div>
+    <div class="phrase-item"><b>Say that again?</b><span>もう一回言って</span></div>
+    <div class="phrase-item"><b>I don't know how to say it.</b><span>どう言えばいいかわからん</span></div>
     <div class="phrase-item"><b>Can you tell me more?</b><span>もう少し教えて</span></div>
     <div class="phrase-item"><b>Why do you think so?</b><span>なんでそう思う？</span></div>
     <div class="phrase-item"><b>What happened next?</b><span>そのあとどうなった？</span></div>
@@ -94,6 +95,14 @@
     <div class="phrase-item"><b>I mean...</b><span>つまり／言いたいのは…</span></div>
     <div class="phrase-item"><b>I think so.</b><span>そう思う</span></div>
     <div class="phrase-item"><b>Not really.</b><span>そうでもない</span></div>
+    <div class="phrase-item"><b>How do you say ___ in English?</b><span>___って英語で何て言う？</span></div>
+    <div class="phrase-item"><b>What should I say?</b><span>何て言えばいい？</span></div>
+    <div class="phrase-item"><b>Give me a second.</b><span>ちょっと待って</span></div>
+    <div class="phrase-item"><b>I don't understand.</b><span>わからない</span></div>
+    <div class="phrase-item"><b>Can you say it more slowly?</b><span>もう少しゆっくり言って</span></div>
+    <div class="phrase-item"><b>Can you say it more simply?</b><span>もっと簡単に言って</span></div>
+    <div class="phrase-item"><b>Let's talk about something else.</b><span>別の話しよう</span></div>
+    <div class="phrase-item"><b>What does that mean?</b><span>それどういう意味？</span></div>
   </div>
 </section>
 
@@ -111,23 +120,8 @@
   </div>
 </section>
 
-<section class="panel phrase-section practical" id="practical">
-  <h2><span>🛠 PRACTICAL</span><span class="phrase-section-note">実用・詰まった時</span></h2>
-  <div class="phrase-list">
-    <div class="phrase-item priority"><b>What do you mean?</b><span>どういう意味？</span></div>
-    <div class="phrase-item priority"><b>Say that again?</b><span>もう一回言って</span></div>
-    <div class="phrase-item priority"><b>I don't know how to say it.</b><span>どう言えばいいかわからん</span></div>
-    <div class="phrase-item"><b>How do you say ___ in English?</b><span>___って英語で何て言う？</span></div>
-    <div class="phrase-item"><b>What should I say?</b><span>何て言えばいい？</span></div>
-    <div class="phrase-item"><b>Give me a second.</b><span>ちょっと待って</span></div>
-    <div class="phrase-item"><b>I don't understand.</b><span>わからない</span></div>
-    <div class="phrase-item"><b>Can you say it more slowly?</b><span>もう少しゆっくり言って</span></div>
-    <div class="phrase-item"><b>Can you say it more simply?</b><span>もっと簡単に言って</span></div>
-    <div class="phrase-item"><b>Let's talk about something else.</b><span>別の話しよう</span></div>
-    <div class="phrase-item"><b>What does that mean?</b><span>それどういう意味？</span></div>
-  </div>
-</section>
-<p class="book-note">優先順＝実使用／毎日使う価値。分類は増やしすぎず、Flowz変更時に追加・削除・順序を毎回見直す。</p>
+
+<p class="book-note">優先順＝実使用／毎日使う価値。分類は3つを基本にし、Flowz変更時に追加・削除・順序を毎回見直す。</p>
 <script>
 document.getElementById('phraseBack').addEventListener('click',function(){
   if(document.referrer&&document.referrer.indexOf(location.host)>=0){history.back();return}
