@@ -227,7 +227,7 @@ test('every visible kedy mode carries the current coaching and feedback rules', 
   expect(p.commute).toMatch(/generic backchannels/);
   expect(p.commute).toMatch(/at most twice in the whole session/);
   expect(p.commute).toMatch(/Complaints, frustration/);
-  expect(p.commute).toMatch(/switch immediately to a genuinely different content domain/);
+  expect(p.commute).toMatch(/switch immediately to a genuinely different theme/);
   expect(p.commute).toMatch(/recently rejected defaults such as mood, weather, music, food, plans, or commute conditions/);
   expect(p.commute).toMatch(/prefer a concrete subject with something to react to/);
   expect(p.commute).toMatch(/Arrival Review/);
