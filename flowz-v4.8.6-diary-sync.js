@@ -1,4 +1,4 @@
-/* Flowz v4.8.6 r3 — verified Diary sync gate.
+/* Flowz v4.8.6 r4 — verified Diary sync gate + THEME phase progression guard.
  * Strengthens kedy session prompts so Wrap up is not considered complete
  * until the existing Diary page has been updated and re-fetched.
  * Also routes all three kedy entry points (THEME / TOEIC / LIFE TALK) through
@@ -50,12 +50,34 @@ function enhanceDiaryPrompt(prompt,pending){
   return prompt+' '+rule;
 }
 
+function enhanceThemePhasePrompt(prompt,pending){
+  if(!prompt||!pending||pending.profile!=='kedy'||pending.mode!=='commute')return prompt;
+  if(prompt.indexOf('COMMUTE Theme Phase Lock r12:')>=0)return prompt;
+
+  var rule=[
+    'COMMUTE Theme Phase Lock r12:',
+    'This is the final priority for structured THEME progression unless kedy explicitly asks for free talk, normal conversation, low-load shadowing, another theme, or to end.',
+    'Maintain explicit internal counters for the current phase. Do not treat ordinary side conversation as an implicit switch to FREE TALK.',
+    'WORD WARM-UP starts at 0 of 5–8. Introduce only one or two useful words or short phrases per turn, but keep counting them. Do not ask the first QUESTION CARD until at least five distinct WORD items have actually been introduced. If a side story appears during WORD, react naturally for at most one or two turns, then resume the remaining WORD items.',
+    'QUESTION CARDS starts only after WORD is complete. Ask three to five concrete theme questions one at a time and count completed questions. Do not move to MINI DIALOGUE until at least three QUESTION CARDS have been completed.',
+    'MINI DIALOGUE is mandatory and starts only after QUESTION CARDS is complete. Run four to six A/B lines total, exactly one dialogue line per assistant turn. Do not enter FREE TALK until the dialogue has actually finished.',
+    'FREE TALK begins only after MINI DIALOGUE is complete, unless kedy explicitly requested an early mode switch.',
+    'When a real-life story becomes interesting, preserve it as conversation material, but return to the unfinished phase within about one or two assistant turns. Do not let rain, coffee, music, work stories, or another spontaneous topic silently replace the structured route.',
+    'Avoid turning THEME into constant sentence repetition. Outside WORD WARM-UP and MINI DIALOGUE, prioritize real conversation. Do not repeatedly say Say this, Try that, or ask for a retry when kedy already communicated the meaning.',
+    'If a correction is useful, give one brief natural recast and continue. Require repetition only when kedy explicitly asks to practice the corrected sentence.',
+    'At each transition, move naturally with a short spoken cue such as Okay, next part or Now a quick dialogue. Never explain the phase system as a long classroom lecture.',
+    'Before every phase transition, silently verify the counter requirement is satisfied. If it is not, remain in the current phase.'
+  ].join(' ');
+
+  return prompt+' '+rule;
+}
+
 function patchApp(){
   if(!window.FlowzApp)return;
   var originalBuild=window.FlowzApp.buildPromptFor;
   if(typeof originalBuild==='function'&&!originalBuild.__flowz486){
     var wrapped=function(p){
-      return enhanceDiaryPrompt(originalBuild(p),p);
+      return enhanceThemePhasePrompt(enhanceDiaryPrompt(originalBuild(p),p),p);
     };
     wrapped.__flowz486=true;
     window.FlowzApp.buildPromptFor=wrapped;
